@@ -8,6 +8,6 @@
 
 ## Badges
 - Travis
-
+[![Build Status](https://travis-ci.com/Topcoder-Kitty-ML/cs207-FinalProject.svg?branch=master)](https://travis-ci.com/Topcoder-Kitty-ML/cs207-FinalProject)
 - Codecov
 [![codecov](https://codecov.io/gh/Topcoder-Kitty-ML/cs207-FinalProject/branch/master/graph/badge.svg)](https://codecov.io/gh/Topcoder-Kitty-ML/cs207-FinalProject)
