@@ -6,6 +6,5 @@ before_install:
     - pip install codecov
 script:
     - pytest --cov=./
-    - python ./test.py
 after_success:
     - codecov
