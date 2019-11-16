@@ -312,6 +312,17 @@ print(x_8.val, x_8.der)
 
 
 
+x_9 = 2 * cos(f) + 3
+print(x_9.val, x_9.der)
+
+
+x_9 = 2 * tan(f) + 3
+print(x_9.val, x_9.der)
+
+
+x_9 = 2 * exponential(f) + 3
+print(x_9.val, x_9.der)
+
 # x = sin(a=a)
 # #f = alpha * x + beta
 # f = x + beta
