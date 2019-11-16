@@ -1,11 +1,10 @@
 #!/usr/bin/python
 
 import math
-
 from linear import AutoDiffToy as x_simple
 
 
-class trigo():
+class trigo_exp():
 	'''
 	Toy forward automatic differentiation
 	class.
@@ -171,7 +170,7 @@ class trigo():
 			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
 
 
-class sin(trigo):
+class sin(trigo_exp):
 	'''
 	E.g.
 	f(x) = alpha * sin(x) + beta
@@ -196,7 +195,7 @@ class sin(trigo):
 		return derivative_val
 
 
-class cos(trigo):
+class cos(trigo_exp):
 	'''
 	E.g.
 	f(x) = alpha * cos(x) + beta
@@ -220,7 +219,7 @@ class cos(trigo):
 		return derivative_val
 
 
-class tan(trigo):
+class tan(trigo_exp):
 	'''
 	E.g.
 	f(x) = alpha * tan(x) + beta
@@ -243,7 +242,7 @@ class tan(trigo):
 		return derivative_val
 
 
-class exponential(trigo):
+class exponential(trigo_exp):
 	'''
 	E.g.
 	f(x) = alpha * exp(x) + beta
