@@ -2,31 +2,19 @@
 
 import math
 
-# from linear import x_simple as x_simple
-from linear import *
+from linear import AutoDiffToy as x_simple
+
 
 class trigo():
 	'''
 	Toy forward automatic differentiation
 	class.
 	E.g.
-	f(x) = alpha * sin(x) + beta
+	f(x) = alpha * trigo_func(x) + beta
 
 	Note:
 	x is a class object
 	'''
-	# def __init__(self, x_object, alpha=1, beta=0):
-
-	# 	# #self.a = a # value to evaluate at
-	# 	# self.alpha = alpha # regard as a x variable with coefficient of x = 1
-	# 	# self.beta = beta # regard as a x variable with no constant
-	# 	# #self.currclass = currclass
-
-	# 	# self.val = self.calc_function_val()
-	# 	# self.der = self.calc_function_derivative_val()
-
-	# 	raise NotImplementedError
-
 	def __init__(self, x_object, alpha=1, beta=0):
 		self.alpha = alpha # regard as a x variable with coefficient of the trigo operation (e.g. sine)
 		self.beta = beta # regard as a x variable with no constant
@@ -66,56 +54,11 @@ class trigo():
 		Performs addition of two trigo objects,
 		or trigo object with a float/int
 		'''
-		#print(self.__add__.__qualname__)
-
-		# Assume that both objects are AutoDiffToyObjects
-		# try:
-		# 	alpha = self.alpha + other.alpha
-		# 	beta = self.beta + other.beta
-		# 	new_toy = cls(self.a, alpha, beta)
-		# 	return(new_toy)
-
-		# # Perhaps the 'other' is not an AutoDiffToyObject.
-		# # So we'll just add the constant values
-		# except:
-		# 	try:
-		# 		beta = self.beta + other.real
-		# 		new_toy = cls(self.a, self.alpha, beta)
-		# 		return(new_toy)
-		# 	except:
-		# 		raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for addition.')
-
-		print(isinstance(self, type(other)))
-
 		return self.__perform_add__(self, other)
-
-	# @classmethod
-	# def __perform_addition__(cls, self, other):
-	# 	# Assume that both objects are AutoDiffToyObjects
-	# 	print("add")
-	# 	try:
-	# 		alpha = self.alpha + other.alpha
-	# 		beta = self.beta + other.beta
-	# 		new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-	# 		return(new_toy)
-
-	# 	# Perhaps the 'other' is not an AutoDiffToyObject.
-	# 	# So we'll just add the constant values
-	# 	except:
-	# 		try:
-	# 			# beta = self.beta + other.real
-	# 			# new_toy = cls(self.a, self.alpha, beta)
-
-	# 			self.__radd__(other)
-	# 			#return(new_toy)
-	# 		except:
-	# 			print("oranges")
-	# 			raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
 
 
 	@classmethod
 	def __perform_add__(cls, self, other):
-		print("add")
 		# Assume that both objects are AutoDiffToyObjects
 		# Check if both objects are of the same type
 		if isinstance(self, type(other)):
@@ -137,37 +80,12 @@ class trigo():
 		Allows for commuative cases of addition, where a
 		float or integer are added to the autodifftoy object.
 		'''
-		# Assume that both objects are AutoDiffToyObjects
-		print("radd")
-		# try:
-		# 	print("adding")
-		# 	alpha = self.alpha + other.alpha
-		# 	beta = self.beta + other.beta
-		# 	new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-		# 	return(new_toy)
-		# # Perhaps the 'other' is not an AutoDiffToyObject.
-		# # So we'll just add the constant values
-		# except:
-		# 	try:
-		# 		print("adding2")
-		# 		alpha = self.alpha
-		# 		beta = self.beta + other.real
-		# 		new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-		# 		return(new_toy)
-		# 	except:
-		# 		#pass
-		# 		raise AttributeError(f'{other.__class__.__name__} is invalid for multiplication.')
-		apple = self.__perform_radd__(self, other)
-		print("-----")
-		print(dir(apple))
-		print(apple)
-		return(apple)
+		radd_result = self.__perform_radd__(self, other)
+		return(radd_result)
 
 
 	@classmethod
 	def __perform_radd__(cls, self, other):
-		print("add")
-
 		try:
 			alpha = self.alpha + other.alpha
 			beta = self.beta + other.beta
@@ -178,60 +96,79 @@ class trigo():
 		# So we'll just add the constant values
 		except:
 			try:
-				print("-=-=-=-=")
-				print(self)
-				print(other)
 				if isinstance(self, cls):
-					print("inself")
 					alpha = self.alpha
 					beta = self.beta + other.real
 					new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-					print(new_toy)
 				elif isinstance(other, cls):
-					print("inother")
 					alpha = other.alpha
 					beta = other.beta + self.real
 					new_toy = cls(other.x_object, alpha=alpha, beta=beta)
 				else:
-					raise AttributeError(f'{other.__class__.__name__} is invalid for multiplication.')
-				
+					raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
 				return(new_toy)
 			except:
-				raise AttributeError(f'{other.__class__.__name__} is invalid for multiplication.')
+				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
 
 
 
 
-	# def __mul__(self, other):
-	# 	'''
-	# 	This allows for multiplication between a coefficient 
-	# 	value and a AutoDiffToy object
-	# 	'''
-	# 	# Multiply a number with a 'x' class
-	# 	try:
-	# 		alpha = self.alpha * other.real
-	# 		new_toy = AutoDiffToy(self.a, alpha, self.beta)
-	# 		return(new_toy)
+	def __mul__(self, other):
+		'''
+		This allows for multiplication between a coefficient 
+		value and a AutoDiffToy object
+		'''
+		# Multiply a number with a 'x' class
+		try:
+			# alpha = self.alpha * other.real
+			# new_toy = AutoDiffToy(self.a, alpha, self.beta)
+			# return(new_toy)
+			return self.__perform_muliplication__(self, other)
 
-	# 	# Catch weird cases. E.g. when we're multiplying two 'x' classes
-	# 	except:
-	# 		raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+		# Catch weird cases. E.g. when we're multiplying two 'x' classes
+		except:
+			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
 
 
-	# def __rmul__(self, other):
-	# 	'''
-	# 	We use rmul as it allows us to deal with commutative case
-	# 	in which we have to multiply a float value with a AutoDiffToy
-	# 	class, without having to overlaod __mul__ function in the
-	# 	float class. (__mul__ function is called from the first variable
-	# 	in a multiplication)
-	# 	'''
-	# 	try:
-	# 		alpha = self.alpha * other.real
-	# 		new_toy = AutoDiffToy(self.a, alpha, self.beta)
-	# 		return(new_toy)
-	# 	except:
-	# 		raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+	def __rmul__(self, other):
+		'''
+		We use rmul as it allows us to deal with commutative case
+		in which we have to multiply a float value with a AutoDiffToy
+		class, without having to overlaod __mul__ function in the
+		float class. (__mul__ function is called from the first variable
+		in a multiplication)
+		'''
+		try:
+			# alpha = self.alpha * other.real
+			# new_toy = AutoDiffToy(self.a, alpha, self.beta)
+			# return(new_toy)
+			return self.__perform_muliplication__(self, other)
+		except:
+			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+
+
+	@classmethod
+	def __perform_muliplication__(cls, self, other):
+		'''
+		Perform multiplication
+		'''
+		try:
+			if isinstance(self, cls):
+				# Muliply object with an integer
+				alpha = self.alpha * other.real
+				beta = self.beta * other.real
+				new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+				return(new_toy)
+			elif isinstance(other, cls):
+				# Allows commutative multiplication
+				alpha = other.alpha * self.real
+				beta = other.beta * self.real
+				new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+				return(new_toy)
+			else:
+				AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+		except:
+			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
 
 
 class sin(trigo):
@@ -339,7 +276,7 @@ gamma = 4.0
 
 
 a = 2.0 # Value to evaluate at
-x = AutoDiffToy(a)
+x = x_simple(a)
 
 alpha = 2.0
 beta = 3.0
@@ -358,14 +295,20 @@ x_4 = x_2 + x_3 + x_2
 print(x_4.alpha)
 print(x_4.val, x_4.der)
 
-# print("======")
+print("======")
 x_5 = (x_4 + 1)
 print(x_5)
 print(x_5.der)
 print(x_5.val, x_5.der)
 
-# x_6 = 1 + x_4
-# print(x_6.val, x_6.der)
+x_6 = 1 + x_4
+print(x_6.val, x_6.der)
+
+x_7 = x_6 * 2
+print(x_7.val, x_7.der)
+
+x_8 = 2 * x_6
+print(x_8.val, x_8.der)
 
 
 
