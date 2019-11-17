@@ -38,44 +38,30 @@ class nonlinear():
     
 class higher_order(nonlinear):
     
- 
 	def calc_function_val(self, order):
-	
 		value = self.alpha * (self.x_object.val ** order  ) + self.beta
 		return value
 
-	
 	def calc_function_derivative_val(self, order):
-		
 		derivative_val = order * self.alpha * self.x_object.der ** (order-1) 
-
 		return derivative_val 
     
 class product_rule(nonlinear):
     
     def calc_function_val(self):
-        
         value = self.x_object.val * self.y_object.val
-        
         return value
 
     def calc_function_derivative_val(self):
-		
         derivative_val = (self.x_object.val * self.y_object.der) + (self.y_object.val * self.x_object.der)
-
 		return derivative_val 
-    
     
 class quotient_rule(nonlinear):
     
     def calc_function_val(self):
-        
         value = self.x_object.val / self.y_object.val
-        
         return value
 
     def calc_function_derivative_val(self):
-		
 		derivative_val = (self.y_object.val * self.x_object.der) - (self.x_object.val * self.y_object.der) / (self.y_object.val ** 2)
-
 		return derivative_val 
