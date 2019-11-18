@@ -110,6 +110,81 @@ class trigo_exp():
 				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
 
 
+	def __sub__(self, other):
+		'''
+		Performs subtraction of two trigo objects,
+		or trigo object with a float/int
+		'''
+		return self.__perform_sub__(self, other)
+
+
+	@classmethod
+	def __perform_sub__(cls, self, other):
+		# Assume that both objects are AutoDiffToyObjects
+		# Check if both objects are of the same type
+		# Self is probably the object on the LHS of the equation
+		if isinstance(self, type(other)):
+			alpha = self.alpha - other.alpha
+			beta = self.beta - other.beta
+			new_object = cls(self.x_object, alpha=alpha, beta=beta)
+			return(new_object)
+
+		# Perhaps the 'other' is not an AutoDiffToyObject.
+		else:
+			try:
+				return self.__rsub__(other)
+			except:
+				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+
+
+	def __rsub__(self, other):
+		'''
+		Allows for commuative cases of subtraction, where a
+		float or integer are added to the autodifftoy object.
+
+		Note:
+		For the equation x - y,
+		__rsub__ works as y.__rsub(x)
+		Thus,
+		other --> x
+		self --> y
+
+		https://docs.python.org/2/reference/datamodel.html#object.__rsub__
+		'''
+		rsub_result = self.__perform_rsub__(self, other)
+		return(rsub_result)
+
+
+	@classmethod
+	def __perform_rsub__(cls, self, other):
+		try:
+			# Maybe need to make this more stringent!!!
+			# E.g. the self.x_object (why not other?)
+			# A bit dangerous if we are using a sin subtracting a cos
+			alpha = other.alpha - self.alpha
+			beta = other.beta - self.beta
+			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+			return(new_toy)
+
+		# Perhaps the 'other' is not an AutoDiffToyObject.
+		# So we'll just add the constant values
+		except:
+			try:
+				if isinstance(self, cls):
+					alpha = self.alpha
+					beta = other.real - self.beta
+					new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+				elif isinstance(other, cls):
+					# I dun think we will ever get here
+					alpha = other.alpha
+					beta = other.beta - self.real
+					new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+				else:
+					raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+				return(new_toy)
+			except:
+				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+
 
 
 	def __mul__(self, other):
@@ -229,7 +304,7 @@ class tan(trigo_exp):
 		Calculate the current value of this
 		function at the 
 		'''
-		value = self.alpha * math.cos(self.x_object.val) + self.beta
+		value = self.alpha * math.tan(self.x_object.val) + self.beta
 		return value
 
 	
@@ -295,12 +370,12 @@ print(x_4.alpha)
 print(x_4.val, x_4.der)
 
 print("======")
-x_5 = (x_4 + 1)
+x_5 = x_4 + 1
 print(x_5)
 print(x_5.der)
 print(x_5.val, x_5.der)
 
-x_6 = 1 + x_4
+x_6 = 1 - x_4
 print(x_6.val, x_6.der)
 
 x_7 = x_6 * 2
