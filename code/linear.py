@@ -234,6 +234,7 @@ class AutoDiffToy():
 
 
 	def __div__(self, other):
+		print("apple")
         
 		try:
 			alpha = self.alpha / other.real
@@ -251,6 +252,7 @@ class AutoDiffToy():
 			raise AttributeError()
 
 	def __rdiv__(self, other):
+		print("rdiv")
 	
 		try:
 			alpha = self.alpha / other.real

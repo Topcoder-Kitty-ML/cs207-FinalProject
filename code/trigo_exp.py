@@ -147,7 +147,7 @@ class trigo_exp():
 
 			return self_dummy + other_dummy
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			raise AttributeError
 
 
 		# try:
@@ -293,7 +293,7 @@ class trigo_exp():
 
 			return other_dummy - self_dummy
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			raise AttributeError
 
 	def __mul__(self, other):
 		'''
@@ -309,7 +309,7 @@ class trigo_exp():
 
 		# Catch weird cases. E.g. when we're multiplying two 'x' classes
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			raise AttributeError
 
 
 	def __rmul__(self, other):
@@ -326,7 +326,7 @@ class trigo_exp():
 			# return(new_toy)
 			return self.__perform_muliplication__(self, other)
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			raise AttributeError
 
 
 	# @classmethod
@@ -384,7 +384,7 @@ class trigo_exp():
 
 			return self_dummy * other_dummy
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			raise AttributeError
 
 
 	def __div__(self, other):
@@ -398,7 +398,7 @@ class trigo_exp():
 
 
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for division.')
+			raise AttributeError
 
 
 	def __rdiv__(self, other):
@@ -406,7 +406,7 @@ class trigo_exp():
 	
 			return self.__perform_division__(self, other)
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for division.')
+			raise AttributeError
 
 
 	@classmethod
@@ -436,20 +436,20 @@ class trigo_exp():
 
 			return self_dummy / other_dummy
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for division.')
+			raise AttributeError
 
 	def __pow__(self, other):
 		try:	
 			return self.__perform_higherorder__(self, other)
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
+			raise AttributeError
 
 
 	def __rpow__(self, other): 
 		try:
 			return self.__perform_higherorder__(self, other)
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
+			raise AttributeError
 
 	@classmethod
 	def __perform_higherpower__(cls, self, other):
@@ -477,7 +477,7 @@ class trigo_exp():
 			other_dummy = dummy(other.val, other.der)
 			return self_dummy ** other_dummy
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
+			raise AttributeError
 
 
 
