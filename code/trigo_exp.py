@@ -2,6 +2,7 @@
 
 import math
 from linear import AutoDiffToy as x_simple
+from dummy import dummy
 
 
 class trigo_exp():
@@ -185,7 +186,7 @@ class trigo_exp():
 			except:
 				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
 
-
+                      
 
 	def __mul__(self, other):
 		'''
@@ -221,28 +222,62 @@ class trigo_exp():
 			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
 
 
+	# @classmethod
+	# def __perform_muliplication__(cls, self, other):
+	# 	'''
+	# 	Perform multiplication
+	# 	'''
+	# 	try:
+	# 		if isinstance(self, cls):
+	# 			# Muliply object with an integer
+	# 			alpha = self.alpha * other.real
+	# 			beta = self.beta * other.real
+	# 			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+	# 			return(new_toy)
+	# 		elif isinstance(other, cls):
+	# 			# Allows commutative multiplication
+	# 			alpha = other.alpha * self.real
+	# 			beta = other.beta * self.real
+	# 			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+	# 			return(new_toy)
+	# 		else:
+	# 			AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+	# 	except:
+	# 		raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
 	@classmethod
 	def __perform_muliplication__(cls, self, other):
 		'''
 		Perform multiplication
 		'''
 		try:
-			if isinstance(self, cls):
-				# Muliply object with an integer
-				alpha = self.alpha * other.real
-				beta = self.beta * other.real
-				new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-				return(new_toy)
-			elif isinstance(other, cls):
-				# Allows commutative multiplication
-				alpha = other.alpha * self.real
-				beta = other.beta * self.real
-				new_toy = cls(other.x_object, alpha=alpha, beta=beta)
-				return(new_toy)
-			else:
-				AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			# Assume other is a single number and try
+			# to multiple
+			alpha = self.alpha * other.real
+			beta = self.beta * other.real
+			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+		try:
+			# Allows commutative multiplication. Assumes
+			# that self is a number (probably not needed)
+			alpha = other.alpha * self.real
+			beta = other.beta * self.real
+			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+		try:
+			# Deals with case where both self and other
+			# are weird unrecognized cases
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return self_dummy * other_dummy
 		except:
 			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+
+
 
 
 class sin(trigo_exp):
@@ -396,6 +431,10 @@ print(x_9.val, x_9.der)
 
 x_9 = 2 * exponential(f) + 3
 print(x_9.val, x_9.der)
+
+
+x_10 = x_9 * x_9
+print(x_10.val, x_10.der)
 
 # x = sin(a=a)
 # #f = alpha * x + beta
