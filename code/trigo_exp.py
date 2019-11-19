@@ -59,7 +59,7 @@ class trigo_exp():
 
 	@classmethod
 	def __perform_add__(cls, self, other):
-		# Assume that both objects are AutoDiffToyObjects
+		# Assume that both objects are the same type
 		# Check if both objects are of the same type
 		if isinstance(self, type(other)):
 			alpha = self.alpha + other.alpha
@@ -250,7 +250,7 @@ class trigo_exp():
 		Perform multiplication
 		'''
 		try:
-			# Assume other is a single number and try
+			# Assume 'other' is a single number and try
 			# to multiple
 			alpha = self.alpha * other.real
 			beta = self.beta * other.real
@@ -260,7 +260,7 @@ class trigo_exp():
 			pass
 		try:
 			# Allows commutative multiplication. Assumes
-			# that self is a number (probably not needed)
+			# that 'self' is a number (probably not needed)
 			alpha = other.alpha * self.real
 			beta = other.beta * self.real
 			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
@@ -269,13 +269,28 @@ class trigo_exp():
 			pass
 		try:
 			# Deals with case where both self and other
-			# are weird unrecognized cases
+			# are weird unrecognized cases. We covert
+			# them to dummy classes and extract their values
+			# and derivatives only for subsequent use.
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
 
 			return self_dummy * other_dummy
 		except:
 			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+
+
+	def __div__(self, other):
+		pass
+
+	def __rdiv__(self, other):
+		pass
+
+	def __pow__(self, other):
+		pass
+
+	def __rpow__(self, other):
+		pass
 
 
 
@@ -376,101 +391,103 @@ class exponential(trigo_exp):
 
 
 
-a = 2.0 # Value to evaluate at
+if __name__ == "__main__":
 
-alpha = 2.0
-beta = 3.0
-gamma = 4.0
+	a = 2.0 # Value to evaluate at
 
-
-
-a = 2.0 # Value to evaluate at
-x = x_simple(a)
-
-alpha = 2.0
-beta = 3.0
-f = alpha * x + beta
-
-print(f.val, f.der)
-
-
-x_2 = sin(f)
-print(x_2.val, x_2.der)
-
-x_3 = sin(f)
-
-
-x_4 = x_2 + x_3 + x_2
-print(x_4.alpha)
-print(x_4.val, x_4.der)
-
-print("======")
-x_5 = x_4 + 1
-print(x_5)
-print(x_5.der)
-print(x_5.val, x_5.der)
-
-x_6 = 1 - x_4
-print(x_6.val, x_6.der)
-
-x_7 = x_6 * 2
-print(x_7.val, x_7.der)
-
-x_8 = 2 * x_6
-print(x_8.val, x_8.der)
+	alpha = 2.0
+	beta = 3.0
+	gamma = 4.0
 
 
 
-x_9 = 2 * cos(f) + 3
-print(x_9.val, x_9.der)
+	a = 2.0 # Value to evaluate at
+	x = x_simple(a)
+
+	alpha = 2.0
+	beta = 3.0
+	f = alpha * x + beta
+
+	print(f.val, f.der)
 
 
-x_9 = 2 * tan(f) + 3
-print(x_9.val, x_9.der)
+	x_2 = sin(f)
+	print(x_2.val, x_2.der)
+
+	x_3 = sin(f)
 
 
-x_9 = 2 * exponential(f) + 3
-print(x_9.val, x_9.der)
+	x_4 = x_2 + x_3 + x_2
+	print(x_4.alpha)
+	print(x_4.val, x_4.der)
+
+	print("======")
+	x_5 = x_4 + 1
+	print(x_5)
+	print(x_5.der)
+	print(x_5.val, x_5.der)
+
+	x_6 = 1 - x_4
+	print(x_6.val, x_6.der)
+
+	x_7 = x_6 * 2
+	print(x_7.val, x_7.der)
+
+	x_8 = 2 * x_6
+	print(x_8.val, x_8.der)
 
 
-x_10 = x_9 * x_9
-print(x_10.val, x_10.der)
 
-# x = sin(a=a)
-# #f = alpha * x + beta
-# f = x + beta
-# print(f.val, f.der)
+	x_9 = 2 * cos(f) + 3
+	print(x_9.val, x_9.der)
 
 
-#f = alpha * x + beta
-#f = x * alpha + beta
-
-# f = beta + alpha * x 
-
-# f = alpha * x + beta
-# print(f.val, f.der)
-# print("====================")
+	x_9 = 2 * tan(f) + 3
+	print(x_9.val, x_9.der)
 
 
-# print("Testing: f = alpha * x + beta")
-# f_1 = alpha * x + beta
-# print(f_1.val, f_1.der)
-# print("====================")
+	x_9 = 2 * exponential(f) + 3
+	print(x_9.val, x_9.der)
 
-# print("Testing: f = x * alpha + beta")
-# f_2 = x * alpha + beta
-# print(f_2.val, f_2.der)
-# print("====================")
 
-# print("Testing: f = beta + alpha * x")
-# f_3 = beta + alpha * x
-# print(f_3.val, f_3.der)
-# print("====================")
+	x_10 = x_9 * x_9
+	print(x_10.val, x_10.der)
 
-# print("Testing: f = beta + x * alpha")
-# f_4 = beta + x * alpha
-# print(f_4.val, f_4.der)
-# print("====================")
+	# x = sin(a=a)
+	# #f = alpha * x + beta
+	# f = x + beta
+	# print(f.val, f.der)
+
+
+	#f = alpha * x + beta
+	#f = x * alpha + beta
+
+	# f = beta + alpha * x 
+
+	# f = alpha * x + beta
+	# print(f.val, f.der)
+	# print("====================")
+
+
+	# print("Testing: f = alpha * x + beta")
+	# f_1 = alpha * x + beta
+	# print(f_1.val, f_1.der)
+	# print("====================")
+
+	# print("Testing: f = x * alpha + beta")
+	# f_2 = x * alpha + beta
+	# print(f_2.val, f_2.der)
+	# print("====================")
+
+	# print("Testing: f = beta + alpha * x")
+	# f_3 = beta + alpha * x
+	# print(f_3.val, f_3.der)
+	# print("====================")
+
+	# print("Testing: f = beta + x * alpha")
+	# f_4 = beta + x * alpha
+	# print(f_4.val, f_4.der)
+	# print("====================")
 
 
 
