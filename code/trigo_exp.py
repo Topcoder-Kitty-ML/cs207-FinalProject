@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import math
 from linear import AutoDiffToy as x_simple
@@ -11,7 +12,6 @@ class trigo_exp():
 	class.
 	E.g.
 	f(x) = alpha * trigo_func(x) + beta
-
 	Note:
 	x is a class object
 	'''
@@ -59,12 +59,11 @@ class trigo_exp():
 
 	@classmethod
 	def __perform_add__(cls, self, other):
-
-		# Assume that the other is a number that
-		# is added to this class
-		try:
-			alpha = self.alpha
-			beta = self.beta + other.real
+		# Assume that both objects are the same type
+		# Check if both objects are of the same type
+		if isinstance(self, type(other)):
+			alpha = self.alpha + other.alpha
+			beta = self.beta + other.beta
 			new_object = cls(self.x_object, alpha=alpha, beta=beta)
 
 			return new_object
@@ -207,14 +206,12 @@ class trigo_exp():
 		'''
 		Allows for commuative cases of subtraction, where a
 		float or integer are added to the autodifftoy object.
-
 		Note:
 		For the equation x - y,
 		__rsub__ works as y.__rsub(x)
 		Thus,
 		other --> x
 		self --> y
-
 		https://docs.python.org/2/reference/datamodel.html#object.__rsub__
 		'''
 		rsub_result = self.__perform_rsub__(self, other)
@@ -250,8 +247,6 @@ class trigo_exp():
 				return(new_toy)
 			except:
 				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
-
-                      
 
 	def __mul__(self, other):
 		'''
@@ -346,17 +341,70 @@ class trigo_exp():
 
 
 	def __div__(self, other):
-		pass
+		'''
+		This allows for division between a coefficient 
+		value and a AutoDiffToy object
+		'''
+		try:
+
+			return self.__perform_division__(self, other)
+
+
+		except:
+			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for division.')
+
 
 	def __rdiv__(self, other):
-		pass
+		try:
+	
+			return self.__perform_division__(self, other)
+		except:
+			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for division.')
 
-	def __pow__(self, other):
-		pass
 
-	def __rpow__(self, other):
-		pass
+	@classmethod
+	def __perform_division__(cls, self, other):
+		'''
+		Perform division
+		'''
+		try:
+		
+			alpha = self.alpha / other.real
+			beta = self.beta / other.real
+			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+		try:
+			alpha = other.alpha / self.real
+			beta = other.beta / self.real
+			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+		try:
 
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return self_dummy / other_dummy
+		except:
+			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for division.')
+
+    def __pow__(self, other):
+		try:
+	
+			return self.__perform_division__(self, other)
+		except:
+			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
+
+
+	def __rpow__(self, other): 
+		try:
+	
+			return self.__perform_division__(self, other)
+		except:
+			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
 
 
 
@@ -460,10 +508,10 @@ if __name__ == "__main__":
 
 	a = 2.0 # Value to evaluate at
 
+
 	alpha = 2.0
 	beta = 3.0
 	gamma = 4.0
-
 
 
 	a = 2.0 # Value to evaluate at
@@ -474,23 +522,25 @@ if __name__ == "__main__":
 	f = alpha * x + beta
 
 	print(f.val, f.der)
-
-
 	x_2 = sin(f)
 	print(x_2.val, x_2.der)
 
+
 	x_3 = sin(f)
+
 
 
 	x_4 = x_2 + x_3 + x_2
 	#print(x_4.alpha)
 	print(x_4.val, x_4.der)
 
+
 	print("======")
 	x_5 = x_4 + 1
 	print(x_5)
 	print(x_5.der)
 	print(x_5.val, x_5.der)
+
 
 	x_6 = 1 - x_4
 	print(x_6.val, x_6.der)
@@ -503,8 +553,10 @@ if __name__ == "__main__":
 
 
 
+
 	x_9 = 2 * cos(f) + 3
 	print(x_9.val, x_9.der)
+
 
 
 	x_9 = 2 * tan(f) + 3
@@ -524,6 +576,10 @@ if __name__ == "__main__":
 	# print(f.val, f.der)
 
 
+	x_10 = x_9 * x_9
+	print(x_10.val, x_10.der)
+
+
 	#f = alpha * x + beta
 	#f = x * alpha + beta
 
@@ -532,6 +588,9 @@ if __name__ == "__main__":
 	# f = alpha * x + beta
 	# print(f.val, f.der)
 	# print("====================")
+
+
+	# f = beta + alpha * x 
 
 
 	# print("Testing: f = alpha * x + beta")
@@ -552,7 +611,16 @@ if __name__ == "__main__":
 	# print("Testing: f = beta + x * alpha")
 	# f_4 = beta + x * alpha
 	# print(f_4.val, f_4.der)
+
 	# print("====================")
 
+	# print("Testing: f = beta + alpha * x")
+	# f_3 = beta + alpha * x
+	# print(f_3.val, f_3.der)
+	# print("====================")
 
+	# print("Testing: f = beta + x * alpha")
+	# f_4 = beta + x * alpha
+	# print(f_4.val, f_4.der)
+	# print("====================")
 

@@ -1,4 +1,8 @@
 
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+
 class dummy:
 	'''
 	A dummy class which covers all the cases
@@ -30,7 +34,7 @@ class dummy:
 			raise AttributeError()
 
 	def __radd__(self, other):
-		# Assume we're adding a simple number with a
+		# Assume we're adding a simple number with
 		# a dummy object
 		try:
 			new_val = other.real + self.val 
@@ -132,14 +136,53 @@ class dummy:
 
 
 	def __div__(self, other):
-		pass
+		'''
+		Apply the quotient rule
+		'''
+	
+		try:
+			new_val = self.val / other.real
+			new_der = self.der / other.real
+			return dummy(new_val, new_der)
+		except AttributeError:
+			pass
+
+		try:
+			new_val = self.val / other.val
+			new_der = (other.val * self.der - self.val * other.der) / other.val ** 2
+			return dummy(new_val, new_der)
+		except:
+			raise AttributeError()
 
 	def __rdiv__(self, other):
-		pass
+	
+		try:
+			new_val = other.real / self.val
+			new_der = other.real / self.der
+			return dummy(new_val, new_der)
+		except AttributeError:
+			pass
 
+		try:
+			new_val = self.val / other.val
+			new_der = (other.val * self.der - self.val * other.der) / other.val ** 2
+			return dummy(new_val, new_der)
+		except:
+			raise AttributeError()
+            
 	def __pow__(self, other):
-		pass
+	
+		try:
+			new_val = self.val ** other.real
+			new_der = (other.real * self.val) ** (other.real - 1)
+			return dummy(new_val, new_der) 
+        except AttributeError:
+			pass 
 
 	def __rpow__(self, other):
-		pass
-
+		try:
+			new_val = other.real ** self.val
+			new_der = (other.real ** self.val) * (math.log(other.real))
+			return dummy(new_val, new_der) 
+		except AttributeError:
+			pass

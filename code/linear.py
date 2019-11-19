@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from dummy import dummy
 
 class AutoDiffToy():
@@ -90,6 +93,7 @@ class AutoDiffToy():
 		'''
 		# We assume that 'other' is just a number being added 
 		# to the autodiff object. Allows commutative case
+
 		try:
 			beta = self.beta + other.real
 			new_toy = AutoDiffToy(self.a, self.alpha, beta)
@@ -230,13 +234,68 @@ class AutoDiffToy():
 
 
 	def __div__(self, other):
-		raise NotImplementedError
+        
+		try:
+			alpha = self.alpha / other.real
+			beta = self.beta / other.real
+			new_toy = AutoDiffToy(self.a, alpha, beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return self_dummy / other_dummy
+		except:
+			raise AttributeError()
 
 	def __rdiv__(self, other):
-		raise NotImplementedError
+	
+		try:
+			alpha = self.alpha / other.real
+			beta = self.beta / other.real
+			new_toy = AutoDiffToy(self.a, alpha, beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return other_dummy / self_dummy
+		except:
+			raise AttributeError()
 
 	def __pow__(self, other):
-		raise NotImplementedError
+		try:
+			alpha = self.alpha ** other.real
+			beta = self.beta ** other.real
+			new_toy = AutoDiffToy(self.a, alpha, beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return self_dummy ** other_dummy
+		except:
+			raise AttributeError()
+
 
 	def __rpow__(self, other):
-		raise NotImplementedError
+		try:
+			alpha = self.alpha ** other.real
+			beta = self.beta ** other.real
+			new_toy = AutoDiffToy(self.a, alpha, beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return other_dummy ** self_dummy
+		except:
+			raise AttributeError()
