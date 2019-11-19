@@ -183,9 +183,7 @@ class trigo_exp():
 				return(new_toy)
 			except:
 				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
-
                       
-
 	def __mul__(self, other):
 		'''
 		This allows for multiplication between a coefficient 
@@ -499,7 +497,7 @@ if __name__ == "__main__":
 	x_4 = x_2 + x_3 + x_2
 	print(x_4.alpha)
 	print(x_4.val, x_4.der)
-
+  
 	print("======")
 	x_5 = x_4 + 1
 	print(x_5)
@@ -508,6 +506,7 @@ if __name__ == "__main__":
 
 	x_6 = 1 - x_4
 	print(x_6.val, x_6.der)
+
 
 	x_7 = x_6 * 2
 	print(x_7.val, x_7.der)
