@@ -135,7 +135,7 @@ class dummy:
 			raise AttributeError()
 
 
-	def __div__(self, other):
+	def __truediv__(self, other):
 		'''
 		Apply the quotient rule
 		'''
@@ -154,7 +154,7 @@ class dummy:
 		except:
 			raise AttributeError()
 
-	def __rdiv__(self, other):
+	def __rtruediv__(self, other):
 	
 		try:
 			new_val = other.real / self.val

@@ -67,7 +67,6 @@ class trigo_exp():
 			new_object = cls(self.x_object, alpha=alpha, beta=beta)
 
 			return new_object
-			
 		except AttributeError:
 			pass
 
@@ -387,7 +386,7 @@ class trigo_exp():
 			raise AttributeError
 
 
-	def __div__(self, other):
+	def __truediv__(self, other):
 		'''
 		This allows for division between a coefficient 
 		value and a AutoDiffToy object
@@ -401,7 +400,7 @@ class trigo_exp():
 			raise AttributeError
 
 
-	def __rdiv__(self, other):
+	def __rtruediv__(self, other):
 		try:
 	
 			return self.__perform_division__(self, other)
