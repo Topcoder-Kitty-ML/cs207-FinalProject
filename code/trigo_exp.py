@@ -59,20 +59,47 @@ class trigo_exp():
 
 	@classmethod
 	def __perform_add__(cls, self, other):
-		# Assume that both objects are the same type
-		# Check if both objects are of the same type
-		if isinstance(self, type(other)):
-			alpha = self.alpha + other.alpha
-			beta = self.beta + other.beta
-			new_object = cls(self.x_object, alpha=alpha, beta=beta)
-			return(new_object)
 
-		# Perhaps the 'other' is not an AutoDiffToyObject.
-		else:
-			try:
-				return self.__radd__(other)
-			except:
-				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+		# Assume that the other is a number that
+		# is added to this class
+		try:
+			alpha = self.alpha
+			beta = self.beta + other.real
+			new_object = cls(self.x_object, alpha=alpha, beta=beta)
+
+			return new_object
+			
+		except AttributeError:
+			pass
+
+		try:
+			# Deals with case where both self and other
+			# are weird unrecognized cases. We covert
+			# them to dummy classes and extract their values
+			# and derivatives only for subsequent use.
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return self_dummy + other_dummy
+		except:
+			raise AttributeError
+
+
+
+		# # Assume that both objects are the same type
+		# # Check if both objects are of the same type
+		# if isinstance(self, type(other)):
+		# 	alpha = self.alpha + other.alpha
+		# 	beta = self.beta + other.beta
+		# 	new_object = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_object)
+
+		# # Perhaps the 'other' is not an AutoDiffToyObject.
+		# else:
+		# 	try:
+		# 		return self.__radd__(other)
+		# 	except:
+		# 		raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
 
 
 	def __radd__(self, other):
@@ -86,29 +113,67 @@ class trigo_exp():
 
 	@classmethod
 	def __perform_radd__(cls, self, other):
-		try:
-			alpha = self.alpha + other.alpha
-			beta = self.beta + other.beta
-			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-			return(new_toy)
+		# We assume that the 'other' is a simple number, and
+		# we will add our current object to it
 
-		# Perhaps the 'other' is not an AutoDiffToyObject.
-		# So we'll just add the constant values
+		# For case of x + y, assume that self is a class of interest,
+		# other is a number
+		try:
+			alpha = self.alpha
+			beta = self.beta + other.real
+			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+
+			return new_toy
+		except AttributeError:
+			pass
+		# For case of x + y, assume that other is a class of interest,
+		# self is a number
+		try:
+			alpha = other.alpha
+			beta = other.beta + self.real
+			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+
+			return new_toy
+		except AttributeError:
+			pass
+
+
+		try:
+			# Deals with case where both self and other
+			# are weird unrecognized cases. We covert
+			# them to dummy classes and extract their values
+			# and derivatives only for subsequent use.
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return self_dummy + other_dummy
 		except:
-			try:
-				if isinstance(self, cls):
-					alpha = self.alpha
-					beta = self.beta + other.real
-					new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-				elif isinstance(other, cls):
-					alpha = other.alpha
-					beta = other.beta + self.real
-					new_toy = cls(other.x_object, alpha=alpha, beta=beta)
-				else:
-					raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
-				return(new_toy)
-			except:
-				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+
+
+		# try:
+		# 	alpha = self.alpha + other.alpha
+		# 	beta = self.beta + other.beta
+		# 	new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+
+		# # Perhaps the 'other' is not an AutoDiffToyObject.
+		# # So we'll just add the constant values
+		# except:
+		# 	try:
+		# 		if isinstance(self, cls):
+		# 			alpha = self.alpha
+		# 			beta = self.beta + other.real
+		# 			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 		elif isinstance(other, cls):
+		# 			alpha = other.alpha
+		# 			beta = other.beta + self.real
+		# 			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+		# 		else:
+		# 			raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+		# 		return(new_toy)
+		# 	except:
+		# 		raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
 
 
 	def __sub__(self, other):
@@ -418,7 +483,7 @@ if __name__ == "__main__":
 
 
 	x_4 = x_2 + x_3 + x_2
-	print(x_4.alpha)
+	#print(x_4.alpha)
 	print(x_4.val, x_4.der)
 
 	print("======")
