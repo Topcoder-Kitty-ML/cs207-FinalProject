@@ -180,7 +180,7 @@ class dummy:
 	def __rpow__(self, other):
 		try:
 			new_val = other.real ** self.val
-			new_der = other.real ** self.val * (math.log(other.real))
-			return dummy(new_val, new_der)
+			new_der = (other.real ** self.val) * (math.log(other.real))
+			return dummy(new_val, new_der) 
 		except AttributeError:
 			pass
