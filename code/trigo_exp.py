@@ -394,7 +394,7 @@ class trigo_exp():
     def __pow__(self, other):
 		try:
 	
-			return self.__perform_division__(self, other)
+			return self.__perform_higherorder__(self, other)
 		except:
 			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
 
@@ -402,7 +402,35 @@ class trigo_exp():
 	def __rpow__(self, other): 
 		try:
 	
-			return self.__perform_division__(self, other)
+			return self.__perform_higherorder__(self, other)
+		except:
+			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
+
+    @classmethod
+	def __perform_higherpower__(cls, self, other):
+		'''
+		Perform power
+		'''
+		try: 
+		
+			alpha = self.alpha ** other.real
+			beta = self.beta ** other.real
+			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+		try:
+			alpha = other.alpha ** self.real
+			beta = other.beta ** self.real
+			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+		try:
+
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return self_dummy ** other_dummy
 		except:
 			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
 
