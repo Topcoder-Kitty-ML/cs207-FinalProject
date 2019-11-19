@@ -11,6 +11,17 @@ class dummy:
 		self.der = der
 
 	def __add__(self, other):
+		# Assume we're adding a simple number with a
+		# a dummy object
+		try:
+			new_val = self.val + other.real
+			new_der = self.der
+			return dummy(new_val, new_der)
+		except AttributeError:
+			pass
+
+		# Adding two dummy object, or a dummy with
+		# another object
 		try:
 			new_val = self.val + other.val
 			new_der = self.der + other.der
@@ -19,6 +30,17 @@ class dummy:
 			raise AttributeError()
 
 	def __radd__(self, other):
+		# Assume we're adding a simple number with a
+		# a dummy object
+		try:
+			new_val = other.real + self.val 
+			new_der = self.der
+			return dummy(new_val, new_der)
+		except AttributeError:
+			pass
+
+		# Adding two dummy object, or a dummy with
+		# another object
 		try:
 			new_val = self.val + other.val
 			new_der = self.der + other.der
@@ -27,6 +49,17 @@ class dummy:
 			raise AttributeError()
 
 	def __sub__(self, other):
+		# Assume we're subtracting a simple number with a
+		# a dummy object
+		try:
+			new_val = self.val - other.real
+			new_der = self.der
+			return dummy(new_val, new_der)
+		except AttributeError:
+			pass
+
+		# Subtracting two dummy object, or a dummy with
+		# another object
 		try:
 			new_val = self.val - other.val
 			new_der = self.der - other.der
@@ -35,6 +68,19 @@ class dummy:
 			raise AttributeError()
 
 	def __rsub__(self, other):
+		# Assume we're subtracting a simple number with a
+		# a dummy object
+		# E.g. num - dummy
+		# num is 'other', dummy is 'self'
+		try:
+			new_val = other.real - self.val
+			new_der = self.der
+			return dummy(new_val, new_der)
+		except AttributeError:
+			pass
+
+		# Subtracting two dummy object, or a dummy with
+		# another object
 		try:
 			new_val = other.val - self.val
 			new_der = other.der - self.der
@@ -46,6 +92,15 @@ class dummy:
 		'''
 		Apply the product rule
 		'''
+		# Assume we're multiplying a dummy object with
+		# a simple number.
+		try:
+			new_val = self.val * other.real
+			new_der = self.der * other.real
+			return dummy(new_val, new_der)
+		except AttributeError:
+			pass
+
 		try:
 			new_val = self.val * other.val
 			new_der = self.val * other.der + other.val * self.der
@@ -58,12 +113,23 @@ class dummy:
 		'''
 		E.g. case of sin multiply by dummy class
 		'''
+
+		# For case of x * y, where x is a number.
+		# x is other, and y is self.
+		try:
+			new_val = other.real * self.val
+			new_der = other.real * self.der
+			return dummy(new_val, new_der)
+		except AttributeError:
+			pass
+
 		try:
 			new_val = self.val * other.val
 			new_der = self.val * other.der + other.val * self.der
 			return dummy(new_val, new_der)
 		except:
 			raise AttributeError()
+
 
 	def __div__(self, other):
 		pass
