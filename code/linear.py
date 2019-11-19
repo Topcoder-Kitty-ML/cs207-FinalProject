@@ -93,6 +93,7 @@ class AutoDiffToy():
 		'''
 		# We assume that 'other' is just a number being added 
 		# to the autodiff object. Allows commutative case
+
 		try:
 			beta = self.beta + other.real
 			new_toy = AutoDiffToy(self.a, self.alpha, beta)
