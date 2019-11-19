@@ -61,9 +61,9 @@ class trigo_exp():
 	def __perform_add__(cls, self, other):
 		# Assume that both objects are the same type
 		# Check if both objects are of the same type
-		if isinstance(self, type(other)):
-			alpha = self.alpha + other.alpha
-			beta = self.beta + other.beta
+		try:
+			alpha = self.alpha
+			beta = self.beta + other.real
 			new_object = cls(self.x_object, alpha=alpha, beta=beta)
 
 			return new_object
@@ -391,9 +391,8 @@ class trigo_exp():
 		except:
 			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for division.')
 
-    def __pow__(self, other):
+	def __pow__(self, other):
 		try:
-	
 			return self.__perform_division__(self, other)
 		except:
 			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
