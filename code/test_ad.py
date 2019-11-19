@@ -395,7 +395,7 @@ def test_trig_rdiv_error():
 
 ## Test rpow error
 def test_trig_rpow_error():
-    with pystest.raises(AttributeError):
+    with pytest.raises(AttributeError):
         a = 2.0  # Value to evaluate at
         x = autodiff(a)
         y = autodiff(a)
@@ -466,7 +466,7 @@ def test_trig_div_error():
 
 ## Test pow error
 def test_trig_pow_error():
-    with pystest.raises(AttributeError):
+    with pytest.raises(AttributeError):
         a = 2.0  # Value to evaluate at
         x = autodiff(a)
         y = autodiff(a)
@@ -487,7 +487,7 @@ def test_ax_b():
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
-    assert (f.val, f.der) == (2, 7)
+    assert (f.val, f.der) == (7, 2)
 
 # b + ax
 def test_b_ax():
@@ -496,7 +496,7 @@ def test_b_ax():
     alpha = 2.0
     beta = 3.0
     f = beta + alpha * x
-    assert (f.val, f.der) == (2, 7)
+    assert (f.val, f.der) == (7, 2)
 
 # xa + b
 def test_xa_b():
@@ -505,7 +505,7 @@ def test_xa_b():
     alpha = 2.0
     beta = 3.0
     f = x*alpha + beta
-    assert (f.val, f.der) == (2, 7)
+    assert (f.val, f.der) == (7, 2)
 
 # b + xa
 def test_b_xa():
@@ -514,7 +514,7 @@ def test_b_xa():
     alpha = 2.0
     beta = 3.0
     f = beta + x*alpha
-    assert (f.val, f.der) == (2, 7)
+    assert (f.val, f.der) == (7, 2)
 
 # Test dummy class =============================
 
@@ -600,7 +600,7 @@ def test_dummy_pow_1():
     h = dummy(2, 2)
     d_obj = f ** h
     power_derivative = f.val ** h.val * (f.der*h.val/f.val+(h.der*math.log(f.val)))
-    assert (div_f.val, div_f.der) == (f.val ** h.val, power_derivative)
+    assert (d_obj.val, d_obj.der) == (f.val ** h.val, power_derivative)
 
 def test_dummy_pow_2():
     f = dummy(1, 0)
