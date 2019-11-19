@@ -1,3 +1,6 @@
+from trigo_exp import *
+from linear import AudoDiffToy as autodiff
+
 class JacobianProduct:
     """
     For vector functions, the output of autodifferentiation in the forward mode
