@@ -59,11 +59,11 @@ class trigo_exp():
 
 	@classmethod
 	def __perform_add__(cls, self, other):
-		# Assume that both objects are the same type
-		# Check if both objects are of the same type
-		if isinstance(self, type(other)):
-			alpha = self.alpha + other.alpha
-			beta = self.beta + other.beta
+		# Assumes that other is a number, and self is
+		# an object of interest.
+		try:
+			alpha = self.alpha
+			beta = self.beta + other.real
 			new_object = cls(self.x_object, alpha=alpha, beta=beta)
 
 			return new_object
@@ -146,7 +146,7 @@ class trigo_exp():
 
 			return self_dummy + other_dummy
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			raise AttributeError
 
 
 		# try:
@@ -187,19 +187,43 @@ class trigo_exp():
 		# Assume that both objects are AutoDiffToyObjects
 		# Check if both objects are of the same type
 		# Self is probably the object on the LHS of the equation
-		if isinstance(self, type(other)):
-			alpha = self.alpha - other.alpha
-			beta = self.beta - other.beta
+		# if isinstance(self, type(other)):
+		# 	alpha = self.alpha - other.alpha
+		# 	beta = self.beta - other.beta
+		# 	new_object = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_object)
+
+		# # Perhaps the 'other' is not an AutoDiffToyObject.
+		# else:
+		# 	try:
+		# 		return self.__rsub__(other)
+		# 	except:
+		# 		raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+
+
+		# Assume that other is a number, and self
+		# is an object of interest.
+		try:
+			alpha = self.alpha
+			beta = self.beta - other.real
 			new_object = cls(self.x_object, alpha=alpha, beta=beta)
-			return(new_object)
 
-		# Perhaps the 'other' is not an AutoDiffToyObject.
-		else:
-			try:
-				return self.__rsub__(other)
-			except:
-				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+			return new_object
+			
+		except AttributeError:
+			pass
 
+		try:
+			# Deals with case where both self and other
+			# are weird unrecognized cases. We covert
+			# them to dummy classes and extract their values
+			# and derivatives only for subsequent use.
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return self_dummy - other_dummy
+		except:
+			raise AttributeError
 
 	def __rsub__(self, other):
 		'''
@@ -219,33 +243,56 @@ class trigo_exp():
 
 	@classmethod
 	def __perform_rsub__(cls, self, other):
-		try:
-			# Maybe need to make this more stringent!!!
-			# E.g. the self.x_object (why not other?)
-			# A bit dangerous if we are using a sin subtracting a cos
-			alpha = other.alpha - self.alpha
-			beta = other.beta - self.beta
-			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-			return(new_toy)
+		# try:
+		# 	# Maybe need to make this more stringent!!!
+		# 	# E.g. the self.x_object (why not other?)
+		# 	# A bit dangerous if we are using a sin subtracting a cos
+		# 	alpha = other.alpha - self.alpha
+		# 	beta = other.beta - self.beta
+		# 	new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
 
-		# Perhaps the 'other' is not an AutoDiffToyObject.
-		# So we'll just add the constant values
+		# # Perhaps the 'other' is not an AutoDiffToyObject.
+		# # So we'll just add the constant values
+		# except:
+		# 	try:
+		# 		if isinstance(self, cls):
+		# 			alpha = self.alpha
+		# 			beta = other.real - self.beta
+		# 			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 		elif isinstance(other, cls):
+		# 			# I dun think we will ever get here
+		# 			alpha = other.alpha
+		# 			beta = other.beta - self.real
+		# 			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+		# 		else:
+		# 			raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+		# 		return(new_toy)
+		# 	except:
+		# 		raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+
+		# Assume that this is a case where x - y, where x is a
+		# number, and y is a class of interest.
+		# x is other, y is self.
+		try:
+			alpha = self.alpha
+			beta = other.real - self.beta
+			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+			return new_toy
+		except AttributeError:
+			pass
+
+		try:
+			# Deals with case where both self and other
+			# are weird unrecognized cases. We covert
+			# them to dummy classes and extract their values
+			# and derivatives only for subsequent use.
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return other_dummy - self_dummy
 		except:
-			try:
-				if isinstance(self, cls):
-					alpha = self.alpha
-					beta = other.real - self.beta
-					new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-				elif isinstance(other, cls):
-					# I dun think we will ever get here
-					alpha = other.alpha
-					beta = other.beta - self.real
-					new_toy = cls(other.x_object, alpha=alpha, beta=beta)
-				else:
-					raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
-				return(new_toy)
-			except:
-				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+			raise AttributeError
 
 	def __mul__(self, other):
 		'''
@@ -261,7 +308,7 @@ class trigo_exp():
 
 		# Catch weird cases. E.g. when we're multiplying two 'x' classes
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			raise AttributeError
 
 
 	def __rmul__(self, other):
@@ -278,7 +325,7 @@ class trigo_exp():
 			# return(new_toy)
 			return self.__perform_muliplication__(self, other)
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			raise AttributeError
 
 
 	# @classmethod
@@ -336,7 +383,7 @@ class trigo_exp():
 
 			return self_dummy * other_dummy
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			raise AttributeError
 
 
 	def __truediv__(self, other):
@@ -350,7 +397,7 @@ class trigo_exp():
 
 
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for division.')
+			raise AttributeError
 
 
 	def __rtruediv__(self, other):
@@ -358,7 +405,7 @@ class trigo_exp():
 	
 			return self.__perform_division__(self, other)
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for division.')
+			raise AttributeError
 
 
 	@classmethod
@@ -388,24 +435,22 @@ class trigo_exp():
 
 			return self_dummy / other_dummy
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for division.')
+			raise AttributeError
 
-    def __pow__(self, other):
-		try:
-	
+	def __pow__(self, other):
+		try:	
 			return self.__perform_higherorder__(self, other)
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
+			raise AttributeError
 
 
 	def __rpow__(self, other): 
 		try:
-	
 			return self.__perform_higherorder__(self, other)
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
+			raise AttributeError
 
-    @classmethod
+	@classmethod
 	def __perform_higherpower__(cls, self, other):
 		'''
 		Perform power
@@ -431,7 +476,7 @@ class trigo_exp():
 			other_dummy = dummy(other.val, other.der)
 			return self_dummy ** other_dummy
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
+			raise AttributeError
 
 
 
@@ -449,7 +494,6 @@ class sin(trigo_exp):
 
 		return value
 
-	
 	def calc_function_derivative_val(self):
 		'''
 		Calculate the derivative of this function
