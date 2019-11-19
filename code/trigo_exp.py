@@ -400,7 +400,6 @@ class trigo_exp():
 
 	def __rpow__(self, other): 
 		try:
-	
 			return self.__perform_division__(self, other)
 		except:
 			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
@@ -421,7 +420,6 @@ class sin(trigo_exp):
 
 		return value
 
-	
 	def calc_function_derivative_val(self):
 		'''
 		Calculate the derivative of this function
