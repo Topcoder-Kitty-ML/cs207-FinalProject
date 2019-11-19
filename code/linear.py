@@ -233,7 +233,7 @@ class AutoDiffToy():
 			raise AttributeError()
 
 
-	def __div__(self, other):
+	def __truediv__(self, other):
         
 		try:
 			alpha = self.alpha / other.real
@@ -250,7 +250,7 @@ class AutoDiffToy():
 		except:
 			raise AttributeError()
 
-	def __rdiv__(self, other):
+	def __rtruediv__(self, other):
 	
 		try:
 			alpha = self.alpha / other.real
