@@ -451,7 +451,7 @@ class trigo_exp():
 			raise AttributeError
 
 	@classmethod
-	def __perform_higherpower__(cls, self, other):
+	def __perform_higherorder__(cls, self, other):
 		'''
 		Perform power
 		'''
