@@ -57,7 +57,7 @@ class dummy:
 		# a dummy object
 		try:
 			new_val = self.val - other.real
-			new_der = self.der
+			new_der = - self.der
 			return dummy(new_val, new_der)
 		except AttributeError:
 			pass
@@ -78,7 +78,7 @@ class dummy:
 		# num is 'other', dummy is 'self'
 		try:
 			new_val = other.real - self.val
-			new_der = self.der
+			new_der = - self.der
 			return dummy(new_val, new_der)
 		except AttributeError:
 			pass
