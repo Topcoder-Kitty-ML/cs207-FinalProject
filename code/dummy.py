@@ -169,14 +169,14 @@ class dummy:
 			return dummy(new_val, new_der)
 		except:
 			raise AttributeError()
-            
+
 	def __pow__(self, other):
 	
 		try:
 			new_val = self.val ** other.real
 			new_der = (other.real * self.val) ** (other.real - 1)
 			return dummy(new_val, new_der) 
-        except AttributeError:
+		except AttributeError:
 			pass 
         
         try:

@@ -1,7 +1,8 @@
 import pytest
 from trigo_exp import *
-from linear import AudoDiffToy as autodiff
+from linear import AutoDiffToy as autodiff
 from vector_jacobian import *
+import math
 
 # Elemental function tests ====================
 
@@ -624,3 +625,7 @@ def test_dummy_rpow_1():
 
 ### Non-intended behavior
 # TODO: Will be available in final version
+
+
+
+# test_linear_div()

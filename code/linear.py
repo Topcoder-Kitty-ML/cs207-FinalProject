@@ -232,9 +232,7 @@ class AutoDiffToy():
 		except:
 			raise AttributeError()
 
-
-	def __truediv__(self, other):
-        
+	def __truediv__(self, other):   
 		try:
 			alpha = self.alpha / other.real
 			beta = self.beta / other.real
