@@ -1,5 +1,5 @@
 from trigo_exp import *
-from linear import AudoDiffToy as autodiff
+from linear import AutoDiffToy as autodiff
 
 class JacobianProduct:
     """
