@@ -303,7 +303,7 @@ def test_trig_rsub_1():
     x_2 = 2
     x_3 = cos(h)
     x_4 = x_2 - x_3
-    assert (x_4.val, x_4.der) == (x_2 - x_3.val, x_3.der)
+    assert (x_4.val, x_4.der) == (x_2 - x_3.val, -x_3.der)
 
 ## Test rdiv
 def test_trig_rdiv_1():
