@@ -162,7 +162,7 @@ class AutoDiffToy():
 		# Note that for a case of x - y, y refers to self here,
 		# and other refers to x.
 		try:
-			alpha = self.alpha
+			alpha = - self.alpha
 			beta = other.real - self.beta
 			new_toy = AutoDiffToy(self.a, alpha, beta)
 			return(new_toy)
