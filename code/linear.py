@@ -144,7 +144,7 @@ class AutoDiffToy():
 			# and other refers to y.
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
-			return self_dummy - other_dummy
+			return self_dummy - other_dummy 
 		except:
 			raise AttributeError()
 
@@ -268,6 +268,7 @@ class AutoDiffToy():
 			pass 
 		
 		# Case of x ** y, where x and y are both classes
+
 		try:
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
@@ -277,6 +278,7 @@ class AutoDiffToy():
 
 
 	def __rpow__(self, other):
+# <<<<<<< HEAD
 		# try:
 		# 	alpha = self.alpha ** other.real
 		# 	beta = self.beta ** other.real
@@ -296,6 +298,16 @@ class AutoDiffToy():
 
 		# Case of x ** y, where both x and y are objects.
 		# x is other, y is self.
+# =======
+# #		try:
+# #			alpha = self.alpha ** other.real
+# #			beta = self.beta ** other.real
+# #			new_toy = AutoDiffToy(self.a, alpha, beta)
+# #			return(new_toy)
+# #		except AttributeError:
+# #			pass
+# #
+# >>>>>>> tchen
 		try:
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
