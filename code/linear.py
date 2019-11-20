@@ -265,46 +265,35 @@ class AutoDiffToy():
 		except:
 			raise AttributeError()
 
-	def __pow__(self, other):
-		try:
-			alpha = self.alpha ** other.real
-			beta = self.beta ** other.real
-			new_toy = AutoDiffToy(self.a, alpha, beta)
-			return(new_toy)
-		except AttributeError:
-			pass
-
-		try:
-			self_dummy = dummy(self.val, self.der)
-			other_dummy = dummy(other.val, other.der)
-			return self_dummy ** other_dummy
-		except:
-			raise AttributeError()
-
-
-	def __rpow__(self, other):
-		try:
-			alpha = self.alpha ** other.real
-			beta = self.beta ** other.real
-			new_toy = AutoDiffToy(self.a, alpha, beta)
-			return(new_toy)
-		except AttributeError:
-			pass
-
-		try:
-			self_dummy = dummy(self.val, self.der)
-			other_dummy = dummy(other.val, other.der)
-			return other_dummy ** self_dummy
-		except:
-			raise AttributeError()
-
-	def __neg__(self):
-		try:
-			alpha = -1 * self.alpha
-			beta = -1 * self.beta
-			new_toy = AutoDiffToy(self.a, alpha, beta)
-			return(new_toy)
-		except:
-			raise AttributeError()
-
-
+#	def __pow__(self, other):
+#		try:
+#			alpha = self.alpha
+#			beta = self.beta 
+#			new_toy = AutoDiffToy(self.a, alpha, beta)
+#			return(new_toy)
+#		except AttributeError:
+#			pass
+#
+#		try:
+#			self_dummy = dummy(self.val, self.der)
+#			other_dummy = dummy(other.val, other.der)
+#			return self_dummy ** other_dummy
+#		except:
+#			raise AttributeError()
+# 
+#
+#	def __rpow__(self, other):
+#		try:
+#			alpha = self.alpha ** other.real
+#			beta = self.beta ** other.real
+#			new_toy = AutoDiffToy(self.a, alpha, beta)
+#			return(new_toy)
+#		except AttributeError:
+#			pass
+#
+#		try:
+#			self_dummy = dummy(self.val, self.der)
+#			other_dummy = dummy(other.val, other.der)
+#			return other_dummy ** self_dummy
+#		except:
+#			raise AttributeError()

@@ -142,7 +142,7 @@ class dummy:
 	
 		try:
 			new_val = self.val / other.real
-			new_der = self.der / other.real
+			new_der = self.der / other.real 
 			return dummy(new_val, new_der)
 		except AttributeError:
 			pass
@@ -152,7 +152,7 @@ class dummy:
 			new_der = (other.val * self.der - self.val * other.der) / other.val ** 2
 			return dummy(new_val, new_der)
 		except:
-			raise AttributeError()
+			raise AttributeError() 
 
 	def __rtruediv__(self, other):
 	
@@ -173,7 +173,7 @@ class dummy:
 	def __pow__(self, other):
 		try:
 			new_val = self.val ** other.real
-			new_der = other.real * self.val ** (other.real - 1)
+			new_der = self.val ** other.real * (self.der * (other.real/self.val) + (other.der * math.log(self.val)))
 			return dummy(new_val, new_der) 
 		except AttributeError:
 			pass 
@@ -200,4 +200,3 @@ class dummy:
 			return dummy(new_val, new_der) 
 		except:
 			raise AttributeError()
-
