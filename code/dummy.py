@@ -149,7 +149,7 @@ class dummy:
 
 		try:
 			new_val = self.val / other.val
-			new_der = (other.val * self.der - self.val * other.der) / other.val ** 2
+			new_der = (other.val * self.der - self.val * other.der) / (other.val ** 2)
 			return dummy(new_val, new_der)
 		except:
 			raise AttributeError() 
