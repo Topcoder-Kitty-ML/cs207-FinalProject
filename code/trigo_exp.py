@@ -456,7 +456,6 @@ class trigo_exp():
 		Perform power
 		'''
 		try: 
-		
 			alpha = self.alpha ** other.real
 			beta = self.beta ** other.real
 			new_toy = cls(self.x_object, alpha=alpha, beta=beta)

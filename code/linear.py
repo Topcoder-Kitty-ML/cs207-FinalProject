@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from dummy import dummy
+import math
 
 class AutoDiffToy():
 	'''
@@ -265,35 +266,52 @@ class AutoDiffToy():
 		except:
 			raise AttributeError()
 
-#	def __pow__(self, other):
-#		try:
-#			alpha = self.alpha
-#			beta = self.beta 
-#			new_toy = AutoDiffToy(self.a, alpha, beta)
-#			return(new_toy)
-#		except AttributeError:
-#			pass
-#
-#		try:
-#			self_dummy = dummy(self.val, self.der)
-#			other_dummy = dummy(other.val, other.der)
-#			return self_dummy ** other_dummy
-#		except:
-#			raise AttributeError()
-# 
-#
-#	def __rpow__(self, other):
-#		try:
-#			alpha = self.alpha ** other.real
-#			beta = self.beta ** other.real
-#			new_toy = AutoDiffToy(self.a, alpha, beta)
-#			return(new_toy)
-#		except AttributeError:
-#			pass
-#
-#		try:
-#			self_dummy = dummy(self.val, self.der)
-#			other_dummy = dummy(other.val, other.der)
-#			return other_dummy ** self_dummy
-#		except:
-#			raise AttributeError()
+	def __pow__(self, other):
+		# try:
+		# 	alpha = self.alpha
+		# 	beta = self.beta 
+		# 	new_toy = AutoDiffToy(self.a, alpha, beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
+
+		# try:
+		# 	self_dummy = dummy(self.val, self.der)
+		# 	other_dummy = dummy(other.val, other.der)
+		# 	return self_dummy ** other_dummy
+		# except:
+		# 	raise AttributeError()
+
+		# Assume that other is a number
+		try:
+			new_val = self.val ** other.real
+			new_der = self.val ** other.real * (self.der * (other.real/self.val) + (0 * math.log(self.val)))
+			return dummy(new_val, new_der) 
+		except AttributeError:
+			pass 
+		
+		try:
+			# new_val = self.val ** other.val
+			# new_der = self.val ** other.val * (self.der * (other.val/self.val)+ (other.der* math.log(self.val)))
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return self_dummy ** other_dummy
+		except:
+			raise AttributeError()
+
+
+	def __rpow__(self, other):
+		try:
+			alpha = self.alpha ** other.real
+			beta = self.beta ** other.real
+			new_toy = AutoDiffToy(self.a, alpha, beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return other_dummy ** self_dummy
+		except:
+			raise AttributeError()
