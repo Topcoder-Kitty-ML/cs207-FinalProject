@@ -275,7 +275,7 @@ class trigo_exp():
 		# number, and y is a class of interest.
 		# x is other, y is self.
 		try:
-			alpha = self.alpha
+			alpha = - self.alpha
 			beta = other.real - self.beta
 			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
 			return new_toy
@@ -392,10 +392,7 @@ class trigo_exp():
 		value and a AutoDiffToy object
 		'''
 		try:
-
 			return self.__perform_division__(self, other)
-
-
 		except:
 			raise AttributeError
 
@@ -403,7 +400,7 @@ class trigo_exp():
 	def __rtruediv__(self, other):
 		try:
 	
-			return self.__perform_division__(self, other)
+			return self.__perform_rdivision__(self, other)
 		except:
 			raise AttributeError
 
@@ -413,23 +410,35 @@ class trigo_exp():
 		'''
 		Perform division
 		'''
-		try:
+		# try:
 		
+		# 	alpha = self.alpha / other.real
+		# 	beta = self.beta / other.real
+		# 	new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
+		# try:
+		# 	alpha = other.alpha / self.real
+		# 	beta = other.beta / self.real
+		# 	new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
+
+		# Assume other is a number
+		try:
 			alpha = self.alpha / other.real
 			beta = self.beta / other.real
 			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-			return(new_toy)
-		except AttributeError:
-			pass
-		try:
-			alpha = other.alpha / self.real
-			beta = other.beta / self.real
-			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
-			return(new_toy)
-		except AttributeError:
-			pass
-		try:
 
+			return(new_toy)
+
+		except AttributeError:
+			pass
+
+		# Assume two classes dividing by each other
+		try:
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
 
@@ -437,45 +446,108 @@ class trigo_exp():
 		except:
 			raise AttributeError
 
+	@classmethod
+	def __perform_rdivision__(cls, self, other):
+
+		# For case of x / y, where we assume that
+		# x is a number. (x is other, y is self)
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.real, 0) # derivative of a number is zero
+
+			return other_dummy / self_dummy
+
+		except AttributeError:
+			pass
+
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return other_dummy / self_dummy
+		except:
+			raise AttributeError
+
+
+
 	def __pow__(self, other):
 		try:	
-			return self.__perform_higherorder__(self, other)
+			return self.__perform_pow__(self, other)
+		except:
+			raise AttributeError
+
+	@classmethod
+	def __perform_pow__(cls, self, other):
+		'''
+		Perform power
+		'''
+
+		# Case of x ** y, where we assume y is a number.
+		# x is self, y is other
+		try: 
+			# alpha = self.alpha ** other.real
+			# beta = self.beta ** other.real
+			# new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+			# return(new_toy)
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.real, 0)
+			return self_dummy ** other_dummy
+		except AttributeError:
+			pass
+
+		# Case of x ** y, where x and y are both classes
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return self_dummy ** other_dummy
 		except:
 			raise AttributeError
 
 
 	def __rpow__(self, other): 
 		try:
-			return self.__perform_higherorder__(self, other)
+			return self.__perform_rpow__(self, other)
 		except:
 			raise AttributeError
 
 	@classmethod
-	def __perform_higherpower__(cls, self, other):
+	def __perform_rpow__(cls, self, other):
 		'''
 		Perform power
 		'''
-		try: 
-			alpha = self.alpha ** other.real
-			beta = self.beta ** other.real
-			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-			return(new_toy)
-		except AttributeError:
-			pass
-		try:
-			alpha = other.alpha ** self.real
-			beta = other.beta ** self.real
-			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
-			return(new_toy)
-		except AttributeError:
-			pass
-		try:
+		# try: 
+		# 	alpha = self.alpha ** other.real
+		# 	beta = self.beta ** other.real
+		# 	new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
+		# try:
+		# 	alpha = other.alpha ** self.real
+		# 	beta = other.beta ** self.real
+		# 	new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
 
+		# Case of x ** y, where we assume x is a number.
+		# x is other, y is self.
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.real, 0)
+			return other_dummy ** self_dummy
+		except AttributeError:
+			pass
+
+		# Case of x ** y, where both x and y are objects.
+		# x is other, y is self.
+		try:
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
-			return self_dummy ** other_dummy
+			return other_dummy ** self_dummy
 		except:
 			raise AttributeError
+
 
 	def __neg__(self):
 		try:
