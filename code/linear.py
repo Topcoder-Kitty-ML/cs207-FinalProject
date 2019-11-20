@@ -299,3 +299,14 @@ class AutoDiffToy():
 			return other_dummy ** self_dummy
 		except:
 			raise AttributeError()
+
+	def __neg__(self):
+		try:
+			alpha = -1 * self.alpha
+			beta = -1 * self.beta
+			new_toy = AutoDiffToy(self.a, alpha, beta)
+			return(new_toy)
+		except:
+			raise AttributeError()
+
+

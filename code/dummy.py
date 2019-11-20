@@ -186,3 +186,12 @@ class dummy:
 			return dummy(new_val, new_der) 
 		except AttributeError:
 			pass
+
+
+	def __neg__(self):
+		try:
+			new_val = -1 * self.val 
+			new_der = -1 * self.der
+			return dummy(new_val, new_der) 
+		except:
+			raise AttributeError()

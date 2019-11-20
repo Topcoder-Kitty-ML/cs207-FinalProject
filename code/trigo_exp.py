@@ -477,7 +477,27 @@ class trigo_exp():
 			other_dummy = dummy(other.val, other.der)
 			return self_dummy ** other_dummy
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for higher order.')
+			raise AttributeError
+
+
+	def __neg__(self):
+		try:
+			return self.__perform_negation__(self)
+		# Catch weird cases.
+		except:
+			raise AttributeError
+
+	@classmethod
+	def __perform_negation__(self):
+		try:
+			alpha = -1 * self.alpha
+			beta = -1 * self.beta
+			new_object = cls(self.x_object, alpha=alpha, beta=beta)
+
+			return new_object
+		except:
+			raise AttributeError
+
 
 
 
