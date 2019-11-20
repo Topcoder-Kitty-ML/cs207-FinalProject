@@ -135,7 +135,7 @@ class dummy:
 			raise AttributeError()
 
 
-	def __div__(self, other):
+	def __truediv__(self, other):
 		'''
 		Apply the quotient rule
 		'''
@@ -154,7 +154,7 @@ class dummy:
 		except:
 			raise AttributeError()
 
-	def __rdiv__(self, other):
+	def __rtruediv__(self, other):
 	
 		try:
 			new_val = other.real / self.val
@@ -165,28 +165,33 @@ class dummy:
 
 		try:
 			new_val = self.val / other.val
-			new_der = (other.val * self.der - self.val * other.der) / other.val ** 2
+			new_der = (other.val * self.der - self.val * other.der) / (other.val ** 2)
 			return dummy(new_val, new_der)
 		except:
 			raise AttributeError()
 
 	def __pow__(self, other):
-	
 		try:
 			new_val = self.val ** other.real
-			new_der = (other.real * self.val) ** (other.real - 1)
+			new_der = other.real * self.val ** (other.real - 1)
 			return dummy(new_val, new_der) 
 		except AttributeError:
 			pass 
-
+		
+		try:
+			new_val = self.val ** other.val
+			new_der = self.val ** other.val * (self.der * (other.val/self.val)+ (other.der* math.log(self.val)))
+		except:
+			raise AttributeError()
+			
 	def __rpow__(self, other):
+		
 		try:
 			new_val = other.real ** self.val
-			new_der = (other.real ** self.val) * (math.log(other.real))
+			new_der = (other.real ** self.val) * (other.der * (self.val/other.real) + (self.der * math.log(other.real)))
 			return dummy(new_val, new_der) 
 		except AttributeError:
 			pass
-
 
 	def __neg__(self):
 		try:
@@ -195,3 +200,4 @@ class dummy:
 			return dummy(new_val, new_der) 
 		except:
 			raise AttributeError()
+
