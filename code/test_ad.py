@@ -615,6 +615,8 @@ def test_dummy_rpow_1():
     power_derivative = 2 ** h.val * (0*h.val/2+(h.der*math.log(2)))
     assert (d_obj.val, d_obj.der) == (2 ** h.val, power_derivative)
 
+
+
 # Jacobian tests ===============================
 
 ### example taken from https: // harvard - iacs.github.io / 2019 - CS207 / lectures / lecture10 / notebook /
