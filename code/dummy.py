@@ -178,11 +178,17 @@ class dummy:
 			return dummy(new_val, new_der) 
 		except AttributeError:
 			pass 
-
+        
+        try:
+            new_val = self.val ** other.val
+			new_der = self.val ** other.val * (self.der * (other.val/self.val)+ (other.der* math.log(self.val)))
+        except:
+            raise AttributeError()
+            
 	def __rpow__(self, other):
 		try:
 			new_val = other.real ** self.val
-			new_der = (other.real ** self.val) * (math.log(other.real))
+			new_der = (other.real ** self.val) * (other.der * (self.val/other.real) + self.der * math.log(other.real))
 			return dummy(new_val, new_der) 
 		except AttributeError:
 			pass
