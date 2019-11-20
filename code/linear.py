@@ -174,7 +174,6 @@ class AutoDiffToy():
 		# an AutoDiff class here. In which case, we replace this
 		# with a dummy object and just retain the value and derivative
 		try:
-
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
 			return other_dummy - self_dummy
@@ -257,14 +256,6 @@ class AutoDiffToy():
 			raise AttributeError()
 
 	def __rtruediv__(self, other):
-	
-		try:
-			alpha = self.alpha / other.real
-			beta = self.beta / other.real
-			new_toy = AutoDiffToy(self.a, alpha, beta)
-			return(new_toy)
-		except AttributeError:
-			pass
 
 		try:
 			self_dummy = dummy(self.val, self.der)
@@ -273,7 +264,7 @@ class AutoDiffToy():
 		except:
 			raise AttributeError()
 
-#	def __pow__(self, other):
+	def __pow__(self, other):
 #		try:
 #			alpha = self.alpha
 #			beta = self.beta 
@@ -282,15 +273,15 @@ class AutoDiffToy():
 #		except AttributeError:
 #			pass
 #
-#		try:
-#			self_dummy = dummy(self.val, self.der)
-#			other_dummy = dummy(other.val, other.der)
-#			return self_dummy ** other_dummy
-#		except:
-#			raise AttributeError()
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return self_dummy ** other_dummy
+		except:
+			raise AttributeError()
 # 
 #
-#	def __rpow__(self, other):
+	def __rpow__(self, other):
 #		try:
 #			alpha = self.alpha ** other.real
 #			beta = self.beta ** other.real
@@ -299,9 +290,9 @@ class AutoDiffToy():
 #		except AttributeError:
 #			pass
 #
-#		try:
-#			self_dummy = dummy(self.val, self.der)
-#			other_dummy = dummy(other.val, other.der)
-#			return other_dummy ** self_dummy
-#		except:
-#			raise AttributeError()
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return other_dummy ** self_dummy
+		except:
+			raise AttributeError()
