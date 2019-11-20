@@ -173,14 +173,14 @@ class dummy:
 	def __pow__(self, other):
 		try:
 			new_val = self.val ** other.real
-			new_der = self.val ** other.real * (self.der * (other.real/self.val) + (other.der * math.log(self.val)))
+			new_der = (self.val ** other.real) * (self.der * (other.real/self.val) + (other.der * math.log(self.val)))
 			return dummy(new_val, new_der) 
 		except AttributeError:
 			pass 
 		
 		try:
 			new_val = self.val ** other.val
-			new_der = self.val ** other.val * (self.der * (other.val/self.val)+ (other.der* math.log(self.val)))
+			new_der = (self.val ** other.val) * (self.der * (other.val/self.val)+ (other.der* math.log(self.val)))
 		except:
 			raise AttributeError()
 			
@@ -192,6 +192,12 @@ class dummy:
 			return dummy(new_val, new_der) 
 		except AttributeError:
 			pass
+
+		try:
+			new_val = other.val ** self.val
+			new_der = (other.val ** self.val) * (other.der * (self.val/other.val) + (self.der * math.log(other.val)))
+		except:
+			raise AttributeError()
 
 	def __neg__(self):
 		try:

@@ -272,7 +272,13 @@ class AutoDiffToy():
 #			return(new_toy)
 #		except AttributeError:
 #			pass
-#
+		try:
+			self_dummy = self.real
+			other_dummy = dummy(other.val, self.val)
+			return self_dummy ** other_dummy 
+		except:
+			raise AttributeError()
+
 		try:
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
@@ -289,7 +295,13 @@ class AutoDiffToy():
 #			return(new_toy)
 #		except AttributeError:
 #			pass
-#
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = other.real
+			return other_dummy ** self_dummy
+		except:
+			raise AttributeError()
+
 		try:
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
