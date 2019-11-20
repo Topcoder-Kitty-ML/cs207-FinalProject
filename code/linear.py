@@ -47,6 +47,14 @@ class AutoDiffToy():
 		self.val = self.calc_function_val()
 		self.der = self.calc_function_derivative_val()
 
+	def __neg__(self):
+		try: 
+			alpha = -1 * self.alpha
+			beta = -1 * self.beta
+			new_toy = AutoDiffToy(self.a, self.alpha, beta)
+			return(new_toy)
+		except AttributeError:
+			pass
 
 	def __add__(self, other):
 		'''
