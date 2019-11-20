@@ -275,7 +275,7 @@ class trigo_exp():
 		# number, and y is a class of interest.
 		# x is other, y is self.
 		try:
-			alpha = self.alpha
+			alpha = - self.alpha
 			beta = other.real - self.beta
 			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
 			return new_toy
@@ -413,21 +413,21 @@ class trigo_exp():
 		'''
 		Perform division
 		'''
-		try:
+		# try:
 		
-			alpha = self.alpha / other.real
-			beta = self.beta / other.real
-			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-			return(new_toy)
-		except AttributeError:
-			pass
-		try:
-			alpha = other.alpha / self.real
-			beta = other.beta / self.real
-			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
-			return(new_toy)
-		except AttributeError:
-			pass
+		# 	alpha = self.alpha / other.real
+		# 	beta = self.beta / other.real
+		# 	new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
+		# try:
+		# 	alpha = other.alpha / self.real
+		# 	beta = other.beta / self.real
+		# 	new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
 		try:
 
 			self_dummy = dummy(self.val, self.der)
@@ -455,21 +455,21 @@ class trigo_exp():
 		'''
 		Perform power
 		'''
-		try: 
+		# try: 
 		
-			alpha = self.alpha ** other.real
-			beta = self.beta ** other.real
-			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-			return(new_toy)
-		except AttributeError:
-			pass
-		try:
-			alpha = other.alpha ** self.real
-			beta = other.beta ** self.real
-			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
-			return(new_toy)
-		except AttributeError:
-			pass
+		# 	alpha = self.alpha ** other.real
+		# 	beta = self.beta ** other.real
+		# 	new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
+		# try:
+		# 	alpha = other.alpha ** self.real
+		# 	beta = other.beta ** self.real
+		# 	new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
 		try:
 
 			self_dummy = dummy(self.val, self.der)
