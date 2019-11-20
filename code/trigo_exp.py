@@ -478,6 +478,26 @@ class trigo_exp():
 		except:
 			raise AttributeError
 
+	def __neg__(self):
+		try:
+			return self.__perform_negation__(self)
+		# Catch weird cases.
+		except:
+			raise AttributeError
+
+	@classmethod
+	def __perform_negation__(self):
+		try:
+			alpha = -1 * self.alpha
+			beta = -1 * self.beta
+			new_object = cls(self.x_object, alpha=alpha, beta=beta)
+
+			return new_object
+		except:
+			raise AttributeError
+
+
+
 
 
 class sin(trigo_exp):
