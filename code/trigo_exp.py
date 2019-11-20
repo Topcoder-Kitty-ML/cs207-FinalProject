@@ -491,7 +491,8 @@ class trigo_exp():
 			# return(new_toy)
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.real, 0)
-			return self_dummy ** other_dummy
+			new_dummy = self_dummy ** other_dummy
+			return(new_dummy)
 		except AttributeError:
 			pass
 
