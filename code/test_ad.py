@@ -580,7 +580,7 @@ def test_dummy_div_1():
     f = dummy(1, 0)
     h = dummy(2, 2)
     d_obj = f / h
-    assert (div_f.val, div_f.der) == (f.val/h.val, (h.val*f.der - f.val*h.der)/(h.val**2))
+    assert (d_obj.val, d_obj.der) == (f.val/h.val, (h.val*f.der - f.val*h.der)/(h.val**2))
 
 def test_dummy_div_2():
     f = dummy(1, 0)
@@ -591,7 +591,7 @@ def test_dummy_div_2():
 def test_dummy_rdiv_1():
     f = 2
     h = dummy(1, 2)
-    d_obj = f * h
+    d_obj = f / h
     assert (d_obj.val, d_obj.der) == (2/h.val, (h.val*0-2*h.der)/(h.val**2))
 
 ## pow and rpow
