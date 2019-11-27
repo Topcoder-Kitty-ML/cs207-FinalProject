@@ -181,23 +181,52 @@ class dummy:
 		# Assume that the self is a dummy class,
 		# and the other is a simple number
 		try:
+			#print("====")
+			#print(other)
+			#print(self.val, other.real)
 			new_val = self.val ** other.real
-			new_der = self.val ** other.real * (self.der * (other.real/self.val) + (0 * math.log(self.val)))
+			#new_der = self.val ** other.real * (self.der * (other.real/self.val) + (0 * math.log(self.val)))
+			new_der = self.val ** other.real * (self.der * (other.real/self.val))
 			return dummy(new_val, new_der) 
 		except AttributeError:
 			pass 
 		
 		try:
+			#print("-=-=-")
 			new_val = self.val ** other.val
+			#print("apple1")
 			new_der = (self.val ** other.val) * (self.der * (other.val/self.val)+ (other.der* math.log(self.val)))
+			#new_der = self.val ** other.val * (self.der * (other.val/self.val))
+			#print("apple2")
+			#print(new_der)
 			return dummy(new_val, new_der) 
 		except:
-			raise AttributeError()
+			pass
+
+		# This deals with an edge case where 
+		# self.val is a negative number, and cannot be log.
+		# In this case, we assume other.der is zero
+		# (self.val is the base of the exponenent)
+		# e.g. x ** 2
+		# (NEED DOUBLE CHECK IF THIS IS A GENERALIZED RULE!!!)
+		try:
+			#print("last chunk")
+			new_val = self.val ** other.val
+			new_der = (self.val ** other.val) * (self.der * (other.val/self.val))
+				
+			return dummy(new_val, new_der)
+		except:
+			raise AttributeError
 			
 	def __rpow__(self, other):
 		# E.g. case of 2 ** dummy_class,
 		# In this case, dummy_class is self, 2 is other
 		try:
+			print("-----")
+			print(self.val)
+			print(self)
+			print(other)
+			print(other.real)
 			new_val = other.real ** self.val
 			new_der = (other.real ** self.val) * (0 * (self.val/other.real) + (self.der * math.log(other.real)))
 			return dummy(new_val, new_der) 
