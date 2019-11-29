@@ -12,5 +12,3 @@
 - Codecov
 [![codecov](https://codecov.io/gh/Topcoder-Kitty-ML/cs207-FinalProject/branch/master/graph/badge.svg)](https://codecov.io/gh/Topcoder-Kitty-ML/cs207-FinalProject)
 
-
-Modified for final milestone
