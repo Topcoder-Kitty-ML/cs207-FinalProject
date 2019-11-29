@@ -489,6 +489,7 @@ class trigo_exp():
 			# beta = self.beta ** other.real
 			# new_toy = cls(self.x_object, alpha=alpha, beta=beta)
 			# return(new_toy)
+			#print("in trigo pow")
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.real, 0)
 			new_dummy = self_dummy ** other_dummy
@@ -536,7 +537,9 @@ class trigo_exp():
 		try:
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.real, 0)
+			#result = other_dummy.__rpow__(self_dummy)
 			return other_dummy ** self_dummy
+			#return result
 		except AttributeError:
 			pass
 
@@ -741,6 +744,9 @@ if __name__ == "__main__":
 
 	x_10 = x_9 * x_9
 	print(x_10.val, x_10.der)
+
+	x_11 =  2 ** x_9
+	print(x_11.val, x_11.der)
 
 
 	#f = alpha * x + beta
