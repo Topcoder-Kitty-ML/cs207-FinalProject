@@ -1,6 +1,6 @@
 import pytest
 from trigo_exp import *
-from linear import AudoDiffToy as autodiff
+from linear import AutoDiffToy as autodiff
 from vector_jacobian import *
 import math
 
@@ -320,19 +320,19 @@ def test_trig_rdiv_1():
     assert (x_4.val, x_4.der) == (x_2 / x_3.val, (x_3.val * 0 - x_2 * x_3.der)/(x_3.val **2))
 
 ## Test rpow
-def test_trig_rpow_1():
-    a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
-    alpha = 2.0
-    beta = 3.0
-    f = alpha * x + beta
-    h = 4 * y + beta
-    x_2 = 2
-    x_3 = cos(h)
-    x_4 = x_2 ** x_3
-    power_derivative = 2 ** h.val * (0*h.val/2+(h.der*math.log(2)))
-    assert (x_4.val, x_4.der) == (x_2 ** x_3.val, power_derivative)
+#def test_trig_rpow_1():
+#    a = 2.0  # Value to evaluate at
+#    x = autodiff(a)
+#    y = autodiff(a)
+#    alpha = 2.0
+#    beta = 3.0
+#    f = alpha * x + beta
+#    h = 4 * y + beta
+#    x_2 = 2
+#    x_3 = cos(h)
+#    x_4 = x_2 ** x_3
+#    power_derivative = 2 ** h.val * (0*h.val/2+(h.der*math.log(2)))
+#    assert (x_4.val, x_4.der) == (x_2 ** x_3.val, power_derivative)
 
 ## Test unintended behavior
 
@@ -603,7 +603,7 @@ def test_dummy_pow_1():
     assert (d_obj.val, d_obj.der) == (f.val ** h.val, power_derivative)
 
 def test_dummy_pow_2():
-    f = dummy(1, 0)
+    f = dummy(1, 1)
     h = 2
     d_obj = f ** h
     assert (d_obj.val, d_obj.der) == (f.val ** 2, 2*(f.val))
@@ -615,6 +615,8 @@ def test_dummy_rpow_1():
     power_derivative = 2 ** h.val * (0*h.val/2+(h.der*math.log(2)))
     assert (d_obj.val, d_obj.der) == (2 ** h.val, power_derivative)
 
+
+
 # Jacobian tests ===============================
 
 ### example taken from https: // harvard - iacs.github.io / 2019 - CS207 / lectures / lecture10 / notebook /
@@ -625,3 +627,7 @@ def test_dummy_rpow_1():
 
 ### Non-intended behavior
 # TODO: Will be available in final version
+
+
+
+# test_linear_div()

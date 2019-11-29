@@ -1,7 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import math
 from linear import AutoDiffToy as x_simple
+from dummy import dummy
 
 
 class trigo_exp():
@@ -10,7 +12,6 @@ class trigo_exp():
 	class.
 	E.g.
 	f(x) = alpha * trigo_func(x) + beta
-
 	Note:
 	x is a class object
 	'''
@@ -58,20 +59,45 @@ class trigo_exp():
 
 	@classmethod
 	def __perform_add__(cls, self, other):
-		# Assume that both objects are AutoDiffToyObjects
-		# Check if both objects are of the same type
-		if isinstance(self, type(other)):
-			alpha = self.alpha + other.alpha
-			beta = self.beta + other.beta
+		# Assumes that other is a number, and self is
+		# an object of interest.
+		try:
+			alpha = self.alpha
+			beta = self.beta + other.real
 			new_object = cls(self.x_object, alpha=alpha, beta=beta)
-			return(new_object)
 
-		# Perhaps the 'other' is not an AutoDiffToyObject.
-		else:
-			try:
-				return self.__radd__(other)
-			except:
-				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+			return new_object
+		except AttributeError:
+			pass
+
+		try:
+			# Deals with case where both self and other
+			# are weird unrecognized cases. We covert
+			# them to dummy classes and extract their values
+			# and derivatives only for subsequent use.
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return self_dummy + other_dummy
+		except:
+			raise AttributeError
+
+
+
+		# # Assume that both objects are the same type
+		# # Check if both objects are of the same type
+		# if isinstance(self, type(other)):
+		# 	alpha = self.alpha + other.alpha
+		# 	beta = self.beta + other.beta
+		# 	new_object = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_object)
+
+		# # Perhaps the 'other' is not an AutoDiffToyObject.
+		# else:
+		# 	try:
+		# 		return self.__radd__(other)
+		# 	except:
+		# 		raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
 
 
 	def __radd__(self, other):
@@ -85,29 +111,67 @@ class trigo_exp():
 
 	@classmethod
 	def __perform_radd__(cls, self, other):
-		try:
-			alpha = self.alpha + other.alpha
-			beta = self.beta + other.beta
-			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-			return(new_toy)
+		# We assume that the 'other' is a simple number, and
+		# we will add our current object to it
 
-		# Perhaps the 'other' is not an AutoDiffToyObject.
-		# So we'll just add the constant values
+		# For case of x + y, assume that self is a class of interest,
+		# other is a number
+		try:
+			alpha = self.alpha
+			beta = self.beta + other.real
+			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+
+			return new_toy
+		except AttributeError:
+			pass
+		# For case of x + y, assume that other is a class of interest,
+		# self is a number
+		try:
+			alpha = other.alpha
+			beta = other.beta + self.real
+			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+
+			return new_toy
+		except AttributeError:
+			pass
+
+
+		try:
+			# Deals with case where both self and other
+			# are weird unrecognized cases. We covert
+			# them to dummy classes and extract their values
+			# and derivatives only for subsequent use.
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return self_dummy + other_dummy
 		except:
-			try:
-				if isinstance(self, cls):
-					alpha = self.alpha
-					beta = self.beta + other.real
-					new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-				elif isinstance(other, cls):
-					alpha = other.alpha
-					beta = other.beta + self.real
-					new_toy = cls(other.x_object, alpha=alpha, beta=beta)
-				else:
-					raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
-				return(new_toy)
-			except:
-				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+			raise AttributeError
+
+
+		# try:
+		# 	alpha = self.alpha + other.alpha
+		# 	beta = self.beta + other.beta
+		# 	new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+
+		# # Perhaps the 'other' is not an AutoDiffToyObject.
+		# # So we'll just add the constant values
+		# except:
+		# 	try:
+		# 		if isinstance(self, cls):
+		# 			alpha = self.alpha
+		# 			beta = self.beta + other.real
+		# 			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 		elif isinstance(other, cls):
+		# 			alpha = other.alpha
+		# 			beta = other.beta + self.real
+		# 			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+		# 		else:
+		# 			raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+		# 		return(new_toy)
+		# 	except:
+		# 		raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
 
 
 	def __sub__(self, other):
@@ -123,32 +187,54 @@ class trigo_exp():
 		# Assume that both objects are AutoDiffToyObjects
 		# Check if both objects are of the same type
 		# Self is probably the object on the LHS of the equation
-		if isinstance(self, type(other)):
-			alpha = self.alpha - other.alpha
-			beta = self.beta - other.beta
+		# if isinstance(self, type(other)):
+		# 	alpha = self.alpha - other.alpha
+		# 	beta = self.beta - other.beta
+		# 	new_object = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_object)
+
+		# # Perhaps the 'other' is not an AutoDiffToyObject.
+		# else:
+		# 	try:
+		# 		return self.__rsub__(other)
+		# 	except:
+		# 		raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+
+
+		# Assume that other is a number, and self
+		# is an object of interest.
+		try:
+			alpha = self.alpha
+			beta = self.beta - other.real
 			new_object = cls(self.x_object, alpha=alpha, beta=beta)
-			return(new_object)
 
-		# Perhaps the 'other' is not an AutoDiffToyObject.
-		else:
-			try:
-				return self.__rsub__(other)
-			except:
-				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+			return new_object
+			
+		except AttributeError:
+			pass
 
+		try:
+			# Deals with case where both self and other
+			# are weird unrecognized cases. We covert
+			# them to dummy classes and extract their values
+			# and derivatives only for subsequent use.
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return self_dummy - other_dummy
+		except:
+			raise AttributeError
 
 	def __rsub__(self, other):
 		'''
 		Allows for commuative cases of subtraction, where a
 		float or integer are added to the autodifftoy object.
-
 		Note:
 		For the equation x - y,
 		__rsub__ works as y.__rsub(x)
 		Thus,
 		other --> x
 		self --> y
-
 		https://docs.python.org/2/reference/datamodel.html#object.__rsub__
 		'''
 		rsub_result = self.__perform_rsub__(self, other)
@@ -157,35 +243,56 @@ class trigo_exp():
 
 	@classmethod
 	def __perform_rsub__(cls, self, other):
+		# try:
+		# 	# Maybe need to make this more stringent!!!
+		# 	# E.g. the self.x_object (why not other?)
+		# 	# A bit dangerous if we are using a sin subtracting a cos
+		# 	alpha = other.alpha - self.alpha
+		# 	beta = other.beta - self.beta
+		# 	new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+
+		# # Perhaps the 'other' is not an AutoDiffToyObject.
+		# # So we'll just add the constant values
+		# except:
+		# 	try:
+		# 		if isinstance(self, cls):
+		# 			alpha = self.alpha
+		# 			beta = other.real - self.beta
+		# 			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 		elif isinstance(other, cls):
+		# 			# I dun think we will ever get here
+		# 			alpha = other.alpha
+		# 			beta = other.beta - self.real
+		# 			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+		# 		else:
+		# 			raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+		# 		return(new_toy)
+		# 	except:
+		# 		raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
+
+		# Assume that this is a case where x - y, where x is a
+		# number, and y is a class of interest.
+		# x is other, y is self.
 		try:
-			# Maybe need to make this more stringent!!!
-			# E.g. the self.x_object (why not other?)
-			# A bit dangerous if we are using a sin subtracting a cos
-			alpha = other.alpha - self.alpha
-			beta = other.beta - self.beta
+			alpha = - self.alpha
+			beta = other.real - self.beta
 			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-			return(new_toy)
+			return new_toy
+		except AttributeError:
+			pass
 
-		# Perhaps the 'other' is not an AutoDiffToyObject.
-		# So we'll just add the constant values
+		try:
+			# Deals with case where both self and other
+			# are weird unrecognized cases. We covert
+			# them to dummy classes and extract their values
+			# and derivatives only for subsequent use.
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return other_dummy - self_dummy
 		except:
-			try:
-				if isinstance(self, cls):
-					alpha = self.alpha
-					beta = other.real - self.beta
-					new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-				elif isinstance(other, cls):
-					# I dun think we will ever get here
-					alpha = other.alpha
-					beta = other.beta - self.real
-					new_toy = cls(other.x_object, alpha=alpha, beta=beta)
-				else:
-					raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
-				return(new_toy)
-			except:
-				raise AttributeError(f'{other.__class__.__name__} is invalid for addition.')
-
-
+			raise AttributeError
 
 	def __mul__(self, other):
 		'''
@@ -201,7 +308,7 @@ class trigo_exp():
 
 		# Catch weird cases. E.g. when we're multiplying two 'x' classes
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			raise AttributeError
 
 
 	def __rmul__(self, other):
@@ -218,31 +325,254 @@ class trigo_exp():
 			# return(new_toy)
 			return self.__perform_muliplication__(self, other)
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			raise AttributeError
 
 
+	# @classmethod
+	# def __perform_muliplication__(cls, self, other):
+	# 	'''
+	# 	Perform multiplication
+	# 	'''
+	# 	try:
+	# 		if isinstance(self, cls):
+	# 			# Muliply object with an integer
+	# 			alpha = self.alpha * other.real
+	# 			beta = self.beta * other.real
+	# 			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+	# 			return(new_toy)
+	# 		elif isinstance(other, cls):
+	# 			# Allows commutative multiplication
+	# 			alpha = other.alpha * self.real
+	# 			beta = other.beta * self.real
+	# 			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+	# 			return(new_toy)
+	# 		else:
+	# 			AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+	# 	except:
+	# 		raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
 	@classmethod
 	def __perform_muliplication__(cls, self, other):
 		'''
 		Perform multiplication
 		'''
 		try:
-			if isinstance(self, cls):
-				# Muliply object with an integer
-				alpha = self.alpha * other.real
-				beta = self.beta * other.real
-				new_toy = cls(self.x_object, alpha=alpha, beta=beta)
-				return(new_toy)
-			elif isinstance(other, cls):
-				# Allows commutative multiplication
-				alpha = other.alpha * self.real
-				beta = other.beta * self.real
-				new_toy = cls(other.x_object, alpha=alpha, beta=beta)
-				return(new_toy)
-			else:
-				AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			# Assume 'other' is a single number and try
+			# to multiple
+			alpha = self.alpha * other.real
+			beta = self.beta * other.real
+			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+		try:
+			# Allows commutative multiplication. Assumes
+			# that 'self' is a number (probably not needed)
+			alpha = other.alpha * self.real
+			beta = other.beta * self.real
+			new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+		try:
+			# Deals with case where both self and other
+			# are weird unrecognized cases. We covert
+			# them to dummy classes and extract their values
+			# and derivatives only for subsequent use.
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return self_dummy * other_dummy
 		except:
-			raise AttributeError(f'{other.__class__.__name__}.{name} is invalid for multiplication.')
+			raise AttributeError
+
+
+	def __truediv__(self, other):
+		'''
+		This allows for division between a coefficient 
+		value and a AutoDiffToy object
+		'''
+		try:
+			return self.__perform_division__(self, other)
+		except:
+			raise AttributeError
+
+
+	def __rtruediv__(self, other):
+		try:
+	
+			return self.__perform_rdivision__(self, other)
+		except:
+			raise AttributeError
+
+
+	@classmethod
+	def __perform_division__(cls, self, other):
+		'''
+		Perform division
+		'''
+		# try:
+		
+		# 	alpha = self.alpha / other.real
+		# 	beta = self.beta / other.real
+		# 	new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
+		# try:
+		# 	alpha = other.alpha / self.real
+		# 	beta = other.beta / self.real
+		# 	new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
+
+		# Assume other is a number
+		try:
+			alpha = self.alpha / other.real
+			beta = self.beta / other.real
+			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+
+			return(new_toy)
+
+		except AttributeError:
+			pass
+
+		# Assume two classes dividing by each other
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return self_dummy / other_dummy
+		except:
+			raise AttributeError
+
+	@classmethod
+	def __perform_rdivision__(cls, self, other):
+
+		# For case of x / y, where we assume that
+		# x is a number. (x is other, y is self)
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.real, 0) # derivative of a number is zero
+
+			return other_dummy / self_dummy
+
+		except AttributeError:
+			pass
+
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return other_dummy / self_dummy
+		except:
+			raise AttributeError
+
+
+
+	def __pow__(self, other):
+		try:	
+			return self.__perform_pow__(self, other)
+		except:
+			raise AttributeError
+
+	@classmethod
+	def __perform_pow__(cls, self, other):
+		'''
+		Perform power
+		'''
+
+		# Case of x ** y, where we assume y is a number.
+		# x is self, y is other
+		try: 
+			# alpha = self.alpha ** other.real
+			# beta = self.beta ** other.real
+			# new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+			# return(new_toy)
+			#print("in trigo pow")
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.real, 0)
+			new_dummy = self_dummy ** other_dummy
+			return(new_dummy)
+		except AttributeError:
+			pass
+
+		# Case of x ** y, where x and y are both classes
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return self_dummy ** other_dummy
+		except:
+			raise AttributeError
+
+
+	def __rpow__(self, other): 
+		try:
+			return self.__perform_rpow__(self, other)
+		except:
+			raise AttributeError
+
+	@classmethod
+	def __perform_rpow__(cls, self, other):
+		'''
+		Perform power
+		'''
+		# try: 
+		# 	alpha = self.alpha ** other.real
+		# 	beta = self.beta ** other.real
+		# 	new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
+		# try:
+		# 	alpha = other.alpha ** self.real
+		# 	beta = other.beta ** self.real
+		# 	new_toy = cls(other.x_object, alpha=alpha, beta=beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
+
+		# Case of x ** y, where we assume x is a number.
+		# x is other, y is self.
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.real, 0)
+			#result = other_dummy.__rpow__(self_dummy)
+			return other_dummy ** self_dummy
+			#return result
+		except AttributeError:
+			pass
+
+		# Case of x ** y, where both x and y are objects.
+		# x is other, y is self.
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return other_dummy ** self_dummy
+		except:
+			raise AttributeError
+
+
+	def __neg__(self):
+		try:
+			return self.__perform_negation__(self)
+		# Catch weird cases.
+		except:
+			raise AttributeError
+
+	@classmethod
+	def __perform_negation__(self):
+		try:
+			alpha = -1 * self.alpha
+			beta = -1 * self.beta
+			new_object = cls(self.x_object, alpha=alpha, beta=beta)
+
+			return new_object
+		except:
+			raise AttributeError
+
+
+
 
 
 class sin(trigo_exp):
@@ -259,7 +589,6 @@ class sin(trigo_exp):
 
 		return value
 
-	
 	def calc_function_derivative_val(self):
 		'''
 		Calculate the derivative of this function
@@ -341,97 +670,126 @@ class exponential(trigo_exp):
 
 
 
-a = 2.0 # Value to evaluate at
+if __name__ == "__main__":
 
-alpha = 2.0
-beta = 3.0
-gamma = 4.0
+	a = 2.0 # Value to evaluate at
 
 
-
-a = 2.0 # Value to evaluate at
-x = x_simple(a)
-
-alpha = 2.0
-beta = 3.0
-f = alpha * x + beta
-
-print(f.val, f.der)
+	alpha = 2.0
+	beta = 3.0
+	gamma = 4.0
 
 
-x_2 = sin(f)
-print(x_2.val, x_2.der)
+	a = 2.0 # Value to evaluate at
+	x = x_simple(a)
 
-x_3 = sin(f)
+	alpha = 2.0
+	beta = 3.0
+	f = alpha * x + beta
+
+	print(f.val, f.der)
+	x_2 = sin(f)
+	print(x_2.val, x_2.der)
 
 
-x_4 = x_2 + x_3 + x_2
-print(x_4.alpha)
-print(x_4.val, x_4.der)
-
-print("======")
-x_5 = x_4 + 1
-print(x_5)
-print(x_5.der)
-print(x_5.val, x_5.der)
-
-x_6 = 1 - x_4
-print(x_6.val, x_6.der)
-
-x_7 = x_6 * 2
-print(x_7.val, x_7.der)
-
-x_8 = 2 * x_6
-print(x_8.val, x_8.der)
+	x_3 = sin(f)
 
 
 
-x_9 = 2 * cos(f) + 3
-print(x_9.val, x_9.der)
+	x_4 = x_2 + x_3 + x_2
+	#print(x_4.alpha)
+	print(x_4.val, x_4.der)
 
 
-x_9 = 2 * tan(f) + 3
-print(x_9.val, x_9.der)
+	print("======")
+	x_5 = x_4 + 1
+	print(x_5)
+	print(x_5.der)
+	print(x_5.val, x_5.der)
 
 
-x_9 = 2 * exponential(f) + 3
-print(x_9.val, x_9.der)
+	x_6 = 1 - x_4
+	print(x_6.val, x_6.der)
 
-# x = sin(a=a)
-# #f = alpha * x + beta
-# f = x + beta
-# print(f.val, f.der)
+	x_7 = x_6 * 2
+	print(x_7.val, x_7.der)
 
-
-#f = alpha * x + beta
-#f = x * alpha + beta
-
-# f = beta + alpha * x 
-
-# f = alpha * x + beta
-# print(f.val, f.der)
-# print("====================")
+	x_8 = 2 * x_6
+	print(x_8.val, x_8.der)
 
 
-# print("Testing: f = alpha * x + beta")
-# f_1 = alpha * x + beta
-# print(f_1.val, f_1.der)
-# print("====================")
-
-# print("Testing: f = x * alpha + beta")
-# f_2 = x * alpha + beta
-# print(f_2.val, f_2.der)
-# print("====================")
-
-# print("Testing: f = beta + alpha * x")
-# f_3 = beta + alpha * x
-# print(f_3.val, f_3.der)
-# print("====================")
-
-# print("Testing: f = beta + x * alpha")
-# f_4 = beta + x * alpha
-# print(f_4.val, f_4.der)
-# print("====================")
 
 
+	x_9 = 2 * cos(f) + 3
+	print(x_9.val, x_9.der)
+
+
+
+	x_9 = 2 * tan(f) + 3
+	print(x_9.val, x_9.der)
+
+
+	x_9 = 2 * exponential(f) + 3
+	print(x_9.val, x_9.der)
+
+
+	x_10 = x_9 * x_9
+	print(x_10.val, x_10.der)
+
+	# x = sin(a=a)
+	# #f = alpha * x + beta
+	# f = x + beta
+	# print(f.val, f.der)
+
+
+	x_10 = x_9 * x_9
+	print(x_10.val, x_10.der)
+
+	x_11 =  2 ** x_9
+	print(x_11.val, x_11.der)
+
+
+	#f = alpha * x + beta
+	#f = x * alpha + beta
+
+	# f = beta + alpha * x 
+
+	# f = alpha * x + beta
+	# print(f.val, f.der)
+	# print("====================")
+
+
+	# f = beta + alpha * x 
+
+
+	# print("Testing: f = alpha * x + beta")
+	# f_1 = alpha * x + beta
+	# print(f_1.val, f_1.der)
+	# print("====================")
+
+	# print("Testing: f = x * alpha + beta")
+	# f_2 = x * alpha + beta
+	# print(f_2.val, f_2.der)
+	# print("====================")
+
+	# print("Testing: f = beta + alpha * x")
+	# f_3 = beta + alpha * x
+	# print(f_3.val, f_3.der)
+	# print("====================")
+
+	# print("Testing: f = beta + x * alpha")
+	# f_4 = beta + x * alpha
+	# print(f_4.val, f_4.der)
+
+	# print("====================")
+
+	# print("Testing: f = beta + alpha * x")
+	# f_3 = beta + alpha * x
+	# print(f_3.val, f_3.der)
+	# print("====================")
+
+	# print("Testing: f = beta + x * alpha")
+	# f_4 = beta + x * alpha
+	# print(f_4.val, f_4.der)
+	# print("====================")
 
