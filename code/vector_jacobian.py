@@ -1,65 +1,75 @@
-from trigo_exp import *
-from linear import AutoDiffToy as autodiff
+# import all necessary packages
+from inspect import signature
+
+def _partial(fun, inputs, wrt):
+    raise NotImplementedError
 
 class JacobianProduct:
     """
-    For vector functions, the output of autodifferentiation in the forward mode
-    is the Jacobian-product matrix - that is the partial derivatives multiplied by seed matrices.
-    Each row corresponds to a function's partial derivative products and each column
-    corresponds to a specific variable (x, y, z, etc.).
-    The output should be a matrix of size [m functions X p variables]
+    Takes in a function vector and allows user to calculate partials or the full jacobian product based on
+    values specified by the user
 
-    m is specified by the vector of autodiff objects (contained in a list)
-    p variables are specified by the total number of variables in ALL functions in the vector
+    This class will only take a vector of functions that have the SAME number of inputs that are in the
+    SAME order. If the functions do not pass this check during class construction, InvalidFunctionsError is
+    raised.
 
-    input:
+    The input should look like the following:
 
-    - vector of autodiff objects
+    f = lambda x, y: cos(x) + sin(y)
+    h = lambda x, y: x + y
+    function_vector = [f, h]
+    jp_object = JacobianProduct(function_vector)
 
-    methods that return:
-    - get_variable_dict(): dictionary mapping column index p with variable
-    - get_function_dict(): dicitionary mapping row index m with autodiff object
-    - get_jp_matrix(): jacobian product matrix
+    The class has various methods:
+    -partial()
+        This method can calculate a partial for one function in the object or for all functions.
+        The variable value inputs are specified in inputs. For example:
 
-    GOODTOHAVE - method to extract specific function sub- matrix or specific
-    variable sub-matrix from jacobian product matrix
+        inputs = [[1, 2, 3], 0] # x = 1, 2, 3 and y = 0
+        # this evaluates the partial at all values of x holding y constant
+        # returns a list of partial derivative evals for each function
+        # wrt sets the variable to calculate the partial
+        list_of_partials = jp_object.partial(wrt=0, inputs=inputs)
+
+        [[2.4, 3.5, 2.5], [1, 2, 3]]
+
+    -jacobian_product()
+        This method calculates the jacobian product it either:
+        takes in one value for each variable or multiple values for each input BUT the number of values
+         for each variable must be the same. Calculates a separate jacobian for each element in the input vectors.
+
+         inputs = [[1, 2, 3], [1, 2, 3]] # calculates 3 jacobian products: (1, 1), (2, 2), and (3, 3)
+         list_of_jp_matrices = jp_object.jacobian_product(inputs=inputs)
+
+        [ [[df/dx, df/dy],
+         [dh/dx, dh/dy]],
+
+         for (2,2),
+         for (3,3)]
+
     """
+    def __init__(self, function_vector):
+        raise NotImplementedError
 
-    # constructor accepts a vector (list) of autodiff objects
-    # accepts a dictionary of variable_values
-    # TODO raise an error if variable dictionary does not have all variables in functions
-    def __init__(self, vector, variable_vals):
-        self.vector = vector
-        self.variable_vals = variable_vals
+    def __repr__(self):
+        #prints out functions
 
-    # maps variables to columns in matrix
-    # I assume that the autodiff object generates
-    # a dictionary of variables
-    def get_variable_dict(self):
-        var_list = list(self.variable_vals.keys())
-        self.variable_dict = dict(enumerate(var_list))
-        return self.variable_dict
+    def partial(self, wrt, inputs, fun_idx=-1):
+        # check to see if input is singular for constants
+        # convert scalar values to lists if not already in list form
+        for idx, value in enumerate(inputs):
+            if not isinstance(value, list):
+                inputs[idx] = list(value)
 
-    def get_function_dict(self):
-        self.function_dict = dict(enumerate(self.vector))
-        return self.function_dict
+        for idx, value in enumerate(inputs):
+            if idx == wrt:
 
-    def get_jp_matrix(self):
-        # Determine variable column mapping
-        var_column_map = self.get_variable_dict(self.variable_vals)
-        # Determine function row mapping
-        fun_row_map = self.get_function_dict
-        # Evaluate each function with respect to variables in the function
-        # and then create matrix - each row corresponds to a function's evaluation
-        jp_matrix = []
-        for obj in fun_row_map.values():
-            # limit variables to only the ones relevant to the function
-            # asume variable names stored in vars attribute of the autodiff object
-            variable_vals_fun = [var for var in variable_vals if var in obj.vars]
-            # should output a vector of derivatives based on values in
-            # variable vals vector
-            jp_matrix_row = obj(variable_vals_fun).der
-            jp_matrix.append(jp_matrix_row)
-        # conver to np array
-        self.jp_matrix = np.asarray(jp_matrix)
-        return self.jp_matrix
+
+        # get partial
+
+    def jacobian_product(self, inputs, fun_idx=-1):
+        # check that all inputs have the same length
+
+    def fun_map(self):
+
+    def var_map(self):
