@@ -13,7 +13,7 @@ class Constant:
         self.val = value
         self.der = 0        
         
-class Generic_diff:
+class GenericDiff:
     def __init__(self, val, der):
         self.val = val 
         self.der = der  
@@ -148,16 +148,16 @@ class Generic_diff:
             __rpow__generic(self, other)
         
 
-class __neg__(self):
-	try:
-		new_val = -1 * self.val 
-		new_der = -1 * self.der
-		return generic(new_val, new_der) 
-        
-	except:
-		raise AttributeError()
+    def __neg__(self):
+    	try:
+    		new_val = -1 * self.val 
+    		new_der = -1 * self.der
+    		return generic(new_val, new_der) 
             
-class sin(Generic):
+    	except:
+    		raise AttributeError()
+            
+class Sin(GenericDiff):
         
     try: 
 		new_val = math.sin(self.val)
@@ -167,7 +167,7 @@ class sin(Generic):
 	except AttributeError:
 		pass
     
-class cos(Generic): 
+class Cos(GenericDiff): 
         
     try:
         new_val = math.cos(self.val)
