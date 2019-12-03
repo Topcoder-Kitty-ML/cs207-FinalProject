@@ -3,17 +3,11 @@
 
 import math
 
-class Variable:
+class Var:
     
     def __init__(self, value): 
         self.val = value
         self.der = 1
-        
-class Constant:
-    
-    def __init__(self, value):
-        self.val = value
-        self.der = 0 
         
 class Generic:
     
@@ -27,9 +21,12 @@ class Generic:
 		try:
 			new_val = self.val + other.val
 			new_der = self.der
-			return Generic(new_val, new_der)     
+			return Generic(new_val, new_der)    
+        
 		except AttributeError:  
-			pass
+			new_val = self.val + float(other)
+            new_der = self.der
+            return Generic(new_val, new_der) 
 
     __radd__ = __add__ # can you do this?
     
@@ -39,8 +36,11 @@ class Generic:
 			new_val = self.val - other.val
 			new_der = self.der - other.der
 			return Generic(new_val, new_der)
-		except:
-			raise AttributeError()
+        
+		except AttributeError(): 
+			new_val = self.val - float(other)
+            new_der = self.der 
+            return Generic(new_val, new_der)
     
     def __rsub__(self, other):
         
@@ -48,17 +48,21 @@ class Generic:
 			new_val = other.val - self.val
 			new_der = other.der - self.der
 			return Generic(new_val, new_der)
-		except:
-			raise AttributeError()
+        
+		except AttributeError:
+			new_val = other.val - float(self)
+            new_der = other.der
+            return Generic(new_val, new_der)
     
     def __mul__(self, other): 
-        
         try:
-			new_val = self.val * other.val
-			new_der = self.val * other.der + other.val * self.der
-			return Generic(new_val, new_der) 
-		except:
-			raise AttributeError()
+		    new_val = self.val * other.val
+		    new_der = self.val * other.der + other.val * self.der
+            return Generic(new_val, new_der) 
+            
+        except AttributeError:
+            new_val = self.val * float(other)
+            new_der = float(other) * self.der 
             
     __rmul__ = __mul__
     
@@ -70,8 +74,11 @@ class Generic:
 			new_val = self.val / other.val
 			new_der = (other.val * self.der - self.val * other.der) / (other.val ** 2)
 			return Generic(new_val, new_der) 
-		except:
-			raise AttributeError() 
+        
+		except AttributeError:
+			new_val = self.val / float(other)
+            new_der = self.der / float(other)
+            return Generic(new_val, new_der) 
             
     def __rtruediv__(self, other):x 
 
@@ -80,9 +87,13 @@ class Generic:
 			new_val = self.val / other.val
 			new_der = (other.val * self.der - self.val * other.der) / (other.val ** 2)
 			return Generic(new_val, new_der) 
-		except:
-			raise AttributeError()
-            
+        
+		except AttributeError:
+			new_val = self.val / float(other)
+            new_der = self.der / float(other)
+            return Generic(new_val, new_der) 
+      
+        # still have to fix pow and rpow!      
     def __pow__(self, other):
 		# Assume that the self is a dummy class,
 		# and the other is a simple number 
@@ -108,7 +119,7 @@ class Generic:
 			return Generic(new_val, new_der)
 		except:
 			raise AttributeError
-			
+		
 	def __rpow__(self, other):
 		# E.g. case of 2 ** dummy_class,
 		# In this case, dummy_class is self, 2 is other
@@ -160,5 +171,7 @@ class Generic:
         
         except AttributeError:
             pass
+        
+    
     
     
