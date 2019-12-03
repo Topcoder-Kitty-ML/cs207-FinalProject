@@ -1,8 +1,6 @@
 # import all necessary packages
 from inspect import signature
-
-def _partial(fun, inputs, wrt):
-    raise NotImplementedError
+import numpy as np
 
 class JacobianProduct:
     """
@@ -109,7 +107,7 @@ class JacobianProduct:
 
         # convert wrt variable inputs to Var object
         # to differentiate
-        diff_inputs = self.inputs.copy()
+        diff_inputs = inputs.copy()
         for idx, value in enumerate(diff_inputs[wrt]):
             diff_inputs[wrt][idx] = Var(value)
 
@@ -145,19 +143,55 @@ class JacobianProduct:
         # make sure all inputs are lists
         inputs = self.input_format_check(inputs)
 
-        # make sure all inputs are non-zero and are of the same length
+        # make sure all inputs are non-zero length and are of the same length
         # if inputs are not, then return AttributeError
+        input_length = None
+        for input in inputs:
+            # non zero length
+            if len(input) <= 0:
+                raise AttributeError("All input values for each variable must be non zero in length")
+
+            if not input_length:
+                input_length = len(input)
+            else:
+                input_length_c = len(input)
+                if input_length != input_length_c:
+                    raise AttributeError("Lengths of all input values for each variable must be the same")
 
         # create input_vals_list
-        # elements wise combination between all values
+        input_vals_list = []
+        vals_list_length = len(inputs[0])
+        for i in range(0, vals_list_length):
+            input_vals_entry = []
+            for j, variable in enumerate(inputs):
+                input_vals_entry[j] = variable[i]
+            input_vals_list.append(input_vals_entry)
 
-        # subset function vector
+        # instantiate jacobian list
+        jp_list = []
 
-        # calculate the jacobian product
+        # calculate the jacobian product for each set of input values
+        for input_vals in input_vals_list:
+            # instantiate new jacobian matrix
+            row_n = len(self.subset_functions(self.function_vector, fun_idx))
+            col_n = len(self.function_signature.parameters)
+            jp_array = np.empty((row_n, col_n))
+
+            # for each variable calculate partials
+            for wrt_idx in range(0, len(self.function_signature.parameters)):
+                partials = self.partial(wrt_idx, input_vals, fun_idx)
+                for function_idx, value in enumerate(partials):
+                    # fill in the matrix with partials
+                    jp_array[function_idx, wrt_idx] = partials[function_idx][0]
+
+            # append the jp_array for current set of input_vals to jp_list
+            jp_list.append(jp_array)
 
         # return list of jacobians
-
+        return jp_list
 
     def fun_map(self):
+        raise NotImplementedError
 
     def var_map(self):
+        raise NotImplementedError
