@@ -4,179 +4,178 @@
 import math
 
 class Var:
-    
     def __init__(self, value): 
         self.val = value
         self.der = 1
+
+class Constant:
+    def __init__(self, value):
+        self.val = value
+        self.der = 0        
         
-class Generic:
-    
+class Generic_diff:
     def __init__(self, val, der):
-		self.val = val 
-		self.der = der  
+        self.val = val 
+        self.der = der  
 
 	def __add__(self, other):
-		# Assume we're adding a simple number with a
-		# a dummy object
-		try:
-			new_val = self.val + other.val
-			new_der = self.der
-			return Generic(new_val, new_der)    
-        
-		except AttributeError:  
-			new_val = self.val + float(other)
-            new_der = self.der
-            return Generic(new_val, new_der) 
+        def __add__generic(self, other):   
+			self.val = self.val + other.val
+			self.der = self.der
+            
+        try:
+            __add__generic(self,other):
+                
+		except AttributeError:   
+			other = Constant(other)
+            __add__generic(self, other)  
 
-    __radd__ = __add__ # can you do this?
+    def __radd__(self, other):
+        def __radd__generic(self, other):
+            self.val = other.val + self.val 
+			self.der = self.der 
+            
+        try:
+            __radd__generic(self, other):
+                
+		except AttributeError: 
+			other = Constant(other)
+            __radd__generic(self, other) 
     
     def __sub__(self, other):
+        def __sub__generic(self, other):
+			self.val = self.val - other.val
+			self.der = self.der - other.der 
         
         try:
-			new_val = self.val - other.val
-			new_der = self.der - other.der
-			return Generic(new_val, new_der)
-        
+            __sub__generic(self, other):
+                
 		except AttributeError(): 
-			new_val = self.val - float(other)
-            new_der = self.der 
-            return Generic(new_val, new_der)
-    
-    def __rsub__(self, other):
-        
+			other = Constant(other)
+            __sub__generic(self, other)  
+   
+    def __rsub__(self, other): 
+        def __rsub__generic(self, other):
+			self.val = other.val - self.val 
+			self.der = other.der - self.der 
+            
         try:
-			new_val = other.val - self.val
-			new_der = other.der - self.der
-			return Generic(new_val, new_der)
-        
+            __rsub__generic(self, other):
+                
 		except AttributeError:
-			new_val = other.val - float(self)
-            new_der = other.der
-            return Generic(new_val, new_der)
+			other = Constant(other)
+            __rsub__generic(self, other) 
+
     
     def __mul__(self, other): 
+        def __mul__generic(self, other):
+		    self.val = self.val * other.val
+		    self.der = self.val * other.der + other.val * self.der
+        
         try:
-		    new_val = self.val * other.val
-		    new_der = self.val * other.der + other.val * self.der
-            return Generic(new_val, new_der) 
+            __mul__generic(self, other)
             
         except AttributeError:
-            new_val = self.val * float(other)
-            new_der = float(other) * self.der 
+            other = Constant(other)
+            __mul__generic(self,other) 
             
-    __rmul__ = __mul__
+    def __rmul__(self, other):
+        def __rmul__generic(self, other):
+			self.val = other.val * self.val
+			self.der = other.val * self.der + self.val * other.der
+            
+        try:
+            __rmul__generic(self, other) 
+            
+		except AttributeError:
+			other = Constant(other)
+            __rmul__generic(self, other)
     
     def __truediv__(self, other):
-		'''
-		Apply the quotient rule
-		'''
-        try:
-			new_val = self.val / other.val
-			new_der = (other.val * self.der - self.val * other.der) / (other.val ** 2)
-			return Generic(new_val, new_der) 
-        
-		except AttributeError:
-			new_val = self.val / float(other)
-            new_der = self.der / float(other)
-            return Generic(new_val, new_der) 
+        def __truediv__generic(self, other):
+			self.val = self.val / other.val
+			self.der = (other.val * self.der - self.val * other.der) / (other.val ** 2)
             
-    def __rtruediv__(self, other):x 
-
-		# Case of two objects dividing by each other
-		try:
-			new_val = self.val / other.val
-			new_der = (other.val * self.der - self.val * other.der) / (other.val ** 2)
-			return Generic(new_val, new_der) 
-        
-		except AttributeError:
-			new_val = self.val / float(other)
-            new_der = self.der / float(other)
-            return Generic(new_val, new_der) 
-      
-        # still have to fix pow and rpow!      
-    def __pow__(self, other):
-		# Assume that the self is a dummy class,
-		# and the other is a simple number 
-		
-		try:
-			new_val = self.val ** other.val
-			new_der = (self.val ** other.val) * (self.der * (other.val/self.val)+ (other.der* math.log(self.val)))
-			return Generic(new_val, new_der) 
-        
-		except AttributeError:
-            new_val = self.val ** float(other)
-			new_der = self.val ** float(other) * (self.der * (float(other)/self.val))
-			return Generic(new_val, new_der) 
-        
-        except ValueError:
-        
-
-		# This deals with an edge case where 
-		# self.val is a negative number, and cannot be log.
-		# In this case, we assume other.der is zero
-		# (self.val is the base of the exponenent)
-		# e.g. x ** 2
-		# (NEED DOUBLE CHECK IF THIS IS A GENERALIZED RULE!!!)
-#		try:
-#			#print("last chunk")
-#			new_val = self.val ** other.val
-#			new_der = (self.val ** other.val) * (self.der * (other.val/self.val))
-#				
-#			return Generic(new_val, new_der)
-#		except:
-#			raise AttributeError
-		
-	def __rpow__(self, other):
-		# E.g. case of 2 ** dummy_class,
-		# In this case, dummy_class is self, 2 is other
-		try:
-			print("-----")
-			print(self.val)
-			print(self)
-			print(other)
-			print(other.real)
-			new_val = other.real ** self.val
-			new_der = (other.real ** self.val) * (0 * (self.val/other.real) + (self.der * math.log(other.real)))
-			return generic(new_val, new_der) 
-		except:
-			raise AttributeError
-		
-		# case of dummy_A ** dummy_B
-		try:
-			new_val = other.val ** self.val 
-			new_der = (other.val ** self.val) * (other.der * (self.val/other.val) + (self.der * math.log(other.val)))
-			return generic(new_val, new_der) 
-		except:
-			raise AttributeError()
-
-	def __neg__(self):
-		try:
-			new_val = -1 * self.val 
-			new_der = -1 * self.der
-			return generic(new_val, new_der) 
-        
-		except:
-			raise AttributeError()
-            
-    def sin(Generic):
-        
-        try: 
-			new_val = math.sin(self.val)
-			new_der = math.cos(self.val)
-			return generic(new_val, new_der) 
-        
-		except AttributeError:
-			pass
-    
-    def cos(Generic): 
-        
         try:
-            new_val = math.cos(self.val)
-            new_der = - math.sin(self.val)
-            return generic(new_val, new_der)
+            __truediv__generic(self, other)
+            
+		except AttributeError:
+			other = Constant(other)
+            __truediv__generic(self, other)
+            
+    def __rtruediv__(self, other):
+        def __rtruediv__generic(self, other):
+			self.val = self.val / other.val
+			self.der = (other.val * self.der - self.val * other.der) / (other.val ** 2)
         
+		try:
+            __rtruediv__generic(self, other):
+                
         except AttributeError:
-            pass
+			other = Constant(other) 
+            __rtruediv__generic(self, other)
+      
+    def __pow__(self, other):
+        def __pow__generic(self, other):
+			self.val = self.val ** other.val
+            
+            if other.der == 0:
+                self.der = self.val ** other.val) * (self.der * (other.val/self.val)
+            else:
+			    self.der = (self.val ** other.val) * (self.der * (other.val/self.val)+ (other.der* math.log(self.val)))
+                
+        try:
+           __pow__generic(self, other): 
+               
+		except AttributeError:
+            other = Constant(other):
+            __pow__generic(self, other)
+        
+	def __rpow__(self, other):
+        def __rpow__generic(self, other):
+            self.val = other.val ** self.val 
+            
+            if self.der == 0:
+                self.der = (other.val ** self.val) * (other.der * (self.val/other.val)
+			else:
+                self.der = (other.val ** self.val) * (other.der * (self.val/other.val) + (self.der * math.log(other.val)))
+                
+        try:
+            __rpow__generic(self, other):
+                
+		except AttributeError:
+            other = Constant(other):
+            __rpow__generic(self, other)
+        
+
+class __neg__(self):
+	try:
+		new_val = -1 * self.val 
+		new_der = -1 * self.der
+		return generic(new_val, new_der) 
+        
+	except:
+		raise AttributeError()
+            
+class sin(Generic):
+        
+    try: 
+		new_val = math.sin(self.val)
+		new_der = math.cos(self.val)
+		return generic(new_val, new_der) 
+    
+	except AttributeError:
+		pass
+    
+class cos(Generic): 
+        
+    try:
+        new_val = math.cos(self.val)
+        new_der = - math.sin(self.val)
+        return generic(new_val, new_der)
+        
+    except AttributeError:
+        pass
         
     
     
