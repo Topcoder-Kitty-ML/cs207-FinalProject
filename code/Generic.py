@@ -102,8 +102,14 @@ class Generic:
 			new_val = self.val ** other.val
 			new_der = (self.val ** other.val) * (self.der * (other.val/self.val)+ (other.der* math.log(self.val)))
 			return Generic(new_val, new_der) 
-		except:
-			pass
+        
+		except AttributeError:
+            new_val = self.val ** float(other)
+			new_der = self.val ** float(other) * (self.der * (float(other)/self.val))
+			return Generic(new_val, new_der) 
+        
+        except ValueError:
+        
 
 		# This deals with an edge case where 
 		# self.val is a negative number, and cannot be log.
@@ -111,14 +117,14 @@ class Generic:
 		# (self.val is the base of the exponenent)
 		# e.g. x ** 2
 		# (NEED DOUBLE CHECK IF THIS IS A GENERALIZED RULE!!!)
-		try:
-			#print("last chunk")
-			new_val = self.val ** other.val
-			new_der = (self.val ** other.val) * (self.der * (other.val/self.val))
-				
-			return Generic(new_val, new_der)
-		except:
-			raise AttributeError
+#		try:
+#			#print("last chunk")
+#			new_val = self.val ** other.val
+#			new_der = (self.val ** other.val) * (self.der * (other.val/self.val))
+#				
+#			return Generic(new_val, new_der)
+#		except:
+#			raise AttributeError
 		
 	def __rpow__(self, other):
 		# E.g. case of 2 ** dummy_class,
