@@ -49,26 +49,114 @@ class JacobianProduct:
 
     """
     def __init__(self, function_vector):
-        raise NotImplementedError
+        self.function_vector = function_vector
+
+        # runs a check on whether the function vector's functions all have
+        # a) the same number of variables and
+        # b) the same variables in the same order
+
+        function_signature = None
+        for function in self.function_vector:
+            if function_signature:
+                function_signature_c = signature(function)
+                if function_signature_c == function_signature:
+                    continue
+                else:
+                    raise AttributeError("Functions in the function vector must contain \n\
+                                         the same number of variables in the same order with the same names.")
+            if not function_signature:
+                function_signature = signature(function)
+        self.function_signature = function_signature
 
     def __repr__(self):
         #prints out functions
+        raise NotImplementedError
+
+    def input_format_check(self, inputs):
+        # make sure all elements in inputs are lists
+        # for example [[1,2,3],0] becomes [[1,2,3],[0]]
+        for idx, element in enumerate(inputs):
+            if not isinstance(element, list):
+                inputs[idx] = list(element)
+        return inputs
+
+    def subset_functions(self, function_vector, fun_idx):
+        if fun_idx == -1:
+            return function_vector
+        else:
+            if not ifisinstance(fun_idx, list):
+                fun_idx = list(fun_idx)
+
+            subsetted_funs = [fun for idx, fun in enumerate(function_vector) if idx in fun_idx]
+            return subsetted_funs
 
     def partial(self, wrt, inputs, fun_idx=-1):
-        # check to see if input is singular for constants
-        # convert scalar values to lists if not already in list form
-        for idx, value in enumerate(inputs):
-            if not isinstance(value, list):
-                inputs[idx] = list(value)
+        # make sure all elements in puts are lists
+        inputs = self.input_format_check(inputs)
 
-        for idx, value in enumerate(inputs):
-            if idx == wrt:
+        # get number of inputs required from function signature
+        n_inputs = len(self.function_signature.parameters)
 
+        # check to see if input is of length one for constant values
+        # check to see if input is of non-zero length for variable values
+        for input in range(0, n_inputs):
+            if input == wrt:
+                if len(self.function_vector[input]) <= 0:
+                    raise AttributeError("Input vector for your wrt variable needs to be of non-zero length.")
+            else:
+                if len(self.function_vector[input]) != 1:
+                    raise AttributeError("Inputs for the variables you are holding constant need to be of length 1.")
 
-        # get partial
+        # convert wrt variable inputs to Var object
+        # to differentiate
+        diff_inputs = self.inputs.copy()
+        for idx, value in enumerate(diff_inputs[wrt]):
+            diff_inputs[wrt][idx] = Var(value)
+
+        # create input vals list
+        input_vals_list = []
+        for input_wrt in diff_inputs[wrt]:
+            input_vals_entry = []
+            for idx, value in enumerate(diff_inputs):
+                if idx == wrt:
+                    input_vals_entry[idx] = input_wrt
+                else:
+                    input_vals_entry[idx] = diff_inputs[idx][0]
+            input_vals_list.append(input_vals_entry)
+
+        # create functions list
+        diff_fun_vector = self.subset_functions(self.function_vector, fun_idx)
+
+        # get partials given input vals list
+        partials_list = []
+        for function in diff_fun_vector:
+            function_partials_list = []
+            for input_vals in input_vals_list:
+                partial_entry = function(*input_vals).der
+                function_partials_list.append(partial_entry)
+            partials_list.append(function_partials_list)
+
+        # return the partials list
+        # this a list of lists such that you can access the value for each function for each variable value
+        # e.g. to access function 0 at variable value 1 from the inputs vector write out partials_list[0][1]
+        return partials_list
 
     def jacobian_product(self, inputs, fun_idx=-1):
-        # check that all inputs have the same length
+        # make sure all inputs are lists
+        inputs = self.input_format_check(inputs)
+
+        # make sure all inputs are non-zero and are of the same length
+        # if inputs are not, then return AttributeError
+
+        # create input_vals_list
+        # elements wise combination between all values
+
+        # subset function vector
+
+        # calculate the jacobian product
+
+        # return list of jacobians
+
 
     def fun_map(self):
 
