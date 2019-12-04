@@ -171,8 +171,34 @@ class log(GenericDiff):
 #logistic function
 class logit(GenericDiff):
 
+    def __init__(self, obj):
+        def _logit_generic(obj):
+            self.val = math.exp(obj.val)/(1+math.exp(obj.val))
+            self.der = -(1+math.exp(-obj.val))**(-2)*(-obj.der*math.exp(-obj.val))
+
+        try:
+            _logit_generic(obj)
+
+        except AttributeError:
+            obj = Constant(obj)
+            _logit_generic(obj)
+
 #sqrt function
 class sqrt(GenericDiff):
 
+    def __init__(self, obj, base=math.e):
+        def _sqrt_generic(obj):
+            if obj.der <= 0:
+                raise ValueError("Cannot take the sqrt derivative of 0 or negative number.\n\
+                                 This package only outputs real numbers.")
+            else:
+                self.val = math.sqrt(obj.val)
+                self.der = 1/(2*math.sqrt(obj.val))
 
-https://calculus.subwiki.org/wiki/Logistic_function#First_derivative
+        try:
+            _sqrt_generic(obj)
+
+        except AttributeError:
+            obj = Constant(obj)
+            _sqrt_generic(obj)
+
