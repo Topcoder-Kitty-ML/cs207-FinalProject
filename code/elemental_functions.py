@@ -1,12 +1,6 @@
 from generic_diff import *
 import math
 
-class Constant:
-
-    def __init__(self, value):
-        self.val = value
-        self.der = 0
-
 class sin(GenericDiff):
 
     def __init__(self, obj):
