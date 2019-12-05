@@ -170,7 +170,7 @@ class GenericDiff:
         return self.der >= other.der
     
     def __eq__(self, other):
-        return self.der = other.der
+        return self.der == other.der
         
     def __ne__(self, other):
         return self.der != other.der
