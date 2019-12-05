@@ -157,26 +157,22 @@ class GenericDiff:
     	except:
     		raise AttributeError()
             
-class Sin(GenericDiff):
-        
-    try: 
-		new_val = math.sin(self.val)
-		new_der = math.cos(self.val)
-		return generic(new_val, new_der) 
+    def __lt__(self, other):
+        return self.der < other.der
     
-	except AttributeError:
-		pass
+    def __gt__(self, other):
+        return self.der > other.der
     
-class Cos(GenericDiff): 
+    def __le__(self, other):
+        return self.der <= other.der
         
-    try:
-        new_val = math.cos(self.val)
-        new_der = - math.sin(self.val)
-        return generic(new_val, new_der)
-        
-    except AttributeError:
-        pass
-        
+    def __ge__(self, other):
+        return self.der >= other.der
     
+    def __eq__(self, other):
+        return self.der = other.der
+        
+    def __ne__(self, other):
+        return self.der != other.der
     
     
