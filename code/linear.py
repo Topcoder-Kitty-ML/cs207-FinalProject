@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from dummy import dummy
+import math
 
 class AutoDiffToy():
 	'''
@@ -47,14 +48,6 @@ class AutoDiffToy():
 		self.val = self.calc_function_val()
 		self.der = self.calc_function_derivative_val()
 
-	def __neg__(self):
-		try: 
-			alpha = -1 * self.alpha
-			beta = -1 * self.beta
-			new_toy = AutoDiffToy(self.a, self.alpha, beta)
-			return(new_toy)
-		except AttributeError:
-			pass
 
 	def __add__(self, other):
 		'''
@@ -265,34 +258,70 @@ class AutoDiffToy():
 			raise AttributeError()
 
 	def __pow__(self, other):
-#		try:
-#			alpha = self.alpha
-#			beta = self.beta 
-#			new_toy = AutoDiffToy(self.a, alpha, beta)
-#			return(new_toy)
-#		except AttributeError:
-#			pass
-#
+		# For case where x ** y. We assume 
+		# that other (y) is a number
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.real, 0)
+			return self_dummy ** other_dummy
+		except AttributeError:
+			pass 
+		
+		# Case of x ** y, where x and y are both classes
+
 		try:
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
 			return self_dummy ** other_dummy
 		except:
 			raise AttributeError()
-# 
-#
+
+
 	def __rpow__(self, other):
-#		try:
-#			alpha = self.alpha ** other.real
-#			beta = self.beta ** other.real
-#			new_toy = AutoDiffToy(self.a, alpha, beta)
-#			return(new_toy)
-#		except AttributeError:
-#			pass
-#
+# <<<<<<< HEAD
+		# try:
+		# 	alpha = self.alpha ** other.real
+		# 	beta = self.beta ** other.real
+		# 	new_toy = AutoDiffToy(self.a, alpha, beta)
+		# 	return(new_toy)
+		# except AttributeError:
+		# 	pass
+
+		# Case of x ** y, where we assume x is a number.
+		# x is other, y is self.
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.real, 0)
+			return other_dummy ** self_dummy
+		except AttributeError:
+			pass
+
+		# Case of x ** y, where both x and y are objects.
+		# x is other, y is self.
+# =======
+# #		try:
+# #			alpha = self.alpha ** other.real
+# #			beta = self.beta ** other.real
+# #			new_toy = AutoDiffToy(self.a, alpha, beta)
+# #			return(new_toy)
+# #		except AttributeError:
+# #			pass
+# #
+# >>>>>>> tchen
 		try:
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
 			return other_dummy ** self_dummy
 		except:
 			raise AttributeError()
+
+
+	def __neg__(self):
+		try: 
+			alpha = -1 * self.alpha
+			beta = -1 * self.beta
+			new_toy = AutoDiffToy(self.a, self.alpha, beta)
+			return(new_toy)
+		except AttributeError:
+			pass
+
