@@ -392,10 +392,7 @@ class trigo_exp():
 		value and a AutoDiffToy object
 		'''
 		try:
-
 			return self.__perform_division__(self, other)
-
-
 		except:
 			raise AttributeError
 
@@ -403,7 +400,7 @@ class trigo_exp():
 	def __rtruediv__(self, other):
 		try:
 	
-			return self.__perform_division__(self, other)
+			return self.__perform_rdivision__(self, other)
 		except:
 			raise AttributeError
 
@@ -428,8 +425,20 @@ class trigo_exp():
 		# 	return(new_toy)
 		# except AttributeError:
 		# 	pass
-		try:
 
+		# Assume other is a number
+		try:
+			alpha = self.alpha / other.real
+			beta = self.beta / other.real
+			new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+
+			return(new_toy)
+
+		except AttributeError:
+			pass
+
+		# Assume two classes dividing by each other
+		try:
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
 
@@ -437,26 +446,78 @@ class trigo_exp():
 		except:
 			raise AttributeError
 
+	@classmethod
+	def __perform_rdivision__(cls, self, other):
+
+		# For case of x / y, where we assume that
+		# x is a number. (x is other, y is self)
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.real, 0) # derivative of a number is zero
+
+			return other_dummy / self_dummy
+
+		except AttributeError:
+			pass
+
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+
+			return other_dummy / self_dummy
+		except:
+			raise AttributeError
+
+
+
 	def __pow__(self, other):
 		try:	
-			return self.__perform_higherorder__(self, other)
+			return self.__perform_pow__(self, other)
+		except:
+			raise AttributeError
+
+	@classmethod
+	def __perform_pow__(cls, self, other):
+		'''
+		Perform power
+		'''
+
+		# Case of x ** y, where we assume y is a number.
+		# x is self, y is other
+		try: 
+			# alpha = self.alpha ** other.real
+			# beta = self.beta ** other.real
+			# new_toy = cls(self.x_object, alpha=alpha, beta=beta)
+			# return(new_toy)
+			#print("in trigo pow")
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.real, 0)
+			new_dummy = self_dummy ** other_dummy
+			return(new_dummy)
+		except AttributeError:
+			pass
+
+		# Case of x ** y, where x and y are both classes
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.val, other.der)
+			return self_dummy ** other_dummy
 		except:
 			raise AttributeError
 
 
 	def __rpow__(self, other): 
 		try:
-			return self.__perform_higherorder__(self, other)
+			return self.__perform_rpow__(self, other)
 		except:
 			raise AttributeError
 
 	@classmethod
-	def __perform_higherorder__(cls, self, other):
+	def __perform_rpow__(cls, self, other):
 		'''
 		Perform power
 		'''
 		# try: 
-		
 		# 	alpha = self.alpha ** other.real
 		# 	beta = self.beta ** other.real
 		# 	new_toy = cls(self.x_object, alpha=alpha, beta=beta)
@@ -470,13 +531,27 @@ class trigo_exp():
 		# 	return(new_toy)
 		# except AttributeError:
 		# 	pass
-		try:
 
+		# Case of x ** y, where we assume x is a number.
+		# x is other, y is self.
+		try:
+			self_dummy = dummy(self.val, self.der)
+			other_dummy = dummy(other.real, 0)
+			#result = other_dummy.__rpow__(self_dummy)
+			return other_dummy ** self_dummy
+			#return result
+		except AttributeError:
+			pass
+
+		# Case of x ** y, where both x and y are objects.
+		# x is other, y is self.
+		try:
 			self_dummy = dummy(self.val, self.der)
 			other_dummy = dummy(other.val, other.der)
-			return self_dummy ** other_dummy
+			return other_dummy ** self_dummy
 		except:
 			raise AttributeError
+
 
 	def __neg__(self):
 		try:
@@ -669,6 +744,9 @@ if __name__ == "__main__":
 
 	x_10 = x_9 * x_9
 	print(x_10.val, x_10.der)
+
+	x_11 =  2 ** x_9
+	print(x_11.val, x_11.der)
 
 
 	#f = alpha * x + beta
