@@ -7,7 +7,7 @@ class sin(GenericDiff):
 
         def _sin_generic(obj):
             self.val = math.sin(obj.val)
-            self.der = math.cos(ojb.val)*obj.der
+            self.der = math.cos(obj.val)*obj.der
 
         try:
             _sin_generic(obj)
