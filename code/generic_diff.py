@@ -3,12 +3,12 @@
 
 import math
 
-class Var:
+class Var(GenericDiff):
 	def __init__(self, value): 
 		self.val = value
 		self.der = 1
 
-class Constant:
+class Constant(GenericDiff):
 	def __init__(self, value):
 		self.val = value
 		self.der = 0
