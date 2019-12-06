@@ -3,7 +3,7 @@ from autodiff_module import *
 
 def function_to_optimize(x_val = 2):
 	# Define the x
-	x = autodiff(x_val)
+	x = Var(x_val)
 
 	# ==== Define you function here!!!! =====
 	func = sin(x) - x * x * cos(x) - 3 + tan(2 * x)
