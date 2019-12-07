@@ -1,6 +1,7 @@
 import pytest
-from trigo_exp import *
-from linear import AutoDiffToy as autodiff
+#from trigo_exp import *
+#from linear import AutoDiffToy as autodiff
+from autodiff_module import *
 from vector_jacobian import *
 import math
 

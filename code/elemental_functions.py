@@ -48,7 +48,7 @@ class tan(GenericDiff):
         except AttributeError:
             obj = Constant(obj)
             return _tan_generic(obj)
-
+          
 class sinh(GenericDiff):
 
     def __init__(self, obj):
@@ -78,7 +78,6 @@ class cosh(GenericDiff):
         except AttributeError:
             obj = Constant(obj)
             return _cosh_generic(obj)
-
 
 class tanh(GenericDiff):
 
@@ -160,7 +159,6 @@ class exp(GenericDiff):
             obj = Constant(obj)
             return _exp_generic(obj)
 
-
 # will handle any base with default = e
 class log(GenericDiff):
 
@@ -196,7 +194,7 @@ class logit(GenericDiff):
         except AttributeError:
             obj = Constant(obj)
             return _logit_generic(obj)
-
+          
 #sqrt function
 class sqrt(GenericDiff):
 
