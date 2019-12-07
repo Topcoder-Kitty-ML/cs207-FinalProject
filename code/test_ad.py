@@ -11,7 +11,7 @@ import math
 ### Intended behavior
 def test_linear_1(): #TEST 1
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
+    x = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -19,8 +19,8 @@ def test_linear_1(): #TEST 1
 
 def test_linear_mult(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -30,8 +30,8 @@ def test_linear_mult(): #TEST
 
 def test_linear_add(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -41,8 +41,8 @@ def test_linear_add(): #TEST
 
 def test_linear_sub():
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -52,8 +52,8 @@ def test_linear_sub():
 
 def test_linear_div():
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -65,7 +65,7 @@ def test_linear_div():
 ### Intended behavior
 def test_sin_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
+    x = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -74,7 +74,7 @@ def test_sin_1(): #TEST
 
 def test_cos_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
+    x = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -83,7 +83,7 @@ def test_cos_1(): #TEST
 
 def test_tan_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
+    x = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -92,8 +92,8 @@ def test_tan_1(): #TEST
 
 def test_trig_add_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -105,8 +105,8 @@ def test_trig_add_1(): #TEST
 
 def test_trig_mult_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -118,8 +118,8 @@ def test_trig_mult_1(): #TEST
 
 def test_trig_sub_1():
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -131,8 +131,8 @@ def test_trig_sub_1():
 
 def test_trig_div_1():
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -147,62 +147,62 @@ def test_trig_div_1():
 
 def test_exp_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
+    x = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
-    x_2 = 2 * exponential(f) + 3
+    x_2 = 2 * exp(f) + 3
     assert (x_2.val, x_2.der) == (2196.266316856917, 4386.532633713834)
 
 def test_exp_add_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
     h = 4 * y + 5
-    x_2 = 2 * exponential(f) + 3
-    x_3 = exponential(h)
+    x_2 = 2 * exp(f) + 3
+    x_3 = exp(h)
     x_4 = x_2 + x_3
     assert (x_4.val, x_4.der) == (x_2.val + x_3.val, x_2.der + x_3.der)
 
 def test_exp_mult_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
     h = 4 * y + 5
-    x_2 = 2 * exponential(f) + 3
-    x_3 = exponential(h)
+    x_2 = 2 * exp(f) + 3
+    x_3 = exp(h)
     x_4 = x_2 * x_3
     assert (x_4.val, x_4.der) == (x_2.val * x_3.val, x_3.val*x_2.der + x_3.der*x_2.val)
 
 def test_exp_sub_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
     h = 4 * y + beta
-    x_2 = 2 * exponential(f) + 3
-    x_3 = exponential(h)
+    x_2 = 2 * exp(f) + 3
+    x_3 = exp(h)
     x_4 = x_2 - x_3
     assert (x_4.val, x_4.der) == (x_2.val - x_3.val, x_2.der - x_3.der)
 
 def test_exp_div_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
     h = 4 * y + beta
-    x_2 = 2 * exponential(f) + 3
-    x_3 = exponential(h)
+    x_2 = 2 * exp(f) + 3
+    x_3 = exp(h)
     x_4 = x_2 / x_3
     assert (x_4.val, x_4.der) == (x_2.val/x_3.val, (x_3.val*x_2.der - x_2.val*x_3.der)/(x_3.val**2))
 
@@ -211,7 +211,7 @@ def test_exp_div_1(): #TEST
 
 def test_pow_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
+    x = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x ** 2 + beta
@@ -219,8 +219,8 @@ def test_pow_1(): #TEST
 
 def test_pow_add_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x ** 2 + beta
@@ -230,8 +230,8 @@ def test_pow_add_1(): #TEST
 
 def test_pow_mult_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x ** 2 + beta
@@ -241,8 +241,8 @@ def test_pow_mult_1(): #TEST
 
 def test_pow_sub_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x ** 2 + beta
@@ -252,8 +252,8 @@ def test_pow_sub_1(): #TEST
 
 def test_exp_div_1(): #TEST
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x ** 2 + beta
@@ -267,8 +267,8 @@ def test_exp_div_1(): #TEST
 ## Test radd
 def test_trig_radd_1():
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -281,8 +281,8 @@ def test_trig_radd_1():
 ## Test rmult
 def test_trig_rmult_1():
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -295,8 +295,8 @@ def test_trig_rmult_1():
 ## Test rsub
 def test_trig_rsub_1():
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -309,8 +309,8 @@ def test_trig_rsub_1():
 ## Test rdiv
 def test_trig_rdiv_1():
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
-    y = autodiff(a)
+    x = Var(a)
+    y = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -323,8 +323,8 @@ def test_trig_rdiv_1():
 ## Test rpow
 #def test_trig_rpow_1():
 #    a = 2.0  # Value to evaluate at
-#    x = autodiff(a)
-#    y = autodiff(a)
+#    x = Var(a)
+#    y = Var(a)
 #    alpha = 2.0
 #    beta = 3.0
 #    f = alpha * x + beta
@@ -341,8 +341,8 @@ def test_trig_rdiv_1():
 def test_trig_radd_error():
     with pytest.raises(AttributeError):
         a = 2.0  # Value to evaluate at
-        x = autodiff(a)
-        y = autodiff(a)
+        x = Var(a)
+        y = Var(a)
         alpha = 2.0
         beta = 3.0
         f = alpha * x + beta
@@ -356,8 +356,8 @@ def test_trig_radd_error():
 def test_trig_rmult_error():
     with pytest.raises(AttributeError):
         a = 2.0  # Value to evaluate at
-        x = autodiff(a)
-        y = autodiff(a)
+        x = Var(a)
+        y = Var(a)
         alpha = 2.0
         beta = 3.0
         f = alpha * x + beta
@@ -370,8 +370,8 @@ def test_trig_rmult_error():
 def test_trig_rsub_error():
     with pytest.raises(AttributeError):
         a = 2.0  # Value to evaluate at
-        x = autodiff(a)
-        y = autodiff(a)
+        x = Var(a)
+        y = Var(a)
         alpha = 2.0
         beta = 3.0
         f = alpha * x + beta
@@ -384,8 +384,8 @@ def test_trig_rsub_error():
 def test_trig_rdiv_error():
     with pytest.raises(AttributeError):
         a = 2.0  # Value to evaluate at
-        x = autodiff(a)
-        y = autodiff(a)
+        x = Var(a)
+        y = Var(a)
         alpha = 2.0
         beta = 3.0
         f = alpha * x + beta
@@ -398,8 +398,8 @@ def test_trig_rdiv_error():
 def test_trig_rpow_error():
     with pytest.raises(AttributeError):
         a = 2.0  # Value to evaluate at
-        x = autodiff(a)
-        y = autodiff(a)
+        x = Var(a)
+        y = Var(a)
         alpha = 2.0
         beta = 3.0
         f = alpha * x + beta
@@ -412,8 +412,8 @@ def test_trig_rpow_error():
 def test_trig_add_error():
     with pytest.raises(AttributeError):
         a = 2.0  # Value to evaluate at
-        x = autodiff(a)
-        y = autodiff(a)
+        x = Var(a)
+        y = Var(a)
         alpha = 2.0
         beta = 3.0
         f = alpha * x + beta
@@ -427,8 +427,8 @@ def test_trig_add_error():
 def test_trig_mult_error():
     with pytest.raises(AttributeError):
         a = 2.0  # Value to evaluate at
-        x = autodiff(a)
-        y = autodiff(a)
+        x = Var(a)
+        y = Var(a)
         alpha = 2.0
         beta = 3.0
         f = alpha * x + beta
@@ -441,8 +441,8 @@ def test_trig_mult_error():
 def test_trig_sub_error():
     with pytest.raises(AttributeError):
         a = 2.0  # Value to evaluate at
-        x = autodiff(a)
-        y = autodiff(a)
+        x = Var(a)
+        y = Var(a)
         alpha = 2.0
         beta = 3.0
         f = alpha * x + beta
@@ -455,8 +455,8 @@ def test_trig_sub_error():
 def test_trig_div_error():
     with pytest.raises(AttributeError):
         a = 2.0  # Value to evaluate at
-        x = autodiff(a)
-        y = autodiff(a)
+        x = Var(a)
+        y = Var(a)
         alpha = 2.0
         beta = 3.0
         f = alpha * x + beta
@@ -469,8 +469,8 @@ def test_trig_div_error():
 def test_trig_pow_error():
     with pytest.raises(AttributeError):
         a = 2.0  # Value to evaluate at
-        x = autodiff(a)
-        y = autodiff(a)
+        x = Var(a)
+        y = Var(a)
         alpha = 2.0
         beta = 3.0
         f = alpha * x + beta
@@ -484,7 +484,7 @@ def test_trig_pow_error():
 # ax + b
 def test_ax_b():
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
+    x = Var(a)
     alpha = 2.0
     beta = 3.0
     f = alpha * x + beta
@@ -493,7 +493,7 @@ def test_ax_b():
 # b + ax
 def test_b_ax():
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
+    x = Var(a)
     alpha = 2.0
     beta = 3.0
     f = beta + alpha * x
@@ -502,7 +502,7 @@ def test_b_ax():
 # xa + b
 def test_xa_b():
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
+    x = Var(a)
     alpha = 2.0
     beta = 3.0
     f = x*alpha + beta
@@ -511,7 +511,7 @@ def test_xa_b():
 # b + xa
 def test_b_xa():
     a = 2.0  # Value to evaluate at
-    x = autodiff(a)
+    x = Var(a)
     alpha = 2.0
     beta = 3.0
     f = beta + x*alpha
