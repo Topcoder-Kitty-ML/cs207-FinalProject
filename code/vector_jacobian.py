@@ -1,6 +1,8 @@
 # import all necessary packages
 from inspect import signature
 import numpy as np
+from generic_diff import *
+from elemental_functions import *
 
 class JacobianProduct:
     """
@@ -75,7 +77,7 @@ class JacobianProduct:
         # for example [[1,2,3],0] becomes [[1,2,3],[0]]
         for idx, element in enumerate(inputs):
             if not isinstance(element, list):
-                inputs[idx] = list(element)
+                inputs[idx] = [element]
         return inputs
 
     def subset_functions(self, function_vector, fun_idx):
@@ -83,13 +85,14 @@ class JacobianProduct:
             return function_vector
         else:
             if not ifisinstance(fun_idx, list):
-                fun_idx = list(fun_idx)
+                fun_idx = [fun_idx]
 
             subsetted_funs = [fun for idx, fun in enumerate(function_vector) if idx in fun_idx]
             return subsetted_funs
 
     def partial(self, wrt, inputs, fun_idx=-1):
         # make sure all elements in puts are lists
+        inputs = inputs.copy()
         inputs = self.input_format_check(inputs)
 
         # get number of inputs required from function signature
@@ -99,11 +102,13 @@ class JacobianProduct:
         # check to see if input is of non-zero length for variable values
         for input in range(0, n_inputs):
             if input == wrt:
-                if len(self.function_vector[input]) <= 0:
-                    raise AttributeError("Input vector for your wrt variable needs to be of non-zero length.")
+                if len(inputs[input]) <= 0:
+                    raise AttributeError(f"You are differentiating wrt argument {wrt} and holding all else constant. \n\
+                     Input vector for your wrt variable needs to be of length > 0.")
             else:
-                if len(self.function_vector[input]) != 1:
-                    raise AttributeError("Inputs for the variables you are holding constant need to be of length 1.")
+                if len(inputs[input]) != 1:
+                    raise AttributeError(f"You are differentiating wrt argument {wrt} and holding all else constant.\n\
+                    Inputs for the variables you hold constant need to be of length 1.")
 
         # convert wrt variable inputs to Var object
         # to differentiate
@@ -117,9 +122,9 @@ class JacobianProduct:
             input_vals_entry = []
             for idx, value in enumerate(diff_inputs):
                 if idx == wrt:
-                    input_vals_entry[idx] = input_wrt
+                    input_vals_entry.append(input_wrt)
                 else:
-                    input_vals_entry[idx] = diff_inputs[idx][0]
+                    input_vals_entry.append(diff_inputs[idx][0])
             input_vals_list.append(input_vals_entry)
 
         # create functions list
@@ -164,8 +169,9 @@ class JacobianProduct:
         for i in range(0, vals_list_length):
             input_vals_entry = []
             for j, variable in enumerate(inputs):
-                input_vals_entry[j] = variable[i]
+                input_vals_entry.append(variable[i])
             input_vals_list.append(input_vals_entry)
+            print(input_vals_list)
 
         # instantiate jacobian list
         jp_list = []
@@ -180,6 +186,7 @@ class JacobianProduct:
             # for each variable calculate partials
             for wrt_idx in range(0, len(self.function_signature.parameters)):
                 partials = self.partial(wrt_idx, input_vals, fun_idx)
+                print(partials)
                 for function_idx, value in enumerate(partials):
                     # fill in the matrix with partials
                     jp_array[function_idx, wrt_idx] = partials[function_idx][0]
