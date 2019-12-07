@@ -339,7 +339,7 @@ def test_trig_rdiv_1():
 
 ## Test radd error
 def test_trig_radd_error():
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         a = 2.0  # Value to evaluate at
         x = Var(a)
         y = Var(a)
@@ -354,7 +354,7 @@ def test_trig_radd_error():
 
 ## Test rmult error
 def test_trig_rmult_error():
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         a = 2.0  # Value to evaluate at
         x = Var(a)
         y = Var(a)
@@ -368,7 +368,7 @@ def test_trig_rmult_error():
 
 ## Test rsub error
 def test_trig_rsub_error():
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         a = 2.0  # Value to evaluate at
         x = Var(a)
         y = Var(a)
@@ -382,7 +382,7 @@ def test_trig_rsub_error():
 
 ## Test rdiv error
 def test_trig_rdiv_error():
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         a = 2.0  # Value to evaluate at
         x = Var(a)
         y = Var(a)
@@ -396,7 +396,7 @@ def test_trig_rdiv_error():
 
 ## Test rpow error
 def test_trig_rpow_error():
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         a = 2.0  # Value to evaluate at
         x = Var(a)
         y = Var(a)
@@ -410,7 +410,7 @@ def test_trig_rpow_error():
 
 ## Test add error
 def test_trig_add_error():
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         a = 2.0  # Value to evaluate at
         x = Var(a)
         y = Var(a)
@@ -425,7 +425,7 @@ def test_trig_add_error():
 
 ## Test mult error
 def test_trig_mult_error():
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         a = 2.0  # Value to evaluate at
         x = Var(a)
         y = Var(a)
@@ -439,7 +439,7 @@ def test_trig_mult_error():
 
 ## Test sub error
 def test_trig_sub_error():
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         a = 2.0  # Value to evaluate at
         x = Var(a)
         y = Var(a)
@@ -453,7 +453,7 @@ def test_trig_sub_error():
 
 ## Test div error
 def test_trig_div_error():
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         a = 2.0  # Value to evaluate at
         x = Var(a)
         y = Var(a)
@@ -467,7 +467,7 @@ def test_trig_div_error():
 
 ## Test pow error
 def test_trig_pow_error():
-    with pytest.raises(AttributeError):
+    with pytest.raises(TypeError):
         a = 2.0  # Value to evaluate at
         x = Var(a)
         y = Var(a)
@@ -517,104 +517,109 @@ def test_b_xa():
     f = beta + x*alpha
     assert (f.val, f.der) == (7, 2)
 
-# Test dummy class =============================
+
+# Test GenericDiff class =============================
 
 ## add and radd
-def test_dummy_add_1():
-    f = dummy(1, 0)
-    h = dummy(2, 2)
+def test_GenericDiff_add_1():
+    f = GenericDiff(1, 0)
+    h = GenericDiff(2, 2)
     d_obj = f + h
     assert (d_obj.val, d_obj.der) == (f.val + h.val, f.der + h.der)
 
 def test_dummy_add_2():
-    f = dummy(1, 0)
+    f = GenericDiff(1, 0)
     h = 2
     d_obj = f + h
     assert (d_obj.val, d_obj.der) == (f.val + 2, f.der)
 
-def test_dummy_radd_1():
+def test_GenericDiff_radd_1():
     f = 2
-    h = dummy(1, 0)
+    h = GenericDiff(1, 0)
     d_obj = f + h
     assert (d_obj.val, d_obj.der) == (2 + h.val, h.der)
 
 ## sub and rsub
-def test_dummy_sub_1():
-    f = dummy(1, 0)
-    h = dummy(2, 2)
+def test_GenericDiff_sub_1():
+    f = GenericDiff(1, 0)
+    h = GenericDiff(2, 2)
     d_obj = f - h
     assert (d_obj.val, d_obj.der) == (f.val - h.val, f.der - h.der)
 
-def test_dummy_sub_2():
-    f = dummy(1, 0)
+def test_GenericDiff_sub_2():
+    f = GenericDiff(1, 0)
     h = 2
     d_obj = f - h
     assert (d_obj.val, d_obj.der) == (f.val - 2, f.der)
 
-def test_dummy_rsub_1():
+def test_GenericDiff_rsub_1():
     f = 2
-    h = dummy(1, 0)
+    h = GenericDiff(1, 0)
     d_obj = f - h
     assert (d_obj.val, d_obj.der) == (2 - h.val, h.der)
 
 ## mul and rmul
-def test_dummy_mul_1():
-    f = dummy(1, 0)
-    h = dummy(2, 2)
+def test_GenericDiff_mul_1():
+    f = GenericDiff(1, 0)
+    h = GenericDiff(2, 2)
     d_obj = f * h
     assert (d_obj.val, d_obj.der) == (f.val * h.val, f.der*h.val + h.der*f.val)
 
-def test_dummy_mul_2():
-    f = dummy(1, 0)
+def test_GenericDiff_mul_2():
+    f = GenericDiff(1, 0)
     h = 2
     d_obj = f * h
     assert (d_obj.val, d_obj.der) == (f.val * 2, f.der * 2)
 
-def test_dummy_rmul_1():
+def test_GenericDiff_rmul_1():
     f = 2
-    h = dummy(1, 0)
+    h = GenericDiff(1, 0)
     d_obj = f * h
     assert (d_obj.val, d_obj.der) == (2 * h.val, 2 * h.der)
 
 ## div and rdiv
-def test_dummy_div_1():
-    f = dummy(1, 0)
-    h = dummy(2, 2)
+def test_GenericDiff_div_1():
+    f = GenericDiff(1, 0)
+    h = GenericDiff(2, 2)
     d_obj = f / h
     assert (d_obj.val, d_obj.der) == (f.val/h.val, (h.val*f.der - f.val*h.der)/(h.val**2))
 
-def test_dummy_div_2():
-    f = dummy(1, 0)
+def test_GenericDiff_div_2():
+    f = GenericDiff(1, 0)
     h = 2
     d_obj = f / h
     assert (d_obj.val, d_obj.der) == (f.val / 2, f.der/2)
 
-def test_dummy_rdiv_1():
+def test_GenericDiff_rdiv_1():
     f = 2
-    h = dummy(1, 2)
+    h = GenericDiff(1, 2)
     d_obj = f / h
     assert (d_obj.val, d_obj.der) == (2/h.val, (h.val*0-2*h.der)/(h.val**2))
 
 ## pow and rpow
-def test_dummy_pow_1():
-    f = dummy(1, 0)
-    h = dummy(2, 2)
+def test_GenericDiff_pow_1():
+    f = GenericDiff(1, 0)
+    h = GenericDiff(2, 2)
     d_obj = f ** h
     power_derivative = f.val ** h.val * (f.der*h.val/f.val+(h.der*math.log(f.val)))
     assert (d_obj.val, d_obj.der) == (f.val ** h.val, power_derivative)
 
-def test_dummy_pow_2():
-    f = dummy(1, 1)
+def test_GenericDiff_pow_2():
+    f = GenericDiff(1, 1)
     h = 2
     d_obj = f ** h
     assert (d_obj.val, d_obj.der) == (f.val ** 2, 2*(f.val))
 
-def test_dummy_rpow_1():
+def test_GenericDiff_rpow_1():
     f = 2
-    h = dummy(1, 2)
+    h = GenericDiff(1, 2)
     d_obj = f ** h
     power_derivative = 2 ** h.val * (0*h.val/2+(h.der*math.log(2)))
     assert (d_obj.val, d_obj.der) == (2 ** h.val, power_derivative)
+
+
+
+
 
 
 
