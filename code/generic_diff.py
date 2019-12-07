@@ -2,16 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import math
-
-class Var(GenericDiff):
-	def __init__(self, value): 
-		self.val = value
-		self.der = 1
-
-class Constant(GenericDiff):
-	def __init__(self, value):
-		self.val = value
-		self.der = 0
 		
 class GenericDiff:
 	def __init__(self, val, der):
@@ -21,10 +11,9 @@ class GenericDiff:
 	def __add__(self, other):
 		def __add__generic(self, other):   
 			self.val = self.val + other.val
-			self.der = self.der
+			self.der = self.der 
 			
 		try:
-			# This code has syntax error. Removed colon
 			__add__generic(self, other)
 				
 		except AttributeError:   
@@ -161,11 +150,11 @@ class GenericDiff:
 		try:
 			new_val = -1 * self.val 
 			new_der = -1 * self.der
-			return generic(new_val, new_der) 
+			return GenericDiff(new_val, new_der) 
 			
 		except:
 			raise AttributeError()
-			
+    	
 	def __lt__(self, other):
 		return self.der < other.der
 	
@@ -183,5 +172,14 @@ class GenericDiff:
 		
 	def __ne__(self, other):
 		return self.der != other.der
-	
+
+class Var(GenericDiff):
+	def __init__(self, value): 
+		self.val = value
+		self.der = 1
+
+class Constant(GenericDiff):
+	def __init__(self, value):
+		self.val = value
+		self.der = 0
 	
