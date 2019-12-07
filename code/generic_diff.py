@@ -179,36 +179,62 @@ class GenericDiff:
 		than of the derivative instead of
 		the value of the objects.
 		'''
-		return self.der < other.der	
+		try:
+			return self.der < other.der	
+
+		except AttributeError:
+            other = Comparison(other)
+            return self.der < other.der
 	
 	def __gt__(self, other):
 		'''
 		We compare the derivative instead of
 		the value here by definition
 		'''
-		return self.der > other.der
+        try:
+            return self.der > other.der
+        
+        except AttributeError:
+			other = Comparison(other)
+            return self.der > other.der
 	
 	def __le__(self, other):
 		'''
 		We compare the derivative instead of
 		the value here by definition
 		'''
-		return self.der <= other.der
+		try:
+			return self.der <= other.der
+
+		except AttributeError:
+			other = Comparison(other)
+            return self.der <= other.der
 		
 	def __ge__(self, other):
 		'''
 		We compare the derivative instead of
 		the value here by definition
 		'''
-		return self.der >= other.der
-	
-	def __eq__(self, other):
+		try:
+			return self.der >= other.der
+
+		except AttributeError:
+			other = Comparison(other)
+            return self.der >= other.der 
+    
+    def __eq__(self, other):
 		'''
 		When the equal operator is called, we compare
 		the values of the derivative of the object instead
-		of the values.
+		of the values. 
 		'''
-		return self.der == other.der
+        try:
+            return self.der == other.der  
+        
+        except AttributeError:
+			other = Comparison(other)
+            return self.der == other.der
+            
 		
 	def __ne__(self, other):
 		'''
@@ -216,7 +242,13 @@ class GenericDiff:
 		the values of the derivative of the object instead
 		of the values.
 		'''
-		return self.der != other.der
+        try:
+            return self.der != other.der
+            
+        except AttributeError:
+            other = Comparison(other)
+            return self.der != other.der  
+
 
 class Var(GenericDiff):
 	def __init__(self, value): 
@@ -227,4 +259,9 @@ class Constant(GenericDiff):
 	def __init__(self, value):
 		self.val = value
 		self.der = 0
+        
+class Comparison(GenericDiff):
+    def __init__(self, value):
+        self.der = value 
+    
 	
