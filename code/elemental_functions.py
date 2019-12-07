@@ -6,195 +6,183 @@ class sin(GenericDiff):
     def __init__(self, obj):
 
         def _sin_generic(obj):
-            new_val = math.sin(obj.val)
-            new_der = math.cos(ojb.val)*obj.der
-            return GenericDiff(new_val, new_der)
+            self.val = math.sin(obj.val)
+            self.der = math.cos(obj.val)*obj.der
 
         try:
-            return _sin_generic(obj)
+            _sin_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _sin_generic(obj)
+            _sin_generic(obj)
 
 class cos(GenericDiff):
 
     def __init__(self, obj):
 
         def _cos_generic(obj):
-            new_val = math.cos(obj.val)
-            new_der = -math.sin(obj.val)*obj.der
-            return GenericDiff(new_val, new_der)
+            self.val = math.cos(obj.val)
+            self.der = -math.sin(obj.val)*obj.der
 
         try:
-            return _cos_generic(obj)
+            _cos_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _cos_generic(obj)
+            _cos_generic(obj)
 
 class tan(GenericDiff):
 
 
     def __init__(self, obj):
         def _tan_generic(obj):
-            new_val = math.tan(obj.val)
-            new_der = obj.der/(math.cos(obj.val)**2.0)
-            return GenericDiff(new_val, new_der)
+            self.val = math.tan(obj.val)
+            self.der = obj.der/(math.cos(obj.val)**2.0)
 
         try:
-            return _tan_generic(obj)
+            _tan_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _tan_generic(obj)
-          
+            _tan_generic(obj)
+
 class sinh(GenericDiff):
 
     def __init__(self, obj):
         def _sinh_generic(obj):
-            new_val = math.sinh(obj.val)
-            new_der = math.cosh(obj.val) * obj.der
-            return GenericDiff(new_val, new_der)
+            self.val = math.sinh(obj.val)
+            self.der = math.cosh(obj.val) * obj.der
 
         try:
-            return _sinh_generic(obj)
+            _sinh_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _sinh_generic(obj)
+            _sinh_generic(obj)
 
 class cosh(GenericDiff):
 
     def __init__(self, obj):
         def _cosh_generic(obj):
-            new_val = math.cosh(obj.val)
-            new_der = math.sinh(obj.val) * obj.der
-            return GenericDiff(new_val, new_der)
+            self.val = math.cosh(obj.val)
+            self.der = math.sinh(obj.val) * obj.der
 
         try:
-            return _cosh_generic(obj)
+            _cosh_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _cosh_generic(obj)
+            _cosh_generic(obj)
+
 
 class tanh(GenericDiff):
 
     def __init__(self, obj):
         def _tanh_generic(obj):
-            new_val = math.tanh(obj.val)
-            new_der = obj.der/(math.cosh(obj.val)**2.0)
-            return GenericDiff(new_val, new_der)
+            self.val = math.tanh(obj.val)
+            self.der = obj.der/(math.cosh(obj.val)**2.0)
 
         try:
-            return _tanh_generic(obj)
+            _tanh_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _tanh_generic(obj)
+            _tanh_generic(obj)
 
 class acos(GenericDiff):
 
     def __init__(self, obj):
         def _acos_generic(obj):
-            new_val = math.acos(obj.val)
-            new_der = -obj.der/(math.sqrt(1.0 - obj.val**2.0))
-            return GenericDiff(new_val, new_der)
+            self.val = math.acos(obj.val)
+            self.der = -obj.der/(math.sqrt(1.0 - obj.val**2.0))
 
         try:
-            return _acos_generic(obj)
+            _acos_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _acos_generic(obj)
+            _acos_generic(obj)
 
 class asin(GenericDiff):
 
     def __init__(self, obj):
         def _asin_generic(obj):
-            new_val = math.asin(obj.val)
-            new_der = obj.der/(math.sqrt(1.0 - obj.val**2.0))
-            return GenericDiff(new_val, new_der)
+            self.val = math.asin(obj.val)
+            self.der = obj.der/(math.sqrt(1.0 - obj.val**2.0))
 
         try:
-            return _asin_generic(obj)
+            _asin_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _asin_generic(obj)
+            _asin_generic(obj)
 
 class atan(GenericDiff):
 
     def __init__(self, obj):
         def _atan_generic(obj):
-            new_val = math.atan(obj.val)
-            new_der = obj.der / (math.sqrt(1.0 + obj.val ** 2.0))
-            return GenericDiff(new_val, new_der)
+            self.val = math.atan(obj.val)
+            self.der = obj.der / (math.sqrt(1.0 + obj.val ** 2.0))
 
         try:
-            return _atan_generic(obj)
+            _atan_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _atan_generic(obj)
+            _atan_generic(obj)
 
 #exponential for base e
 class exp(GenericDiff):
 
     def __init__(self, obj):
         def _exp_generic(obj):
-            new_val = math.exp(obj.val)
+            self.val = math.exp(obj.val)
             if obj.der == 0:
-                new_der = 0
-                return GenericDiff(new_val, new_der)
+                self.der = 0
             else:
-                new_der = math.exp(obj.val)*obj.der
-                return GenericDiff(new_val, new_der)
+                self.der = math.exp(obj.val)*obj.der
 
         try:
-            return _exp_generic(obj)
+            _exp_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _exp_generic(obj)
+            _exp_generic(obj)
+
 
 # will handle any base with default = e
 class log(GenericDiff):
 
     def __init__(self, obj, base=math.e):
         def _log_generic(obj):
-            new_val = math.log(obj.val, base)
+            self.val = math.log(obj.val, base)
             if obj.der == 0:
-                new_der = 0
-                return GenericDiff(new_val, new_der)
+                self.der = 0
             else:
-                new_der = obj.der/(obj.val*math.log(base))
-                return GenericDiff(new_val, new_der)
+                self.der = obj.der/(obj.val*math.log(base))
 
         try:
-            return _log_generic(obj)
+            _log_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _log_generic(obj)
+            _log_generic(obj)
 
 #logistic function
 class logit(GenericDiff):
 
     def __init__(self, obj):
         def _logit_generic(obj):
-            new_val = math.exp(obj.val)/(1+math.exp(obj.val))
-            new_der = -(1+math.exp(-obj.val))**(-2)*(-obj.der*math.exp(-obj.val))
-            return GenericDiff(new_val, new_der)
+            self.val = math.exp(obj.val)/(1+math.exp(obj.val))
+            self.der = -(1+math.exp(-obj.val))**(-2)*(-obj.der*math.exp(-obj.val))
 
         try:
-            return _logit_generic(obj)
+            _logit_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _logit_generic(obj)
-          
+            _logit_generic(obj)
+
 #sqrt function
 class sqrt(GenericDiff):
 
@@ -204,14 +192,13 @@ class sqrt(GenericDiff):
                 raise ValueError("Cannot take the sqrt derivative of 0 or negative number.\n\
                                  This package only outputs real numbers.")
             else:
-                new_val = math.sqrt(obj.val)
-                new_der = 1/(2*math.sqrt(obj.val))
-                return GenericDiff(new_val, new_der)
+                self.val = math.sqrt(obj.val)
+                self.der = 1/(2*math.sqrt(obj.val))
 
         try:
-            return _sqrt_generic(obj)
+            _sqrt_generic(obj)
 
         except AttributeError:
             obj = Constant(obj)
-            return _sqrt_generic(obj)
+            _sqrt_generic(obj)
 
