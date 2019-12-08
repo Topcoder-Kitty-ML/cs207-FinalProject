@@ -8,17 +8,17 @@ import numpy as np
 import random
 
 
+
 def cell():
 	'''
-	A 
 	'''
-	def __init__(self, index):
-		self.index = index
+	def __init__(self, time, index, alpha, gamma):
 		self.time = time
-		self.spliced_velocity = 
-		self.unspliced_velocity = 
+		self.index = index
 		# self.alpha = alpha
 		# self.gamma = gamma
+		self.spliced_velocity
+		self.unspliced_velocity
 
 
 
@@ -178,8 +178,10 @@ for i in range(len(order_cell_index) - 1):
 
 
 	# Get the distance values for each gene
-	distance_splice = calc_euclidian_distance()
-	distance_unspliced = calc_euclidian_distance()
+
+	distance_splice = calc_euclidian_distance
+	distance_unspliced = 
+
 	distance_total = distance_splice + distance_unspliced
 
 	# Add each distance value for each gene to
@@ -189,9 +191,61 @@ for i in range(len(order_cell_index) - 1):
 
 
 
+
+=======
+
+# Overall loss function
+# func --> loss func of each pair of cells in time
+
+# Loss func of each pair of cells
+# func --> predicted future state of cell from current cell (variable)
+#      --> actual future state of cell (constant from raw data)
+
+# Predicted future state of cell
+# func --> current state of cell
+#      --> velocity of cell
+#      --> time difference between cell
+
+# velocity of cell
+# func --> alpha
+#      --> gamma
+#      --> u_t
+#      --> s_t
+
+# u_t
+# func --> alpha (var)
+#      --> u_0 (const)
+#      --> t (non-diff var)
+
+# s_t
+# func --> alpha (var)
+#      --> gamma (var)
+#      --> u_0 (constant)
+#      --> s_0 (constant)
+#      --> t (non-diff var)
+
 # Generate the function vector needed for
 # optimization of the data
 f = lambda x, y: cos(x) + sin(y)
 h = lambda x, y: x + y
 function_vector = [f, h]
+
+
 jp_object = JacobianProduct(function_vector)
+=======
+jp_object = JacobianProduct(function_vector)
+
+
+# Actual code
+f = lambda x,y: sin(x) + sin(y)
+h = lambda f: sin(f)
+g = lambda h, m: h + m
+
+combined = lambda x, y, m: g(h(f(x, y)), m)
+
+jp = JacobianProduct([combined])
+jp.partial(wrt=0, inputs=[[1, 2, 3], 0, 0]) #wrt refers to first variable for diff
+
+
+
+

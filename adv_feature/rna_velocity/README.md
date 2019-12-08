@@ -32,4 +32,32 @@ To optimize for the optimal state in this model, we propose the following loss f
 
 Briefly, the loss function was defined as above because the future state of the cell can be approximated as the current "velocity" of the cell multiplied by the timestep difference between the current and future state. Thus, when the cells are arranged in an optimal sequential order, the above function would be minimized.
 
-To obtain the optimal solution, we need to calculate the optimal α, γ, and t values. To this end, we will be performing gradient descent using our KittyDiffy package to optimize the function with respect to α and γ first. Subsequent to that, we will perform optimization for the best t values. Overall, we will perform these two steps in turn via alternating optimization to optimize for the target function. In the end, the final t values should provide an intuitive inference of which cell is the "parental" cell, and which is the "daughter" cell.
+To obtain the optimal solution, we need to calculate the optimal α, γ, and t values. To this end, we will be performing gradient descent using our KittyDiffy package to optimize the function with respect to α and γ first. Subsequent to that, we will perform optimization for the best t values. Overall, we will perform these two steps in turn via alternating optimization to optimize for the target function. In the end, the final t values should provide an intuitive inference of which cell is the "parental" cell, and which is the "daughter" cell
+
+
+# Data Pre-processing
+To generate 
+
+
+As the data is initially stored in the ".loom" format which requires a customized python library, we extracted and dumped the data into a ".pickle" object which is more readily readable across different platforms. To do so, we applied the code "extract_data.py", which extracts both the counts of unspliced reads (reactants), and spliced reads (products) from the original data structure. These data which are represented as two matrices of the same dimensions were dumped into the "hgForebrainGlut.spliced.pickle" and "hgForebrainGlut.unspliced.pickle" files.
+
+# Data cleaning and normalization
+The matrices representing the reactants (unspliced RNA) and products (spliced RNA) are extremely sparse in nature because (1) some genes within the cells are not expressed, and (2) single-cell RNA-sequencing typically is only able to subsample a fraction of the genes present within the cell. Noting this, most elements within this matrix is zero, causing the matrix to be extremely sparse. With this, most genes (columns in the matrix) will not provide much useful information in helping us determine which cells are the parental cells, and which are the daughter cells.
+
+We expect that genes which show a significant level of counts within each cell to provide meaningful information for inference of the parental or daughter nature of each cells. To address this, we removed genes (columns) which showed only a very low count of reads within the data for both the 'spliced' and 'unspliced' data. As such, we selected for genes which showed at least a 
+
+This was done using the 
+
+
+# Optimization of alpha, gamma, and pseudotime
+
+
+
+## Optimization of alpha and gamma
+
+
+## Optimization of pseudotime
+
+
+
+
