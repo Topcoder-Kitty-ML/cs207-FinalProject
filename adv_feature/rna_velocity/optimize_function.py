@@ -6,10 +6,12 @@
 
 import numpy as np
 import random
+import sys
 from functions import *
-from code.autodiff_module import *
-
-
+#from code.autodiff_module import *
+sys.path.append('../../code/')
+# from autodiff import *
+from vector_jacobian import *
 
 def cell():
 	'''
@@ -223,7 +225,7 @@ def optimization_function(data, alpha, gamma):
 	# print(len(vals_predicted ))
 
 	dist = calc_euclidian_distance(vals_predicted, vals_actual)
-	print(dist)
+	return dist
 
 
 
