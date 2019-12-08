@@ -1,65 +1,193 @@
-from trigo_exp import *
-from linear import AutoDiffToy as autodiff
+# import all necessary packages
+from inspect import signature
+import numpy as np
+from generic_diff import *
+from elemental_functions import *
 
 class JacobianProduct:
     """
-    For vector functions, the output of autodifferentiation in the forward mode
-    is the Jacobian-product matrix - that is the partial derivatives multiplied by seed matrices.
-    Each row corresponds to a function's partial derivative products and each column
-    corresponds to a specific variable (x, y, z, etc.).
-    The output should be a matrix of size [m functions X p variables]
+    Takes in a function vector and allows user to calculate partials or the full jacobian product based on
+    values specified by the user
 
-    m is specified by the vector of autodiff objects (contained in a list)
-    p variables are specified by the total number of variables in ALL functions in the vector
+    This class will only take a vector of functions that have the SAME number of inputs that are in the
+    SAME order. If the functions do not pass this check during class construction, InvalidFunctionsError is
+    raised.
 
-    input:
+    The input should look like the following:
 
-    - vector of autodiff objects
+    f = lambda x, y: cos(x) + sin(y)
+    h = lambda x, y: x + y
+    function_vector = [f, h]
+    jp_object = JacobianProduct(function_vector)
 
-    methods that return:
-    - get_variable_dict(): dictionary mapping column index p with variable
-    - get_function_dict(): dicitionary mapping row index m with autodiff object
-    - get_jp_matrix(): jacobian product matrix
+    The class has various methods:
+    -partial()
+        This method can calculate a partial for one function in the object or for all functions.
+        The variable value inputs are specified in inputs. For example:
 
-    GOODTOHAVE - method to extract specific function sub- matrix or specific
-    variable sub-matrix from jacobian product matrix
+        inputs = [[1, 2, 3], 0] # x = 1, 2, 3 and y = 0
+        # this evaluates the partial at all values of x holding y constant
+        # returns a list of partial derivative evals for each function
+        # wrt sets the variable to calculate the partial
+        list_of_partials = jp_object.partial(wrt=0, inputs=inputs)
+
+        [[2.4, 3.5, 2.5], [1, 2, 3]]
+
+    -jacobian_product()
+        This method calculates the jacobian product it either:
+        takes in one value for each variable or multiple values for each input BUT the number of values
+         for each variable must be the same. Calculates a separate jacobian for each element in the input vectors.
+
+         inputs = [[1, 2, 3], [1, 2, 3]] # calculates 3 jacobian products: (1, 1), (2, 2), and (3, 3)
+         list_of_jp_matrices = jp_object.jacobian_product(inputs=inputs)
+
+        [ [[df/dx, df/dy],
+         [dh/dx, dh/dy]],
+
+         for (2,2),
+         for (3,3)]
+
     """
+    def __init__(self, function_vector):
+        self.function_vector = function_vector
 
-    # constructor accepts a vector (list) of autodiff objects
-    # accepts a dictionary of variable_values
-    # TODO raise an error if variable dictionary does not have all variables in functions
-    def __init__(self, vector, variable_vals):
-        self.vector = vector
-        self.variable_vals = variable_vals
+        # runs a check on whether the function vector's functions all have
+        # a) the same number of variables and
+        # b) the same variables in the same order
 
-    # maps variables to columns in matrix
-    # I assume that the autodiff object generates
-    # a dictionary of variables
-    def get_variable_dict(self):
-        var_list = list(self.variable_vals.keys())
-        self.variable_dict = dict(enumerate(var_list))
-        return self.variable_dict
+        function_signature = None
+        for function in self.function_vector:
+            if function_signature:
+                function_signature_c = signature(function)
+                if function_signature_c == function_signature:
+                    continue
+                else:
+                    raise AttributeError("Functions in the function vector must contain \n\
+                                         the same number of variables in the same order with the same names.")
+            if not function_signature:
+                function_signature = signature(function)
+        self.function_signature = function_signature
 
-    def get_function_dict(self):
-        self.function_dict = dict(enumerate(self.vector))
-        return self.function_dict
+    def input_format_check(self, inputs):
+        # make sure all elements in inputs are lists
+        # for example [[1,2,3],0] becomes [[1,2,3],[0]]
+        for idx, element in enumerate(inputs):
+            if not isinstance(element, list):
+                inputs[idx] = [element]
+        return inputs
 
-    def get_jp_matrix(self):
-        # Determine variable column mapping
-        var_column_map = self.get_variable_dict(self.variable_vals)
-        # Determine function row mapping
-        fun_row_map = self.get_function_dict
-        # Evaluate each function with respect to variables in the function
-        # and then create matrix - each row corresponds to a function's evaluation
-        jp_matrix = []
-        for obj in fun_row_map.values():
-            # limit variables to only the ones relevant to the function
-            # asume variable names stored in vars attribute of the autodiff object
-            variable_vals_fun = [var for var in variable_vals if var in obj.vars]
-            # should output a vector of derivatives based on values in
-            # variable vals vector
-            jp_matrix_row = obj(variable_vals_fun).der
-            jp_matrix.append(jp_matrix_row)
-        # conver to np array
-        self.jp_matrix = np.asarray(jp_matrix)
-        return self.jp_matrix
+    def subset_functions(self, function_vector, fun_idx):
+        if fun_idx == -1:
+            return function_vector
+        else:
+            if not ifisinstance(fun_idx, list):
+                fun_idx = [fun_idx]
+
+            subsetted_funs = [fun for idx, fun in enumerate(function_vector) if idx in fun_idx]
+            return subsetted_funs
+
+    def partial(self, wrt, inputs, fun_idx=-1):
+        # make sure all elements in puts are lists
+        inputs = inputs.copy()
+        inputs = self.input_format_check(inputs)
+
+        # get number of inputs required from function signature
+        n_inputs = len(self.function_signature.parameters)
+
+        # check to see if input is of length one for constant values
+        # check to see if input is of non-zero length for variable values
+        for input in range(0, n_inputs):
+            if input == wrt:
+                if len(inputs[input]) <= 0:
+                    raise AttributeError(f"You are differentiating wrt argument {wrt} and holding all else constant. \n\
+                     Input vector for your wrt variable needs to be of length > 0.")
+            else:
+                if len(inputs[input]) != 1:
+                    raise AttributeError(f"You are differentiating wrt argument {wrt} and holding all else constant.\n\
+                    Inputs for the variables you hold constant need to be of length 1.")
+
+        # convert wrt variable inputs to Var object
+        # to differentiate
+        diff_inputs = inputs.copy()
+        for idx, value in enumerate(diff_inputs[wrt]):
+            diff_inputs[wrt][idx] = Var(value)
+
+        # create input vals list
+        input_vals_list = []
+        for input_wrt in diff_inputs[wrt]:
+            input_vals_entry = []
+            for idx, value in enumerate(diff_inputs):
+                if idx == wrt:
+                    input_vals_entry.append(input_wrt)
+                else:
+                    input_vals_entry.append(diff_inputs[idx][0])
+            input_vals_list.append(input_vals_entry)
+
+        # create functions list
+        diff_fun_vector = self.subset_functions(self.function_vector, fun_idx)
+
+        # get partials given input vals list
+        partials_list = []
+        for function in diff_fun_vector:
+            function_partials_list = []
+            for input_vals in input_vals_list:
+                partial_entry = function(*input_vals).der
+                function_partials_list.append(partial_entry)
+            partials_list.append(function_partials_list)
+
+        # return the partials list
+        # this a list of lists such that you can access the value for each function for each variable value
+        # e.g. to access function 0 at variable value 1 from the inputs vector write out partials_list[0][1]
+        return partials_list
+
+    def jacobian_product(self, inputs, fun_idx=-1):
+        # make sure all inputs are lists
+        inputs = self.input_format_check(inputs)
+
+        # make sure all inputs are non-zero length and are of the same length
+        # if inputs are not, then return AttributeError
+        input_length = None
+        for input in inputs:
+            # non zero length
+            if len(input) <= 0:
+                raise AttributeError("All input values for each variable must be non zero in length")
+
+            if not input_length:
+                input_length = len(input)
+            else:
+                input_length_c = len(input)
+                if input_length != input_length_c:
+                    raise AttributeError("Lengths of all input values for each variable must be the same")
+
+        # create input_vals_list
+        input_vals_list = []
+        vals_list_length = len(inputs[0])
+        for i in range(0, vals_list_length):
+            input_vals_entry = []
+            for j, variable in enumerate(inputs):
+                input_vals_entry.append(variable[i])
+            input_vals_list.append(input_vals_entry)
+
+        # instantiate jacobian list
+        jp_list = []
+
+        # calculate the jacobian product for each set of input values
+        for input_vals in input_vals_list:
+            # instantiate new jacobian matrix
+            row_n = len(self.subset_functions(self.function_vector, fun_idx))
+            col_n = len(self.function_signature.parameters)
+            jp_array = np.empty((row_n, col_n))
+
+            # for each variable calculate partials
+            for wrt_idx in range(0, len(self.function_signature.parameters)):
+                partials = self.partial(wrt_idx, input_vals, fun_idx)
+                for function_idx, value in enumerate(partials):
+                    # fill in the matrix with partials
+                    jp_array[function_idx, wrt_idx] = partials[function_idx][0]
+
+            # append the jp_array for current set of input_vals to jp_list
+            jp_list.append(jp_array)
+
+        # return list of jacobians
+        return jp_list
+

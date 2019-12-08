@@ -22,6 +22,7 @@ def cell():
 
 
 
+
 # def calc_euclidian_distance(vector1, vector2):
 # 	'''
 # 	Calculate the euclidean distance between
@@ -177,8 +178,10 @@ for i in range(len(order_cell_index) - 1):
 
 
 	# Get the distance values for each gene
+
 	distance_splice = calc_euclidian_distance
 	distance_unspliced = 
+
 	distance_total = distance_splice + distance_unspliced
 
 	# Add each distance value for each gene to
@@ -188,6 +191,8 @@ for i in range(len(order_cell_index) - 1):
 
 
 
+
+=======
 
 # Overall loss function
 # func --> loss func of each pair of cells in time
@@ -219,16 +224,15 @@ for i in range(len(order_cell_index) - 1):
 #      --> s_0 (constant)
 #      --> t (non-diff var)
 
-
-
-
-
-
 # Generate the function vector needed for
 # optimization of the data
 f = lambda x, y: cos(x) + sin(y)
 h = lambda x, y: x + y
 function_vector = [f, h]
+
+
+jp_object = JacobianProduct(function_vector)
+=======
 jp_object = JacobianProduct(function_vector)
 
 
