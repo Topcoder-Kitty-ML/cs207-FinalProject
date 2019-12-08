@@ -68,10 +68,6 @@ class JacobianProduct:
                 function_signature = signature(function)
         self.function_signature = function_signature
 
-    def __repr__(self):
-        #prints out functions
-        raise NotImplementedError
-
     def input_format_check(self, inputs):
         # make sure all elements in inputs are lists
         # for example [[1,2,3],0] becomes [[1,2,3],[0]]
@@ -171,7 +167,6 @@ class JacobianProduct:
             for j, variable in enumerate(inputs):
                 input_vals_entry.append(variable[i])
             input_vals_list.append(input_vals_entry)
-            print(input_vals_list)
 
         # instantiate jacobian list
         jp_list = []
@@ -186,7 +181,6 @@ class JacobianProduct:
             # for each variable calculate partials
             for wrt_idx in range(0, len(self.function_signature.parameters)):
                 partials = self.partial(wrt_idx, input_vals, fun_idx)
-                print(partials)
                 for function_idx, value in enumerate(partials):
                     # fill in the matrix with partials
                     jp_array[function_idx, wrt_idx] = partials[function_idx][0]
@@ -197,8 +191,3 @@ class JacobianProduct:
         # return list of jacobians
         return jp_list
 
-    def fun_map(self):
-        raise NotImplementedError
-
-    def var_map(self):
-        raise NotImplementedError
