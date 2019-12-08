@@ -172,7 +172,7 @@ class GenericDiff:
 			
 		except:
 			raise AttributeError()
-    	
+		
 	def __lt__(self, other):
 		'''
 		We define the less than to be less
@@ -219,10 +219,10 @@ class GenericDiff:
 			return self.der >= other.der
 
 		except AttributeError:
-		    other = Comparison(other)
-            return self.der >= other.der 
-    
-    def __eq__(self, other):
+			other = Comparison(other)
+			return self.der >= other.der 
+	
+	def __eq__(self, other):
 			other = Comparison(other)
 			return self.der >= other.der
 
