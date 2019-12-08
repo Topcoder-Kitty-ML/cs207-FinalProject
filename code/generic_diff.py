@@ -185,7 +185,7 @@ class GenericDiff:
 		except AttributeError:
             other = Comparison(other)
             return self.der < other.der
-	
+	 
 	def __gt__(self, other):
 		'''
 		We compare the derivative instead of
@@ -195,7 +195,7 @@ class GenericDiff:
             return self.der > other.der
         
         except AttributeError:
-			other = Comparison(other)
+            other = Comparison(other)
             return self.der > other.der
 	
 	def __le__(self, other):
@@ -219,7 +219,7 @@ class GenericDiff:
 			return self.der >= other.der
 
 		except AttributeError:
-			other = Comparison(other)
+		    other = Comparison(other)
             return self.der >= other.der 
     
     def __eq__(self, other):
@@ -232,7 +232,7 @@ class GenericDiff:
             return self.der == other.der  
         
         except AttributeError:
-			other = Comparison(other)
+            other = Comparison(other)
             return self.der == other.der
             
 		

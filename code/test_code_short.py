@@ -82,4 +82,16 @@ print(z.der)
 
 print("------")
 print(x < y)
+print(x > y)
+print(x <= y)
+print(x >= y)
+print(x == y)
+print(x != y)
+
+
+
+
+
+
+
 
