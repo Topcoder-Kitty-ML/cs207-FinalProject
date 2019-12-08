@@ -6,6 +6,8 @@
 
 import numpy as np
 import random
+from functions import *
+from code.autodiff_module import *
 
 
 
@@ -43,7 +45,7 @@ def calc_euclidian_distance(vector1, vector2):
 	'''
 
 	total_dist = 0
-	for i in len(vector1):
+	for i in range(len(vector1)):
 		dist_curr = (vector1[i] - vector2[i]) ** 2
 		total_dist = total_dist + dist_curr
 
@@ -133,21 +135,36 @@ def optimize_time():
 
 
 # Read data in
-data = np.load("norm_filtered_cells.pickle")
-num_cells = data.shape()[2]
-num_genes = data.shape()[1]
+data = np.load("processed_data/norm_filtered_cells.pickle")
+print(data.shape) # type x genes x cells
+num_cells = data.shape[2]
+num_genes = data.shape[1]
 
 
-# Randomize the time values
-time_cell = range(num_cells)
-time_cell_random = random.shuffle(time_cell)
-initial_cell_index = time_cell_random.index(0)
+# Randomize the time values (Time values are in per 10^6 scale)
+time_cell = [ x / 1000000 for x in range(num_cells)]
+
+# Shuffle the time values between cells
+random.shuffle(time_cell)
+
+# Get index sorted from smallest to largest
+idx = np.argsort(time_cell)
+print(idx)
+
+# initial_cell_index = time_cell.index(0)
+initial_cell_index = idx[0]
+print(initial_cell_index)
 
 
 # Randomize the alpha and gamma values
 # for each gene
-alpha_vals = [random.random() for i in range(num_cells)]
-gamma_vals = [random.random() for i in range(num_cells)]
+alpha_vals = [random.random() for i in range(num_genes)]
+gamma_vals = [random.random() for i in range(num_genes)]
+
+
+
+# print(alpha_vals)
+# print(gamma_vals)
 
 
 # Get the indices of the cells based on
@@ -155,96 +172,192 @@ gamma_vals = [random.random() for i in range(num_cells)]
 ##########
 # CHECK!!!! I think this should work
 ##########
-order_cell_index = range(num_cells)[time_cell_random]
+# order_cell_index = range(num_cells)[time_cell]
 
 
 
-# Create the function vector
-function_vector_unspliced = []
-for i in range(len(order_cell_index) - 1):
-	curr_index = order_cell_index[i]
-	future_index = order_cell_index[i+1]
+# Approach 2
 
-	# Curr index
-	alpha = alpha_vals[curr_index]
-	gamma = gamma_vals[curr_index]
-	t = time_cell_random[curr_index]
+def optimization_function(data, alpha, gamma):
+	# Do this for a single gene first
+	curr_gene_idx = 100
 
-	# Future index
-	t = time_cell_random[future_index]
+	s_0 = data[0][curr_gene_idx][initial_cell_index]
+	u_0 = data[1][curr_gene_idx][initial_cell_index]
 
 
-	calc_predicted_future_state(present_cell, currstate, velocity, delta_t)
+	unspliced_vals_predicted = []
+	spliced_vals_predicted = []
+	unspliced_vals_actual = []
+	spliced_vals_actual = []
+	for i in range(len(idx)):
+		# print(i)
+		curr_index = idx[i]
+
+		# Curr index
+		alpha = alpha_vals[curr_index]
+		gamma = gamma_vals[curr_index]
+		t_curr = time_cell[curr_index]
+
+		# Predicted values based on equations
+		u_t = calc_u(alpha, u_0, t_curr)
+		s_t = calc_s(alpha, gamma, u_0, s_0, t_curr)
+
+		# Actual state at t
+		u_t_actual = data[0][100][curr_index]
+		s_t_actual = data[1][100][curr_index]
+		# print(u_t, s_t)
+		# print(u_t_actual, s_t_actual)
+
+		unspliced_vals_predicted.append(u_t)
+		spliced_vals_predicted.append(s_t)
+		unspliced_vals_actual.append(u_t_actual)
+		spliced_vals_actual.append(s_t_actual)
 
 
-	# Get the distance values for each gene
+	# Combine the list
+	vals_predicted = unspliced_vals_predicted + spliced_vals_predicted
+	vals_actual = unspliced_vals_actual + spliced_vals_actual
 
-	distance_splice = calc_euclidian_distance
-	distance_unspliced = 
 
-	distance_total = distance_splice + distance_unspliced
+	# print(len(vals_predicted ))
 
-	# Add each distance value for each gene to
-	# the vector.
-	function_vector_unspliced.append(distance_total)
-
+	dist = calc_euclidian_distance(vals_predicted, vals_actual)
+	print(dist)
 
 
 
 
-=======
-
-# Overall loss function
-# func --> loss func of each pair of cells in time
-
-# Loss func of each pair of cells
-# func --> predicted future state of cell from current cell (variable)
-#      --> actual future state of cell (constant from raw data)
-
-# Predicted future state of cell
-# func --> current state of cell
-#      --> velocity of cell
-#      --> time difference between cell
-
-# velocity of cell
-# func --> alpha
-#      --> gamma
-#      --> u_t
-#      --> s_t
-
-# u_t
-# func --> alpha (var)
-#      --> u_0 (const)
-#      --> t (non-diff var)
-
-# s_t
-# func --> alpha (var)
-#      --> gamma (var)
-#      --> u_0 (constant)
-#      --> s_0 (constant)
-#      --> t (non-diff var)
-
-# Generate the function vector needed for
-# optimization of the data
-f = lambda x, y: cos(x) + sin(y)
-h = lambda x, y: x + y
-function_vector = [f, h]
-
-
-jp_object = JacobianProduct(function_vector)
-=======
+function_vector = [optimization_function]
 jp_object = JacobianProduct(function_vector)
 
+inputs = [data, alpha_vals, gamma_vals]
+# getting partial with respect to x (position 0 in lambdas)
+partial_wrt_x = jp_object.partial(wrt=1, inputs=inputs)
+print(partial_wrt_x)
 
-# Actual code
-f = lambda x,y: sin(x) + sin(y)
-h = lambda f: sin(f)
-g = lambda h, m: h + m
 
-combined = lambda x, y, m: g(h(f(x, y)), m)
 
-jp = JacobianProduct([combined])
-jp.partial(wrt=0, inputs=[[1, 2, 3], 0, 0]) #wrt refers to first variable for diff
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	# print("Time===")
+	# print(t_curr)
+
+
+
+
+
+
+# # Create the function vector
+# function_vector_unspliced = []
+# for i in range(len(idx) - 1):
+# 	print(i)
+# 	curr_index = idx[i]
+# 	future_index = idx[i+1]
+
+# 	print(curr_index, future_index)
+
+# 	# Curr index
+# 	alpha = alpha_vals[curr_index]
+# 	gamma = gamma_vals[curr_index]
+# 	t_curr = time_cell[curr_index]
+
+# 	# Future index
+# 	t_future = time_cell[future_index]
+
+# 	print("Time===")
+# 	print(t_curr, t_future)
+
+
+	# Calc predicted "spliced"
+
+	# Calc predicted "unspliced"
+
+
+	# calc_predicted_future_state(present_cell, currstate, velocity, delta_t)
+
+
+	# # Get the distance values for each gene
+
+	# distance_splice = calc_euclidian_distance
+	# distance_unspliced = 
+
+	# distance_total = distance_splice + distance_unspliced
+
+	# # Add each distance value for each gene to
+	# # the vector.
+	# function_vector_unspliced.append(distance_total)
+
+
+
+
+
+# calc_du_dt(alpha, u_t)
+
+
+# # Overall loss function
+# # func --> loss func of each pair of cells in time
+
+# # Loss func of each pair of cells
+# # func --> predicted future state of cell from current cell (variable)
+# #      --> actual future state of cell (constant from raw data)
+
+# # Predicted future state of cell
+# # func --> current state of cell
+# #      --> velocity of cell
+# #      --> time difference between cell
+
+# # velocity of cell
+# # func --> alpha
+# #      --> gamma
+# #      --> u_t
+# #      --> s_t
+
+# # u_t
+# # func --> alpha (var)
+# #      --> u_0 (const)
+# #      --> t (non-diff var)
+
+# # s_t
+# # func --> alpha (var)
+# #      --> gamma (var)
+# #      --> u_0 (constant)
+# #      --> s_0 (constant)
+# #      --> t (non-diff var)
+
+# # Generate the function vector needed for
+# # optimization of the data
+# f = lambda x, y: cos(x) + sin(y)
+# h = lambda x, y: x + y
+# function_vector = [f, h]
+
+
+# jp_object = JacobianProduct(function_vector)
+
+
+# # Actual code
+# f = lambda x,y: sin(x) + sin(y)
+# h = lambda f: sin(f)
+# g = lambda h, m: h + m
+
+# combined = lambda x, y, m: g(h(f(x, y)), m)
+
+# jp = JacobianProduct([combined])
+# jp.partial(wrt=0, inputs=[[1, 2, 3], 0, 0]) #wrt refers to first variable for diff
 
 
 
