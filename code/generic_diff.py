@@ -183,14 +183,21 @@ class GenericDiff:
 			return self.der < other.der	
 
 		except AttributeError:
+<<<<<<< HEAD
             other = Comparison(other)
             return self.der < other.der
 	 
+=======
+			other = Comparison(other)
+			return self.der < other.der
+
+>>>>>>> 74ac4e281cffb3a5c2b0ae0bcdf140d03bf1daea
 	def __gt__(self, other):
 		'''
 		We compare the derivative instead of
 		the value here by definition
 		'''
+<<<<<<< HEAD
         try:
             return self.der > other.der
         
@@ -198,6 +205,15 @@ class GenericDiff:
             other = Comparison(other)
             return self.der > other.der
 	
+=======
+		try:
+			return self.der > other.der
+
+		except AttributeError:
+			other = Comparison(other)
+			return self.der > other.der
+
+>>>>>>> 74ac4e281cffb3a5c2b0ae0bcdf140d03bf1daea
 	def __le__(self, other):
 		'''
 		We compare the derivative instead of
@@ -208,8 +224,8 @@ class GenericDiff:
 
 		except AttributeError:
 			other = Comparison(other)
-            return self.der <= other.der
-		
+			return self.der <= other.der
+
 	def __ge__(self, other):
 		'''
 		We compare the derivative instead of
@@ -219,15 +235,23 @@ class GenericDiff:
 			return self.der >= other.der
 
 		except AttributeError:
+<<<<<<< HEAD
 		    other = Comparison(other)
             return self.der >= other.der 
     
     def __eq__(self, other):
+=======
+			other = Comparison(other)
+			return self.der >= other.der
+
+	def __eq__(self, other):
+>>>>>>> 74ac4e281cffb3a5c2b0ae0bcdf140d03bf1daea
 		'''
 		When the equal operator is called, we compare
 		the values of the derivative of the object instead
-		of the values. 
+		of the values.
 		'''
+<<<<<<< HEAD
         try:
             return self.der == other.der  
         
@@ -236,22 +260,32 @@ class GenericDiff:
             return self.der == other.der
             
 		
+=======
+		try:
+			return self.der == other.der
+
+		except AttributeError:
+			other = Comparison(other)
+			return self.der == other.der
+
+
+>>>>>>> 74ac4e281cffb3a5c2b0ae0bcdf140d03bf1daea
 	def __ne__(self, other):
 		'''
 		When the not-equal operator is called, we compare
 		the values of the derivative of the object instead
 		of the values.
 		'''
-        try:
-            return self.der != other.der
-            
-        except AttributeError:
-            other = Comparison(other)
-            return self.der != other.der  
+		try:
+			return self.der != other.der
+
+		except AttributeError:
+			other = Comparison(other)
+			return self.der != other.der
 
 
 class Var(GenericDiff):
-	def __init__(self, value): 
+	def __init__(self, value):
 		self.val = value
 		self.der = 1
 
@@ -259,9 +293,9 @@ class Constant(GenericDiff):
 	def __init__(self, value):
 		self.val = value
 		self.der = 0
-        
+
 class Comparison(GenericDiff):
-    def __init__(self, value):
-        self.der = value 
-    
-	
+	def __init__(self, value):
+		self.der = value
+
+

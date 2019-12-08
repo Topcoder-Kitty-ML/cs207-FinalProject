@@ -174,7 +174,7 @@ class logit(GenericDiff):
     def __init__(self, obj):
         def _logit_generic(obj):
             self.val = math.exp(obj.val)/(1+math.exp(obj.val))
-            self.der = -(1+math.exp(-obj.val))**(-2)*(-obj.der*math.exp(-obj.val))
+            self.der = (1+math.exp(-obj.val))**(-2)*(math.exp(-obj.val))*(-obj.der)
 
         try:
             _logit_generic(obj)
@@ -188,12 +188,14 @@ class sqrt(GenericDiff):
 
     def __init__(self, obj, base=math.e):
         def _sqrt_generic(obj):
-            if obj.der <= 0:
-                raise ValueError("Cannot take the sqrt derivative of 0 or negative number.\n\
+            if obj.val <= 0:
+                raise ValueError("Cannot take the derivative for sqrt of 0 or negative number.\n\
                                  This package only outputs real numbers.")
+            self.val = math.sqrt(obj.val)
+            if obj.der == 0:
+                self.der = 0
             else:
-                self.val = math.sqrt(obj.val)
-                self.der = 1/(2*math.sqrt(obj.val))
+                self.der = 1/(2*math.sqrt(obj.val)*obj.der)
 
         try:
             _sqrt_generic(obj)
