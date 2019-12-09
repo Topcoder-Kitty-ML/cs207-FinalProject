@@ -1,8 +1,8 @@
 # import all necessary packages
 from inspect import signature
 import numpy as np
-from generic_diff import *
-from elemental_functions import *
+from genericdiff.generic_diff import *
+from genericdiff.elemental_functions import *
 
 class JacobianProduct:
     """

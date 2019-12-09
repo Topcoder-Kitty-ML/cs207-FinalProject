@@ -1,4 +1,4 @@
-from generic_diff import *
+from genericdiff.generic_diff import *
 import math
 
 class sin(GenericDiff):

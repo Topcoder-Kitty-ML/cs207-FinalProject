@@ -1,5 +1,6 @@
 import pytest
-from vector_jacobian import *
+import math
+from genericdiff.vector_jacobian import *
 
 ## test partial
 def test_partial_1():

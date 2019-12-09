@@ -1,6 +1,6 @@
 import pytest
 import math
-from elemental_functions import *
+from genericdiff.elemental_functions import *
 
 # Elemental function tests ====================
 
