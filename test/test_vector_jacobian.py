@@ -1,6 +1,6 @@
 import pytest
 import math
-from genericdiff.vector_jacobian import *
+from genericdiff import *
 
 ## test partial
 def test_partial_1():

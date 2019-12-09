@@ -1,7 +1,6 @@
 import pytest
 import math
-from genericdiff.generic_diff import *
-from genericdiff.elemental_functions import *
+from genericdiff import *
 
 # Elemental function tests ====================
 
@@ -330,7 +329,7 @@ def test_trig_rpow_1():
    x_2 = 2
    x_3 = cos(h)
    x_4 = x_2 ** x_3
-   power_derivative = 2 ** h.val * (0*h.val/2+(h.der*math.log(2)))
+   power_derivative = 2 ** x_3.val * (0*x_3.val/2+(x_3.der*math.log(2)))
    assert (x_4.val, x_4.der) == (x_2 ** x_3.val, power_derivative)
 
 ## Test unintended behavior
