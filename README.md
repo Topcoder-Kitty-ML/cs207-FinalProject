@@ -1,10 +1,14 @@
 # cs207-FinalProject (Group #35)
 
 ## Group Members
-1. Tamilyn	Chen
-2. Kar-Tong Tan
-3. Mark Lock
+Top Coder Kitty ML
+1. Tamilyn	Chen (Top Coder)
+2. Kar-Tong Tan (Kitty)
+3. Mark Lock (ML)
 
+## Packages
+1. genericdiff - forward mode automatic differentiation
+2. rnavelocity - tool to determine rna velocity
 
 ## Badges
 - Travis
