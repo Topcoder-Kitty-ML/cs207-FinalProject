@@ -3,7 +3,7 @@
 import numpy as np
 import random
 import sys
-sys.path.append('../')
+# sys.path.append('../')
 from genericdiff import *
 from functions import calc_u as u_t
 from functions import calc_s as s_t
@@ -105,7 +105,7 @@ def optimization_function(data, alpha_vals, gamma_vals, time_cell, idx, num_gene
 
 def decide_optimal_start(input_pickle_file="processed_data/norm_filtered_cells.scaled.pickle", \
 	initial_cellorder_file="output/cell_order.txt",\
-	final_cellorder_file="output/cell_order.txt"):
+	final_cellorder_file="output/cell_order.final.txt"):
 	'''
 	Determine which cell gives rise to
 	the lowest error and should thus be
