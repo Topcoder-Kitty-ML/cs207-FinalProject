@@ -34,95 +34,95 @@ def calc_ds_dt(gamma, u_t, s_t):
 	return result
 
 
-# def calc_u(alpha, u_0, t):
-# 	'''
-# 	Calculates the level of unspliced product (u)
-# 	at time t. Implements equation 5 in the 
-# 	RNA velocity paper.
-
-# 	Parameters:
-# 	alpha - Rate constant describing the transcription 
-# 			rate
-# 	u_0   - level of unspliced RNA (u) at time(t) = 0
-# 	t     - Time (t)
-# 	'''
-# 	result = alpha * (1 - exp(-1 * t)) + u_0 * exp(-1 * t)
-# 	print("calc u")
-# 	print(result.val)
-
-
-# 	return result
-
-
-# def calc_s(alpha, gamma, u_0, s_0, t):
-# 	'''
-# 	Calculates the level of spliced product (s) at
-# 	time t. Implements equation 6 in the RNA velocity
-# 	paper.
-
-# 	Parameters:
-# 	alpha - Rate constant describing the transcription 
-# 			rate
-# 	gamma - Rate constant describing the degradation
-# 			rate
-# 	u_0   - level of unspliced RNA (u) at time(t) = 0
-# 	s_0   - level of spliced RNA (s) at time(t) = 0
-# 	t     - Time (t)
-# 	'''
-
-# 	# try:
-# 	# result = (math.exp((-1*t) * (1+gamma)) * (math.exp(t*(1+gamma)) * \
-# 	# 			alpha * (gamma-1) + \
-# 	# 			math.exp(t*gamma)*(u_0-alpha)*gamma + \
-# 	# 			math.exp(t)*(alpha-gamma*(s_0+u_0+s_0*gamma)))) / \
-# 	# 			(gamma * (gamma-1))
-
-# 	# print(alpha.val.val)
-
-# 	result = (exp((-1*t) * (1+gamma)) * (exp(t*(1+gamma)) * \
-# 			alpha * (gamma-1) + \
-# 			exp(t*gamma)*(u_0-alpha)*gamma + \
-# 			exp(t)*(alpha-gamma*(s_0+u_0+s_0*gamma)))) / \
-# 			(gamma * (gamma-1))
-
-# 	# print(result.val.val)
-
-
-# 	# result = (math.exp((-1*t) * (1+gamma)) * (math.exp(t*(1+gamma)) * alpha * (gamma-1) + math.exp(t*gamma)*(u_0-alpha)*gamma + math.exp(t)*(alpha-gamma*(s_0+u_0+s_0*gamma)))) / (gamma * (gamma-1))
-
-# 	# except:
-# 	# 		result = (math.exp((-1*t) * (1+gamma.val)) * (math.exp(t*(1+gamma.val)) * \
-# 	# 			alpha * (gamma.val-1) + \
-# 	# 			math.exp(t*gamma.val)*(u_0-alpha.val)*gamma.val + \
-# 	# 			math.exp(t)*(alpha.val-gamma.val*(s_0+u_0+s_0*gamma.val)))) / \
-# 	# 			(gamma.val * (gamma.val-1))
-
-	
-# 	return result
-
-
-
-
 def calc_u(alpha, u_0, t):
+	'''
+	Calculates the level of unspliced product (u)
+	at time t. Implements equation 5 in the 
+	RNA velocity paper.
 
-	# result = alpha ** 3
-	result = alpha
+	Parameters:
+	alpha - Rate constant describing the transcription 
+			rate
+	u_0   - level of unspliced RNA (u) at time(t) = 0
+	t     - Time (t)
+	'''
+	result = alpha * (1 - exp(-1 * t)) + u_0 * exp(-1 * t)
+	# print("calc u")
+	# print(result.val)
 
 
 	return result
-
 
 
 def calc_s(alpha, gamma, u_0, s_0, t):
-	# result = (exp((-1*t) * (1+gamma)) * (exp(t*(1+gamma)) * \
-	# 		alpha * (gamma-1) + \
-	# 		exp(t*gamma)*(u_0-alpha)*gamma + \
-	# 		exp(t)*(alpha-gamma*(s_0+u_0+s_0*gamma)))) / \
-	# 		(gamma * (gamma-1))
+	'''
+	Calculates the level of spliced product (s) at
+	time t. Implements equation 6 in the RNA velocity
+	paper.
 
-	# result = alpha ** 2 + gamma ** 2
+	Parameters:
+	alpha - Rate constant describing the transcription 
+			rate
+	gamma - Rate constant describing the degradation
+			rate
+	u_0   - level of unspliced RNA (u) at time(t) = 0
+	s_0   - level of spliced RNA (s) at time(t) = 0
+	t     - Time (t)
+	'''
 
-	result = alpha
+	# try:
+	# result = (math.exp((-1*t) * (1+gamma)) * (math.exp(t*(1+gamma)) * \
+	# 			alpha * (gamma-1) + \
+	# 			math.exp(t*gamma)*(u_0-alpha)*gamma + \
+	# 			math.exp(t)*(alpha-gamma*(s_0+u_0+s_0*gamma)))) / \
+	# 			(gamma * (gamma-1))
+
+	# print(alpha.val.val)
+
+	result = (exp((-1*t) * (1+gamma)) * (exp(t*(1+gamma)) * \
+			alpha * (gamma-1) + \
+			exp(t*gamma)*(u_0-alpha)*gamma + \
+			exp(t)*(alpha-gamma*(s_0+u_0+s_0*gamma)))) / \
+			(gamma * (gamma-1))
+
+	# print(result.val.val)
+
+
+	# result = (math.exp((-1*t) * (1+gamma)) * (math.exp(t*(1+gamma)) * alpha * (gamma-1) + math.exp(t*gamma)*(u_0-alpha)*gamma + math.exp(t)*(alpha-gamma*(s_0+u_0+s_0*gamma)))) / (gamma * (gamma-1))
+
+	# except:
+	# 		result = (math.exp((-1*t) * (1+gamma.val)) * (math.exp(t*(1+gamma.val)) * \
+	# 			alpha * (gamma.val-1) + \
+	# 			math.exp(t*gamma.val)*(u_0-alpha.val)*gamma.val + \
+	# 			math.exp(t)*(alpha.val-gamma.val*(s_0+u_0+s_0*gamma.val)))) / \
+	# 			(gamma.val * (gamma.val-1))
 
 	
 	return result
+
+
+
+
+# def calc_u(alpha, u_0, t):
+
+# 	# result = alpha ** 3
+# 	result = alpha
+
+
+# 	return result
+
+
+
+# def calc_s(alpha, gamma, u_0, s_0, t):
+# 	# result = (exp((-1*t) * (1+gamma)) * (exp(t*(1+gamma)) * \
+# 	# 		alpha * (gamma-1) + \
+# 	# 		exp(t*gamma)*(u_0-alpha)*gamma + \
+# 	# 		exp(t)*(alpha-gamma*(s_0+u_0+s_0*gamma)))) / \
+# 	# 		(gamma * (gamma-1))
+
+# 	# result = alpha ** 2 + gamma ** 2
+
+# 	result = alpha
+
+	
+# 	return result
