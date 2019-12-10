@@ -9,8 +9,8 @@ import sys
 from genericdiff import *
 from multiprocessing import Pool
 
-from functions import calc_u as u_t
-from functions import calc_s as s_t
+from rnavelocity.functions import calc_u as u_t
+from rnavelocity.functions import calc_s as s_t
 
 
 

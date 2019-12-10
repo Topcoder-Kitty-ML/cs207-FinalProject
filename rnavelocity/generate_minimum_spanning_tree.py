@@ -6,8 +6,8 @@ import sys
 # sys.path.append('../')
 from genericdiff import *
 
-from functions import calc_u as u_t
-from functions import calc_s as s_t
+from rnavelocity.functions import calc_u as u_t
+from rnavelocity.functions import calc_s as s_t
 
 
 

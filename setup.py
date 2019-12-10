@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="rnavelocity-genericdiff",
-    version="0.0.1",
+    version="0.0.3",
     author="Top Coder Kitty ML",
     author_email="mark.y.lock@gmail.com",
     description="Package for RNA velocity, cell ordering and automatic differentiation",
@@ -18,5 +18,10 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    install_requires=[
+        "numpy",
+        "pytest",
+        "matplotlib"
+        ],
     python_requires='>=3.6',
 )

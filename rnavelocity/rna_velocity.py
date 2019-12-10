@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from time_sort import *
-from optimize_parameters import *
+from rnavelocity.time_sort import *
+from rnavelocity.optimize_parameters import *
 
 class RNAOptimize:
 	'''

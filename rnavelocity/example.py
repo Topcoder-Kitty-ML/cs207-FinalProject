@@ -1,4 +1,4 @@
-from rna_velocity import *
+from rnavelocity.rna_velocity import *
 
 # We set cached as true since it is going to take a long time to
 # rerun the optimization
