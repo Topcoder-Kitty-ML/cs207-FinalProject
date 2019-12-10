@@ -5,7 +5,7 @@
 import numpy as np
 import random
 import sys
-sys.path.append('../../')
+sys.path.append('../')
 from genericdiff import *
 from multiprocessing import Pool
 
@@ -23,24 +23,26 @@ num_genes = data.shape[1]
 # Randomize the time values (Time values are in per 10^6 scale)
 time_cell = [ x / 1000000 for x in range(num_cells)]
 
+# Set seed for 
 random.seed(1234)
 
 # Shuffle the time values between cells
 random.shuffle(time_cell)
 
-# # Get index sorted from smallest to largest
-# idx = np.argsort(time_cell)
-
-f = open("cell_order.txt", "r")
+# Read in the graph of the cell order
+f = open("cell_order/cell_order.txt", "r")
 for line in f:
 	order = line.strip().split(",")
 f.close()
 idx = [int(float(i)) for i in order]
 
+
+
+
 # Reverse it to start from the end
 idx = idx[::-1]
 
-# initial_cell_index = time_cell.index(0)
+# Identify the index of the initial cell
 initial_cell_index = idx[0]
 
 
@@ -197,9 +199,7 @@ def optimize_alpha(alpha, gamma, u_0, s_0, t_curr_allcells, u_t_actual_allcells,
 
 
 def optimize_gene(curr_gene_idx):
-	# for i in range(num_genes):
-	# curr_gene_idx = 220
-	# curr_cell_index = 180
+	print("Optimizing gene number:", curr_gene_idx)
 
 	try:
 		iterations = 0
@@ -208,9 +208,7 @@ def optimize_gene(curr_gene_idx):
 		u_0 = data[1][curr_gene_idx][initial_cell_index]
 		alpha = alpha_vals[curr_gene_idx]
 		gamma = gamma_vals[curr_gene_idx]
-		# t_curr = time_cell[curr_cell_index]
-		# u_t_actual = data[0][curr_gene_idx][curr_cell_index]
-		# s_t_actual = data[1][curr_gene_idx][curr_cell_index]
+
 
 		t_curr = time_cell
 		u_t_actual = data[0][curr_gene_idx]
@@ -235,14 +233,16 @@ def optimize_gene(curr_gene_idx):
 		return curr_gene_idx, "NA", "NA"
 
 
-# print(optimize_gene(1))
 
-pool = Pool(processes = 3)
+# Perform multi-threading of the run
+number_proc = 3
+pool = Pool(processes = number_proc)
 # result = pool.map(optimize_gene, range(2))
 result = pool.map(optimize_gene, range(num_genes))
 
 
-output = open("optimized_gene_parameters.txt", "w")
+# Print optimized parameters to output file
+output = open("output/optimized_gene_parameters.txt", "w")
 for result_line in result:
 	output.write("\t".join(map(str, result_line)) + "\n")
 	print(result_line)
