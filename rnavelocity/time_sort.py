@@ -3,9 +3,9 @@
 from rnavelocity.generate_minimum_spanning_tree import *
 from rnavelocity.initialization import *
 
-def time_sort(array_pickle_file = "processed_data/norm_filtered_cells.scaled.pickle",\
-	output_cellorder_file = "output/cell_order.txt", \
-	output_cellorder_final_file = "output/cell_order.final.txt"):
+def time_sort(array_pickle_file = "rnavelocity/processed_data/norm_filtered_cells.scaled.pickle",\
+	output_cellorder_file = "rnavelocity/output/cell_order.txt", \
+	output_cellorder_final_file = "rnavelocity/output/cell_order.final.txt"):
 	'''
 	Generate the order of the cells.
 	Pickle file is a n x m x o matrix where,
