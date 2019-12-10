@@ -10,7 +10,7 @@ To resolve this, a recently published and highly cited publication by Manno et a
 
 In the paper by Manno et al, the following differential equations were proposed to track these time related changes:
 
-(equations 3 and 4 from the paper) $\alpha$
+(equations 3 and 4 from the paper)
 
 This give rise to the following equations:
 
