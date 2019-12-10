@@ -60,6 +60,7 @@ combined = lambda alpha, gamma, u_0, s_0, t_curr, u_t_actual, s_t_actual:\
 euclidean_distance(u_t(alpha, u_0, t_curr), s_t(alpha, gamma, u_0, s_0, t_curr), u_t_actual, s_t_actual)
 
 
+
 # combined = lambda alpha, gamma, u_0, s_0, t_curr, u_t_actual, s_t_actual: alpha ** 2
 
 
@@ -86,14 +87,14 @@ s_0 = data[0][curr_gene_idx][initial_cell_index]
 u_0 = data[1][curr_gene_idx][initial_cell_index]
 alpha = alpha_vals[curr_gene_idx]
 gamma = gamma_vals[curr_gene_idx]
-# t_curr = time_cell[curr_cell_index]
-# u_t_actual = data[0][curr_gene_idx][curr_cell_index]
-# s_t_actual = data[1][curr_gene_idx][curr_cell_index]
+t_curr = [time_cell[curr_cell_index]]
+u_t_actual = [data[0][curr_gene_idx][curr_cell_index]]
+s_t_actual = [data[1][curr_gene_idx][curr_cell_index]]
 
 
-t_curr = time_cell
-u_t_actual = data[0][curr_gene_idx]
-s_t_actual = data[1][curr_gene_idx]
+# t_curr = time_cell
+# u_t_actual = data[0][curr_gene_idx]
+# s_t_actual = data[1][curr_gene_idx]
 
 
 
@@ -138,6 +139,7 @@ def calc_total_loss_and_der_across_cells(alpha, gamma, u_0, s_0, \
 	
 	# Loop through each cell and calculate the loss
 	for i in range(len(t_curr_allcells)):
+		# print(i)
 		t_curr = t_curr_allcells[i]
 		u_t_actual = u_t_actual_allcells[i]
 		s_t_actual = s_t_actual_allcells[i]
@@ -145,6 +147,7 @@ def calc_total_loss_and_der_across_cells(alpha, gamma, u_0, s_0, \
 
 		# Define the input for the loss function
 		inputs = [alpha, gamma, u_0, s_0, t_curr, u_t_actual, s_t_actual]
+		# print(inputs)
 		jp_matrix = jp_object.partial(wrt=wrt, inputs=inputs)
 
 
@@ -165,8 +168,9 @@ def calc_total_loss_and_der_across_cells(alpha, gamma, u_0, s_0, \
 	loss_sum = np.sum(loss_val_all_cells) / total_cells
 	loss_der_sum = np.sum(loss_der_wrt_all_cells) / total_cells
 
-	print("losssum", loss_sum)
-	print("losssum der", loss_der_sum)
+	print(alpha, loss_sum, loss_der_sum)
+	# print("losssum", loss_sum)
+	# print("losssum der", loss_der_sum)
 	
 	return loss_sum, loss_der_sum
 
@@ -191,10 +195,10 @@ def optimize_gamma(alpha, gamma, u_0, s_0, t_curr_allcells, u_t_actual_allcells,
 
 	while True and iterations < iterations_cutoff:
 		# new_gamma = curr_gamma - learning_rate * float(loss_val_sum / loss_der_gamma_sum)
-		print("der", loss_der_gamma_sum)
+		# print("der", loss_der_gamma_sum)
 		new_gamma = curr_gamma - learning_rate * loss_der_gamma_sum
 
-		print("gamma:", new_gamma)
+		# print("gamma:", new_gamma)
 
 		# We reoptimize for gamma if the number becomes negative
 		# by randomly selecting a new gamma for optimzation
@@ -220,7 +224,7 @@ def optimize_gamma(alpha, gamma, u_0, s_0, t_curr_allcells, u_t_actual_allcells,
 
 
 def optimize_alpha(alpha, gamma, u_0, s_0, t_curr_allcells, u_t_actual_allcells, \
-	s_t_actual_allcells, learning_rate = 0.001):
+	s_t_actual_allcells, learning_rate = 0.1):
 	'''
 	Function to optimize the alpha value
 	across all cells
@@ -239,8 +243,11 @@ def optimize_alpha(alpha, gamma, u_0, s_0, t_curr_allcells, u_t_actual_allcells,
 
 	while True and iterations < iterations_cutoff:
 		# new_alpha = curr_alpha - learning_rate * float(loss_val_sum / loss_der_alpha_sum)
+		# new_alpha = curr_alpha - float(loss_val_sum / loss_der_alpha_sum)
 		new_alpha = curr_alpha - learning_rate * loss_der_alpha_sum
-		print("alpha:", new_alpha)
+		diff = new_alpha - curr_alpha
+		# print("diff:", diff)
+		# print("alpha:", new_alpha)
 
 		# We reoptimize for gamma if the number becomes negative
 		# by randomly selecting a new alpha for optimzation
@@ -251,8 +258,8 @@ def optimize_alpha(alpha, gamma, u_0, s_0, t_curr_allcells, u_t_actual_allcells,
 		loss_val_sum, loss_der_alpha_sum = calc_total_loss_and_der_across_cells(new_alpha, gamma, u_0, s_0, \
 		t_curr_allcells, u_t_actual_allcells, s_t_actual_allcells, wrt=0)
 
-		print("----")
-		print(loss_val_sum, loss_der_alpha_sum)
+		# print("----")
+		# print(loss_val_sum, loss_der_alpha_sum)
 
 		curr_alpha = new_alpha
 
@@ -264,6 +271,8 @@ def optimize_alpha(alpha, gamma, u_0, s_0, t_curr_allcells, u_t_actual_allcells,
 
 		previous_error = loss_val_sum
 		iterations += 1
+
+	# print("apple")
 
 	return curr_alpha
 
