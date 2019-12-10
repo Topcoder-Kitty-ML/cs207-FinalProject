@@ -5,26 +5,35 @@ from optimize_parameters import *
 
 class RNAOptimize:
 	'''
+	Optimize for alpha, gamma and time, given input data
+	of single cell RNA-seq expression values
 	'''
-	def __init__(self, pickle_file = "processed_data/norm_filtered_cells.scaled.pickle", \
+	def __init__(self, input_pickle_file = "processed_data/norm_filtered_cells.scaled.pickle", \
 		output_cellorder_file = "output/cell_order.txt", \
 		output_cellorder_final_file = "output/cell_order.final.txt",
 		final_parameter_output_file = "output/optimized_gene_parameters.txt",
-		num_processes = 4):
+		num_processes = 4, cached=False):
 		'''
 		Performs the overall optization on the input pickle
-		file on run.
+		file which carries the expression of the spliced and
+		unspliced RNA species.
+
+		By default cached is set to true as the optimization takes
+		a long time. Thus, 
 		'''
+		self.output_cellorder_final_file = output_cellorder_final_file
+		self.final_parameter_output_file = final_parameter_output_file
 
-		time_sort(array_pickle_file = pickle_file, \
-			output_cellorder_file = output_cellorder_file, \
-			output_cellorder_final_file = output_cellorder_final_file)
+		if not cached:
+			time_sort(array_pickle_file = input_pickle_file, \
+				output_cellorder_file = output_cellorder_file, \
+				output_cellorder_final_file = output_cellorder_final_file)
 
 
-		overall_optimization(input_pickle_file=pickle_file, \
-			cell_order_file=output_cellorder_final_file, \
-			output_parameter_file=final_parameter_output_file, \
-			num_processes=num_processes)
+			overall_optimization(input_pickle_file=input_pickle_file, \
+				cell_order_file=output_cellorder_final_file, \
+				output_parameter_file=final_parameter_output_file, \
+				num_processes=num_processes)
 
 
 	def get_sequence(self):
@@ -32,34 +41,28 @@ class RNAOptimize:
 		Read the final sequence from the final
 		order file
 		'''
-		pass
+
+		f = open(self.output_cellorder_final_file, "r")
+		for line in f:
+			order = line.strip().split(",")
+		f.close()
+		idx = [int(float(i)) for i in order]
+		
+		return idx
 
 
-	def plot_top_alpha_gamma(self):
+	def get_parameters(self):
 		'''
-		Plot the 
+		Get the alpha and gamma parameters
+		column 1: gene index
+		column 2: alpha parameter for gene
+		column 3: gamma parameter for gene
 		'''
-		pass
+		file = open(self.final_parameter_output_file, "r")
+		data = []
+		for line in file:
+			data.append(line.strip().split("\t"))
+			
+		data_np = np.array(data)
 
-
-	def plot_expression(self):
-		pass
-
-
-	def get_alpha_gamma(self):
-		'''
-		Get the alpha and gamma values
-		as a list from the input files
-		'''
-		pass
-
-
-
-
-
-
-	# # Read data in
-	# data = np.load("processed_data/norm_filtered_cells.scaled.pickle", allow_pickle=True)
-	# # print(data.shape) # type x genes x cells
-	# num_cells = data.shape[2]
-	# num_genes = data.shape[1]
+		return data_np

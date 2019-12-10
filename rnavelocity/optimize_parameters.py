@@ -164,7 +164,7 @@ def optimize_gene(data, initial_cell_index, alpha_vals, gamma_vals, time_cell, j
 	new_gamma = gamma
 	while True and iterations < iterations_cutoff:
 		# Alternating optimization between alpha and gamma
-		print(iterations)
+		print("Iteration:", iterations)
 		new_gamma = optimize_gamma(new_alpha, new_gamma, u_0, s_0, t_curr, u_t_actual, s_t_actual, jp_object)
 		new_alpha = optimize_alpha(new_alpha, new_gamma, u_0, s_0, t_curr, u_t_actual, s_t_actual, jp_object)
 		
