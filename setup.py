@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="rnavelocity-genericdiff",
-    version="0.0.3",
+    version="0.1.0",
     author="Top Coder Kitty ML",
     author_email="mark.y.lock@gmail.com",
     description="Package for RNA velocity, cell ordering and automatic differentiation",
