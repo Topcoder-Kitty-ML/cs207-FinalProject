@@ -21,7 +21,7 @@ class JacobianProduct:
     jp_object = JacobianProduct(function_vector)
 
     The class has various methods:
-    -partial()
+    -partial_ders()
         This method can calculate a partial for one function in the object or for all functions.
         The variable value inputs are specified in inputs. For example:
 
@@ -29,7 +29,7 @@ class JacobianProduct:
         # this evaluates the partial at all values of x holding y constant
         # returns a list of partial derivative evals for each function
         # wrt sets the variable to calculate the partial
-        list_of_partials = jp_object.partial(wrt=0, inputs=inputs)
+        list_of_partials = jp_object.partial_ders(wrt=0, inputs=inputs)
 
         [[2.4, 3.5, 2.5], [1, 2, 3]]
 

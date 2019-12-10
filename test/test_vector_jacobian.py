@@ -11,9 +11,21 @@ def test_partial_1():
     # inputs are x = {1, 2, 3} and y = 0 (you can hold y constant at any value)
     inputs = [[1, 2, 3], 0]
     # getting partial with respect to x (position 0 in lambdas)
-    partial_wrt_x = jp_object.partial(wrt=0, inputs=inputs)
+    partial_wrt_x = jp_object.partial_ders(wrt=0, inputs=inputs)
     # output is [[df/dx(1), df/dx(2), df/dx(3)], dh/dx(1), dh/dx(2), dh/dx(3)]]
     assert  partial_wrt_x == [[2, 4, 6], [3, 12, 27]]
+
+def test_partial_2():
+    f = lambda x, y: x**2 - y**3
+    h = lambda x, y: x**3 + y**3
+    function_vector = [f, h]
+    jp_object = JacobianProduct(function_vector)
+    # inputs are x = {1, 2, 3} and y = 0 (you can hold y constant at any value)
+    inputs = [[1, 2, 3], 0]
+    # getting partial with respect to x (position 0 in lambdas)
+    partial_wrt_x = jp_object.partial_vals(wrt=0, inputs=inputs)
+    # output is [[df/dx(1), df/dx(2), df/dx(3)], dh/dx(1), dh/dx(2), dh/dx(3)]]
+    assert  partial_wrt_x == [[2, 4, 9], [1, 8, 27]]
 
 ## test jp
 def test_jp_1():
