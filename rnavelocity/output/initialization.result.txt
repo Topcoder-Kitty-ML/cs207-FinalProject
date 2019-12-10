@@ -1,0 +1,2 @@
+Error with left as start: 0.026107831645186153
+Error with right as start: 0.021981301526958923
