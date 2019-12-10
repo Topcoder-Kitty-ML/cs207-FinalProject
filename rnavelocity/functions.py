@@ -2,7 +2,7 @@
 
 import math
 import sys
-sys.path.append('../../')
+sys.path.append('../')
 from genericdiff import *
 
 def calc_du_dt(alpha, u_t):
