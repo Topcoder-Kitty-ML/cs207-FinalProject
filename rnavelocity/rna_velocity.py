@@ -8,10 +8,10 @@ class RNAOptimize:
 	Optimize for alpha, gamma and time, given input data
 	of single cell RNA-seq expression values
 	'''
-	def __init__(self, input_pickle_file = "processed_data/norm_filtered_cells.scaled.pickle", \
-		output_cellorder_file = "output/cell_order.txt", \
-		output_cellorder_final_file = "output/cell_order.final.txt",
-		final_parameter_output_file = "output/optimized_gene_parameters.txt",
+	def __init__(self, input_pickle_file = "rnavelocity/processed_data/norm_filtered_cells.scaled.pickle", \
+		output_cellorder_file = "rnavelocity/output/cell_order.txt", \
+		output_cellorder_final_file = "rnavelocity/output/cell_order.final.txt",
+		final_parameter_output_file = "rnavelocity/output/optimized_gene_parameters.txt",
 		num_processes = 4, cached=False):
 		'''
 		Performs the overall optization on the input pickle
