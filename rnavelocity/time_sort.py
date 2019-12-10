@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import sys
+sys.path.append('../')
 from rnavelocity.generate_minimum_spanning_tree import *
 from rnavelocity.initialization import *
 

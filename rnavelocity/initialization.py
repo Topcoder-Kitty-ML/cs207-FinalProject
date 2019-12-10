@@ -3,7 +3,7 @@
 import numpy as np
 import random
 import sys
-# sys.path.append('../')
+sys.path.append('../')
 from genericdiff import *
 from rnavelocity.functions import calc_u as u_t
 from rnavelocity.functions import calc_s as s_t

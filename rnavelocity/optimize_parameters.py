@@ -5,7 +5,7 @@
 import numpy as np
 import random
 import sys
-# sys.path.append('../')
+sys.path.append('../')
 from genericdiff import *
 from multiprocessing import Pool
 
