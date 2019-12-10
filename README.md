@@ -10,6 +10,8 @@ Top Coder Kitty ML
 1. genericdiff - forward mode automatic differentiation
 2. rnavelocity - tool to determine rna velocity
 
+For documentation and vignettes (how to use) please consult the docs folder
+
 ## Badges
 - Travis
 [![Build Status](https://travis-ci.com/Topcoder-Kitty-ML/cs207-FinalProject.svg?branch=master)](https://travis-ci.com/Topcoder-Kitty-ML/cs207-FinalProject)
