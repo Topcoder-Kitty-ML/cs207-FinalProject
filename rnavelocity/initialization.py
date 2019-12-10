@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 
-
-# Performs optimization of the RNA velocity
-# equation
-
 import numpy as np
 import random
 import sys
@@ -11,36 +7,6 @@ sys.path.append('../')
 from genericdiff import *
 from functions import calc_u as u_t
 from functions import calc_s as s_t
-
-
-
-# Read data in
-data = np.load("processed_data/norm_filtered_cells.scaled.pickle", allow_pickle=True)
-# print(data.shape) # type x genes x cells
-num_cells = data.shape[2]
-num_genes = data.shape[1]
-
-
-f = open("output/cell_order.txt", "r")
-for line in f:
-	order = line.strip().split(",")
-f.close()
-
-order = [int(float(i)) for i in order] 
-
-
-
-# Randomize the time values (Time values are in per 10^6 scale)
-# time_cell = [ x / 1000000 for x in range(num_cells)]
-time_cell = [ x / 100000000000000 for x in range(num_cells)]
-
-
-
-# Randomize the alpha and gamma values
-# for each gene (Initialization)
-random.seed(1234)
-alpha_vals = [random.random() for i in range(num_genes)]
-gamma_vals = [random.random() for i in range(num_genes)]
 
 
 
@@ -76,8 +42,10 @@ def calc_norm_euclidian_distance(vector1, vector2):
 
 
 
-def optimization_function(data, alpha_vals, gamma_vals, time_cell, idx):
-
+def optimization_function(data, alpha_vals, gamma_vals, time_cell, idx, num_genes):
+	'''
+	Calculate the 
+	'''
 	dist_all_gene = []
 	# idx = np.argsort(time_cell)
 	initial_cell_index = idx[0]
@@ -135,10 +103,69 @@ def optimization_function(data, alpha_vals, gamma_vals, time_cell, idx):
 	return total_dist_all_gene
 
 
+def decide_optimal_start(input_pickle_file="processed_data/norm_filtered_cells.scaled.pickle", \
+	initial_cellorder_file="output/cell_order.txt",\
+	final_cellorder_file="output/cell_order.txt"):
+	'''
+	Determine which cell gives rise to
+	the lowest error and should thus be
+	used as the starting cell.
+	'''
 
-# For left as initial cell
-print("Error with left as start:", optimization_function(data, alpha_vals, gamma_vals, time_cell, order))
+	# Read data in
+	data = np.load(input_pickle_file, allow_pickle=True)
+	# print(data.shape) # type x genes x cells
+	num_cells = data.shape[2]
+	num_genes = data.shape[1]
 
-# For right as initial cell
-print("Error with right as start:", optimization_function(data, alpha_vals, gamma_vals, time_cell, order[::-1]))
+
+	f = open(initial_cellorder_file, "r")
+	for line in f:
+		order = line.strip().split(",")
+	f.close()
+
+	order = [int(float(i)) for i in order] 
+
+
+	# Initialize the time values
+	time_cell = [ x / 1000000 for x in range(num_cells)]
+
+
+
+	# Randomize the alpha and gamma values
+	# for each gene (Initialization)
+	random.seed(1234)
+	alpha_vals = [random.random() for i in range(num_genes)]
+	gamma_vals = [random.random() for i in range(num_genes)]
+
+
+	error_left_initial = optimization_function(data, alpha_vals, gamma_vals, time_cell, order, num_genes)
+	error_right_initial = optimization_function(data, alpha_vals, gamma_vals, time_cell, order[::-1], num_genes)
+
+	# For left as initial cell
+	print("Error with left as start:", error_left_initial)
+
+	# For right as initial cell
+	print("Error with right as start:", error_right_initial)
+
+
+	# Open file for writing
+	output = open(final_cellorder_file, "w")
+
+	# Original order (if error starting from left is smaller)
+	if error_left_initial < error_right_initial:
+		output.write(",".join(map(str, order)))
+		output.close()
+
+	# Reverse order (if error on other side is smaller)
+	else:
+		output.write(",".join(map(str, order[::-1])))
+		output.close()
+
+
+if __name__ == "__main__":
+	decide_optimal_start(input_pickle_file="processed_data/norm_filtered_cells.scaled.pickle", \
+		initial_cellorder_file="output/cell_order.txt",\
+		final_cellorder_file="output/cell_order.final.txt")
+
 
