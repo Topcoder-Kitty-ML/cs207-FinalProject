@@ -25,7 +25,7 @@ def test_partial_2():
     # getting partial with respect to x (position 0 in lambdas)
     partial_wrt_x = jp_object.partial_vals(wrt=0, inputs=inputs)
     # output is [[df/dx(1), df/dx(2), df/dx(3)], dh/dx(1), dh/dx(2), dh/dx(3)]]
-    assert  partial_wrt_x == [[2, 4, 9], [1, 8, 27]]
+    assert  partial_wrt_x == [[1, 4, 9], [1, 8, 27]]
 
 ## test jp
 def test_jp_1():
