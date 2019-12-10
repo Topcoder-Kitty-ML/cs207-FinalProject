@@ -86,7 +86,7 @@ class JacobianProduct:
             subsetted_funs = [fun for idx, fun in enumerate(function_vector) if idx in fun_idx]
             return subsetted_funs
 
-    def partial(self, wrt, inputs, fun_idx=-1):
+    def partial_ders(self, wrt, inputs, fun_idx=-1):
         # make sure all elements in puts are lists
         inputs = inputs.copy()
         inputs = self.input_format_check(inputs)
@@ -140,6 +140,60 @@ class JacobianProduct:
         # e.g. to access function 0 at variable value 1 from the inputs vector write out partials_list[0][1]
         return partials_list
 
+    def partial_vals(self, wrt, inputs, fun_idx=-1):
+        # make sure all elements in puts are lists
+        inputs = inputs.copy()
+        inputs = self.input_format_check(inputs)
+
+        # get number of inputs required from function signature
+        n_inputs = len(self.function_signature.parameters)
+
+        # check to see if input is of length one for constant values
+        # check to see if input is of non-zero length for variable values
+        for input in range(0, n_inputs):
+            if input == wrt:
+                if len(inputs[input]) <= 0:
+                    raise AttributeError(f"You are differentiating wrt argument {wrt} and holding all else constant. \n\
+                     Input vector for your wrt variable needs to be of length > 0.")
+            else:
+                if len(inputs[input]) != 1:
+                    raise AttributeError(f"You are differentiating wrt argument {wrt} and holding all else constant.\n\
+                    Inputs for the variables you hold constant need to be of length 1.")
+
+        # convert wrt variable inputs to Var object
+        # to differentiate
+        diff_inputs = inputs.copy()
+        for idx, value in enumerate(diff_inputs[wrt]):
+            diff_inputs[wrt][idx] = Var(value)
+
+        # create input vals list
+        input_vals_list = []
+        for input_wrt in diff_inputs[wrt]:
+            input_vals_entry = []
+            for idx, value in enumerate(diff_inputs):
+                if idx == wrt:
+                    input_vals_entry.append(input_wrt)
+                else:
+                    input_vals_entry.append(diff_inputs[idx][0])
+            input_vals_list.append(input_vals_entry)
+
+        # create functions list
+        diff_fun_vector = self.subset_functions(self.function_vector, fun_idx)
+
+        # get partials given input vals list
+        vals_list = []
+        for function in diff_fun_vector:
+            function_vals_list = []
+            for input_vals in input_vals_list:
+                vals_entry = function(*input_vals).val
+                function_vals_list.append(vals_entry)
+            vals_list.append(function_vals_list)
+
+        # return the vals list
+        # this a list of lists such that you can access the value for each function for each variable value
+        # e.g. to access function 0 at variable value 1 from the inputs vector write out valss_list[0][1]
+        return vals_list
+
     def jacobian_product(self, inputs, fun_idx=-1):
         # make sure all inputs are lists
         inputs = self.input_format_check(inputs)
@@ -180,7 +234,7 @@ class JacobianProduct:
 
             # for each variable calculate partials
             for wrt_idx in range(0, len(self.function_signature.parameters)):
-                partials = self.partial(wrt_idx, input_vals, fun_idx)
+                partials = self.partial_ders(wrt_idx, input_vals, fun_idx)
                 for function_idx, value in enumerate(partials):
                     # fill in the matrix with partials
                     jp_array[function_idx, wrt_idx] = partials[function_idx][0]
