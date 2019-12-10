@@ -19,7 +19,7 @@ class RNAOptimize:
 		unspliced RNA species.
 
 		By default cached is set to true as the optimization takes
-		a long time. Thus, 
+		a long time. Thus, we cached it by default.
 		'''
 		self.output_cellorder_final_file = output_cellorder_final_file
 		self.final_parameter_output_file = final_parameter_output_file
