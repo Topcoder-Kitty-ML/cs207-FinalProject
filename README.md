@@ -12,6 +12,8 @@ Top Coder Kitty ML
 
 For documentation and vignettes (how to use) please consult the docs folder
 
+To install: ``` install pip rnavelocity-genericdiff```
+
 ## Badges
 - Travis
 [![Build Status](https://travis-ci.com/Topcoder-Kitty-ML/cs207-FinalProject.svg?branch=master)](https://travis-ci.com/Topcoder-Kitty-ML/cs207-FinalProject)
