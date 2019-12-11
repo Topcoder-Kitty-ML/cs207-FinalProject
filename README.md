@@ -12,7 +12,7 @@ Top Coder Kitty ML
 
 For documentation and vignettes (how to use) please consult the docs folder
 
-To install: ``` pip install rnavelocity-genericdiff```
+To install: ```python -m pip install rnavelocity-genericdiff```
 
 ## Badges
 - Travis
